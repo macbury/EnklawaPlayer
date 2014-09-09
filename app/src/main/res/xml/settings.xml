@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+    android:title="@string/pref_api_title"
+    android:key="pref_key_api_settings">
+    <EditTextPreference
+      android:key="pref_key_api_endpoint"
+      android:defaultValue="http://enklawa.macbury.ninja/"
+      android:title="@string/pref_key_api_endpoint_title" />
+
+  </PreferenceCategory>
+</PreferenceScreen>
