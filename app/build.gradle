@@ -25,4 +25,5 @@ dependencies {
     compile 'com.google.code.gson:gson:1.7.2'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.android.support:support-v4:20.0.0'
+    compile 'com.github.gabrielemariotti.cards:library:1.8.0'
 }

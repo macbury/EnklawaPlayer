@@ -3,7 +3,9 @@
 
     <string name="app_name">EnklawaPod</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ustawienia</string>
   <string name="action_refresh">Odśwież</string>
+  <string name="main_activity_action_bar_sub_title">Wolne radio. U nas można!</string>
+  <string name="pref_proxy_header">Proxy</string>
 
 </resources>

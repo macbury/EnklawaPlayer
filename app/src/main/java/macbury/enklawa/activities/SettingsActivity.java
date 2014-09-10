@@ -2,6 +2,8 @@ package macbury.enklawa.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 import macbury.enklawa.fragments.SettingsFragment;
 
@@ -16,5 +18,16 @@ public class SettingsActivity extends FragmentActivity {
     getFragmentManager().beginTransaction()
             .replace(android.R.id.content, new SettingsFragment())
             .commit();
+    getActionBar().setDisplayHomeAsUpEnabled(true);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+    if (id == android.R.id.home) {
+      NavUtils.navigateUpFromSameTask(this);
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 }

@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    getActionBar().setSubtitle(R.string.main_activity_action_bar_sub_title);
   }
 
 

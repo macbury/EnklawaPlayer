@@ -2,4 +2,30 @@
 <resources>
   <string name="pref_api_title">Api</string>
   <string name="pref_key_api_endpoint_title">Pod URL</string>
+  <string name="pref_sync_title">Synchronizacja</string>
+
+  <string name="title_activity_settings">Ustawienia</string>
+
+
+  <string name="pref_title_sync_frequency">Częstotliwość odświeżania</string>
+  <string name="pref_key_proxy_enabled_title">Używaj proxy</string>
+  <string name="pref_key_proxy_host_title">Host</string>
+  <string name="pref_key_proxy_port_title">Port</string>
+  <string-array name="pref_sync_frequency_titles">
+    <item>15 minut</item>
+    <item>30 minut</item>
+    <item>1 godzina</item>
+    <item>3 godziny</item>
+    <item>6 godzin</item>
+    <item>Ręcznie</item>
+  </string-array>
+  <string-array name="pref_sync_frequency_values">
+    <item>15</item>
+    <item>30</item>
+    <item>60</item>
+    <item>180</item>
+    <item>360</item>
+    <item>-1</item>
+  </string-array>
+
 </resources>

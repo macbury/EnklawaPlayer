@@ -12,8 +12,8 @@ public class APIProgram {
   public String   author;
   public boolean  live;
   public String   image;
-  public String   feedUrl;
-  public int      categoryId;
+  public String   feed_url;
+  public int      category_id;
 
   public ArrayList<APIEpisode> episodes;
 }

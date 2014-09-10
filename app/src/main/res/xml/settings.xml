@@ -6,8 +6,41 @@
     android:key="pref_key_api_settings">
     <EditTextPreference
       android:key="pref_key_api_endpoint"
-      android:defaultValue="http://enklawa.macbury.ninja/"
+      android:defaultValue="http://enklawa.macbury.ninja"
       android:title="@string/pref_key_api_endpoint_title" />
 
   </PreferenceCategory>
+  <PreferenceCategory
+    android:title="@string/pref_sync_title"
+    android:key="pref_key_sync_settings">
+    <ListPreference
+        android:key="pref_key_sync_frequency"
+        android:title="@string/pref_title_sync_frequency"
+        android:entries="@array/pref_sync_frequency_titles"
+        android:entryValues="@array/pref_sync_frequency_values"
+        android:defaultValue="360"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/pref_proxy_header"
+    android:key="pref_key_proxy_settings">
+    <CheckBoxPreference
+      android:key="pref_key_proxy_enabled"
+      android:title="@string/pref_key_proxy_enabled_title"
+      />
+    <EditTextPreference
+      android:key="pref_key_proxy_host"
+      android:defaultValue="127.0.0.1"
+      android:dependency="pref_key_proxy_enabled"
+      android:title="@string/pref_key_proxy_host_title" />
+    <EditTextPreference
+      android:key="pref_key_proxy_port"
+      android:inputType="number"
+      android:dependency="pref_key_proxy_enabled"
+      android:defaultValue="8118"
+      android:title="@string/pref_key_proxy_port_title" />
+   </PreferenceCategory>
 </PreferenceScreen>

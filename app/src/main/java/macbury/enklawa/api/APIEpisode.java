@@ -10,7 +10,7 @@ public class APIEpisode {
   public String   name;
   public String   description;
   public String   mp3;
-  public Date     pubDate;
+  public Date     pub_date;
   public String   link;
   public int      duration;
   public String   image;

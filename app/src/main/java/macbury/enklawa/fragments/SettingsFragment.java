@@ -3,6 +3,8 @@ package macbury.enklawa.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
@@ -36,6 +38,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     EditTextPreference endpointPreference  = (EditTextPreference)screen.findPreference(SettingsManager.KEY_API_ENDPOINT);
     endpointPreference.setSummary(manager.getApiEndpoint());
+
+    ListPreference syncFreq                = (ListPreference)screen.findPreference(SettingsManager.KEY_SYNC_FREQ);
+    syncFreq.setSummary(syncFreq.getEntry());
+
+    EditTextPreference proxyHostPreference = (EditTextPreference)screen.findPreference(SettingsManager.KEY_PROXY_HOST);
+    proxyHostPreference.setSummary(manager.getProxyHost());
+
+    EditTextPreference proxyPortPreference = (EditTextPreference)screen.findPreference(SettingsManager.KEY_PROXY_PORT);
+    proxyPortPreference.setSummary(""+manager.getProxyPort());
   }
 
   @Override
