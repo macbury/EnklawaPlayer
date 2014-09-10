@@ -13,9 +13,13 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 import com.koushikdutta.ion.builder.Builders;
 
+import java.util.ArrayList;
+
 import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.api.APIResponse;
+import macbury.enklawa.db.ExternalDBCallbacks;
+import macbury.enklawa.db.models.BaseModel;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.db.scopes.EpisodesScope;
@@ -84,21 +88,39 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     } else {
       Log.e(TAG, "Error while downloading pod data!");
       e.printStackTrace();
+      showErrorSyncNotification(e);
       stopSelf();
     }
   }
+
+  private void showErrorSyncNotification(Exception e) {
+    throw(new RuntimeException("Implement this"));
+    //TODO implement this
+  }
+
   @Override
   public void onProgress(long downloaded, long total) {
     progress(Math.round(downloaded / total * 100));
   }
 
-  private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> {
+  private void showNotificationsForNewEpisodesOrDownloadThem(ArrayList<Episode> newEpisodes) {
+    for(Episode episode : newEpisodes) {
+      if (episode.program.isFavorite()) {
+        Log.i(TAG, "Show notification!!!!");
+      }
+      Log.i(TAG, "New episode: " + episode.name);
+    }
+    // else show summary
+  }
 
+  private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements ExternalDBCallbacks {
+    private ArrayList<Episode> newEpisodes;
     private float current = 0;
     private float total   = 1;
 
     @Override
     protected Boolean doInBackground(APIResponse... params) {
+      newEpisodes            = new ArrayList<Episode>();
       APIResponse result     = params[0];
       this.total             = result.countProgramsAndEpisodes();
       ProgramsScope programs = app.db.programs;
@@ -108,20 +130,21 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
         current++;
         if (programs.save(apiProgram)) {
           Program program = programs.find(apiProgram);
-          Log.v(TAG, "Saved: " +program.name);
+          Log.v(TAG, "Program: " +program.name);
           for(APIEpisode apiEpisode : apiProgram.episodes) {
             Episode episode = episodes.buildFromApi(apiEpisode);
             episode.program = program;
+            episode.setListener(this);
             current++;
             publishProgress();
             if (episodes.update(episode)) {
-              Log.v(TAG, "Saved: " + episode.name);
+              Log.v(TAG, "Episode: " + episode.name);
             } else {
-              Log.e(TAG, "Could not save: " + episode.name);
+              Log.e(TAG, "Could not save episode: " + episode.name);
             }
           }
         } else {
-          Log.e(TAG, "Could not save: " + apiProgram.name);
+          Log.e(TAG, "Could not save program: " + apiProgram.name);
         }
       }
 
@@ -137,8 +160,30 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     @Override
     protected void onPostExecute(Boolean aBoolean) {
       super.onPostExecute(aBoolean);
-
+      SyncPodService.this.showNotificationsForNewEpisodesOrDownloadThem(newEpisodes);
       stopSelf();
     }
+
+    @Override
+    public void afterCreate(BaseModel model) {
+      if (Episode.class.isInstance(model)) {
+        Episode episode = (Episode)model;
+        if (episode.isFresh()) {
+          newEpisodes.add(episode);
+        }
+
+      }
+    }
+
+    @Override
+    public void afterDestroy(BaseModel object) {
+
+    }
+
+    @Override
+    public void afterSave(BaseModel object) {
+
+    }
   }
+
 }

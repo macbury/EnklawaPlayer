@@ -1,5 +1,6 @@
 package macbury.enklawa.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,7 +16,11 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    getActionBar().setSubtitle(R.string.main_activity_action_bar_sub_title);
+    ActionBar actionBar = getActionBar();
+    actionBar.setDisplayShowHomeEnabled(true);
+    actionBar.setDisplayUseLogoEnabled(true);
+    actionBar.setDisplayShowTitleEnabled(false);
+    actionBar.setLogo(R.drawable.ic_logo_wide);
   }
 
 

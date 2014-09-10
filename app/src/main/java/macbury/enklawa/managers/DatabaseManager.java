@@ -19,8 +19,8 @@ import macbury.enklawa.db.scopes.ProgramsScope;
  * Created by macbury on 09.09.14.
  */
 public class DatabaseManager extends OrmLiteSqliteOpenHelper {
-  private static final int DATABASE_VERSION = 3;
-  private static final String DATABASE_NAME = "enklawa.pods";
+  private static final int DATABASE_VERSION = 25;
+  private static final String DATABASE_NAME = "pods.db";
   private static final String TAG           = "DatabaseManager";
   public EpisodesScope episodes;
   public ProgramsScope programs;
@@ -40,6 +40,10 @@ public class DatabaseManager extends OrmLiteSqliteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
     Log.d(TAG, "Creating database");
+    createTables();
+  }
+
+  private void createTables() {
     try {
       TableUtils.createTable(connectionSource, Program.class);
       TableUtils.createTable(connectionSource, Episode.class);
@@ -51,6 +55,14 @@ public class DatabaseManager extends OrmLiteSqliteOpenHelper {
   @Override
   public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
     Log.d(TAG, "Upgrading database");
+
+    try {
+      TableUtils.dropTable(connectionSource, Program.class, true);
+      TableUtils.dropTable(connectionSource, Episode.class, true);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    createTables();
   }
 
 }

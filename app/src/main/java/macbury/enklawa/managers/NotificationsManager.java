@@ -19,8 +19,8 @@ public class NotificationsManager {
   public Notification syncPod(int progress) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
             .setSmallIcon(R.drawable.ic_launcher)
-            .setContentTitle("Synchronizacja...")
-            .setContentText("TEST...");
+            .setContentTitle(context.getString(R.string.notification_sync_pod_title))
+            .setContentText(context.getString(R.string.notification_sync_pod_content));
 
     if (progress == 0) {
       builder.setProgress(100, 0, true);

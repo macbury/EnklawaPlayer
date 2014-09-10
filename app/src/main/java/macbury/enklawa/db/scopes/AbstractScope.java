@@ -5,11 +5,10 @@ import android.util.Log;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import macbury.enklawa.db.DBCallbacks;
-import macbury.enklawa.managers.DatabaseManager;
+import macbury.enklawa.db.models.BaseModel;
 
 /**
  * Created by macbury on 09.09.14.
@@ -43,15 +42,13 @@ public abstract class AbstractScope<T, K> {
   public boolean update(K dbObject) {
     try {
       Dao.CreateOrUpdateStatus status = dao.createOrUpdate(dbObject);
-      if (DBCallbacks.class.isInstance(dbObject)) {
-        if (status.isCreated()) {
-          Log.v(getClass().getSimpleName(), "Created...");
-          triggerAfterCreateCallback(dbObject);
-        } else {
-          Log.v(getClass().getSimpleName(), "Updated...");
-        }
-        triggerAfterSaveCallback(dbObject);
+      if (status.isCreated()) {
+        Log.v(getClass().getSimpleName(), "Created...");
+        triggerAfterCreateCallback(dbObject);
+      } else {
+        Log.v(getClass().getSimpleName(), "Updated...");
       }
+      triggerAfterSaveCallback(dbObject);
 
       return true;
     } catch (SQLException e) {
@@ -83,29 +80,49 @@ public abstract class AbstractScope<T, K> {
 
   public abstract K find(T apiObject);
 
-  private boolean haveCallbacks(K dbObject) {
+  private boolean haveCallbacksInterface(K dbObject) {
     return DBCallbacks.class.isInstance(dbObject);
   }
 
-  private DBCallbacks callbacks(K dbObject) {
+  private boolean haveCallbacks(K dbObject) {
+    return callbacks(dbObject).getListener() != null;
+  }
+
+  private DBCallbacks callbacksInterface(K dbObject) {
     return (DBCallbacks) dbObject;
   }
 
+  private BaseModel callbacks(K dbObject) {
+    return (BaseModel) dbObject;
+  }
+
   private void triggerAfterCreateCallback(K dbObject) {
+    if (haveCallbacksInterface(dbObject)) {
+      callbacksInterface(dbObject).afterCreate();
+    }
+
     if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).afterCreate();
+      callbacks(dbObject).getListener().afterCreate((BaseModel)dbObject);
     }
   }
 
   private void triggerAfterSaveCallback(K dbObject) {
+    if (haveCallbacksInterface(dbObject)) {
+      callbacksInterface(dbObject).afterSave();
+    }
+
     if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).afterSave();
+      callbacks(dbObject).getListener().afterSave((BaseModel)dbObject);
     }
   }
 
   private void triggerAfterDestroyCallback(K dbObject) {
+    if (haveCallbacksInterface(dbObject)) {
+      callbacksInterface(dbObject).afterDestroy();
+    }
+
     if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).afterDestroy();
+      callbacks(dbObject).getListener().afterDestroy((BaseModel)dbObject);
     }
   }
 }

@@ -26,4 +26,5 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.github.gabrielemariotti.cards:library:1.8.0'
+    compile 'joda-time:joda-time:2.4'
 }
