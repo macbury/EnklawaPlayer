@@ -2,20 +2,23 @@ package macbury.enklawa.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 import com.koushikdutta.ion.builder.Builders;
 
+import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.api.APIResponse;
-import macbury.enklawa.db.Program;
+import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.db.models.Program;
+import macbury.enklawa.db.scopes.EpisodesScope;
 import macbury.enklawa.db.scopes.ProgramsScope;
 import macbury.enklawa.managers.ApplicationManager;
 
@@ -72,31 +75,70 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
   @Override
   public void onCompleted(Exception e, APIResponse result) {
+    progress(0);
+
     if (e == null) {
       Log.d(TAG, "Downloaded pod data!");
-      syncApiResponseWithDB(result);
+      SyncApiResponseWithDB syncDB = new SyncApiResponseWithDB();
+      syncDB.execute(result);
     } else {
       Log.e(TAG, "Error while downloading pod data!");
       e.printStackTrace();
-    }
-
-    stopSelf();
-  }
-
-  private void syncApiResponseWithDB(APIResponse result) {
-    progress(0);
-    ProgramsScope programs = this.app.db.programs;
-    for (APIProgram apiProgram : result.programs) {
-      if (programs.save(apiProgram)) {
-        Log.v(TAG, "Saved: " +apiProgram.name);
-      } else {
-        Log.e(TAG, "Could not save: " +apiProgram.name);
-      }
+      stopSelf();
     }
   }
-
   @Override
   public void onProgress(long downloaded, long total) {
     progress(Math.round(downloaded / total * 100));
+  }
+
+  private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> {
+
+    private float current = 0;
+    private float total   = 1;
+
+    @Override
+    protected Boolean doInBackground(APIResponse... params) {
+      APIResponse result     = params[0];
+      this.total             = result.countProgramsAndEpisodes();
+      ProgramsScope programs = app.db.programs;
+      EpisodesScope episodes = app.db.episodes;
+
+      for (APIProgram apiProgram : result.programs) {
+        current++;
+        if (programs.save(apiProgram)) {
+          Program program = programs.find(apiProgram);
+          Log.v(TAG, "Saved: " +program.name);
+          for(APIEpisode apiEpisode : apiProgram.episodes) {
+            Episode episode = episodes.buildFromApi(apiEpisode);
+            episode.program = program;
+            current++;
+            publishProgress();
+            if (episodes.update(episode)) {
+              Log.v(TAG, "Saved: " + episode.name);
+            } else {
+              Log.e(TAG, "Could not save: " + episode.name);
+            }
+          }
+        } else {
+          Log.e(TAG, "Could not save: " + apiProgram.name);
+        }
+      }
+
+      return true;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+      super.onProgressUpdate(values);
+      SyncPodService.this.progress(Math.round(current / total * 100));
+    }
+
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+      super.onPostExecute(aBoolean);
+
+      stopSelf();
+    }
   }
 }

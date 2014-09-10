@@ -1,6 +1,8 @@
-package macbury.enklawa.db;
+package macbury.enklawa.db.models;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
@@ -8,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 
 @DatabaseTable(tableName = "programs")
-public class Program {
+public class Program extends BaseModel {
   @DatabaseField(canBeNull = false, id = true)
   public int id;
   @DatabaseField
@@ -21,4 +23,6 @@ public class Program {
   public boolean  live;
   @DatabaseField
   public String   image;
+  @ForeignCollectionField
+  private ForeignCollection<Episode> episodes;
 }

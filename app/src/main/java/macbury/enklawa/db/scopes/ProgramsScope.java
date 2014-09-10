@@ -3,8 +3,7 @@ package macbury.enklawa.db.scopes;
 import com.j256.ormlite.dao.Dao;
 
 import macbury.enklawa.api.APIProgram;
-import macbury.enklawa.db.Program;
-import macbury.enklawa.managers.DatabaseManager;
+import macbury.enklawa.db.models.Program;
 
 /**
  * Created by macbury on 09.09.14.
