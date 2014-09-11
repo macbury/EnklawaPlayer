@@ -2,10 +2,24 @@
 
   <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
     <item name="android:actionBarStyle">@style/FlatActionBar</item>
+    <item name="spbStyle">@style/EnklawaProgressBar</item>
   </style>
   <style name="FlatActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-    <item name="android:background">#3498db</item>
+    <item name="android:background">@color/actionbar_color</item>
     <item name="android:displayOptions">showTitle</item>
+  </style>
+
+  <style name="EnklawaProgressBar" parent="SmoothProgressBar">
+    <item name="spb_stroke_separator_length">4dp</item>
+    <item name="spb_stroke_width">5dp</item>
+    <item name="spb_sections_count">3</item>
+    <item name="spb_reversed">false</item>
+    <item name="spb_mirror_mode">true</item>
+    <item name="spb_speed">1.25</item>
+    <item name="android:interpolator">@android:anim/decelerate_interpolator</item>
+    <item name="spb_colors">@array/enklawa_colors</item>
+    <item name="spb_progressiveStart_activated">true</item>
+    <item name="spb_generate_background_with_colors">false</item>
   </style>
 
 

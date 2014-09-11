@@ -10,12 +10,11 @@ import macbury.enklawa.db.models.Program;
 /**
  * Created by macbury on 10.09.14.
  */
-public class EpisodesScope extends AbstractScope<APIEpisode, Episode> {
+public class EpisodesScope extends AbstractScope<Episode> {
   public EpisodesScope(Dao<Episode, Integer> dao) {
     super(dao);
   }
 
-  @Override
   public Episode buildFromApi(APIEpisode apiObject) {
     Episode episode  = new Episode();
     episode.name     = apiObject.name;
@@ -28,7 +27,7 @@ public class EpisodesScope extends AbstractScope<APIEpisode, Episode> {
     return episode;
   }
 
-  @Override
+
   public Episode find(APIEpisode apiObject) {
     return find(apiObject.id);
   }

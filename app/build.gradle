@@ -27,4 +27,6 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.0'
     compile 'com.github.gabrielemariotti.cards:library:1.8.0'
     compile 'joda-time:joda-time:2.4'
+    compile 'com.github.castorflex.smoothprogressbar:library:0.5.2'
+
 }

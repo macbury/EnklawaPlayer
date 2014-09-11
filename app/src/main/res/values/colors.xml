@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <integer-array name="enklawa_colors">
+    <item>@color/progress_color_1</item>
+    <item>@color/progress_color_3</item>
+    <item>@color/progress_color_4</item>
+    <item>@color/progress_color_5</item>
+  </integer-array>
+
+
+  <color name="progress_color_1">#11A7D9</color>
+  <color name="progress_color_3">#00B15E</color>
+  <color name="progress_color_4">#ED1E79</color>
+  <color name="progress_color_5">#FFA500</color>
+  <color name="actionbar_color">#004B8E</color>
+</resources>

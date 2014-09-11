@@ -31,6 +31,9 @@ public class Episode extends BaseModel {
   @DatabaseField(foreign=true, foreignAutoRefresh=true)
   public Program program;
 
+  @DatabaseField(foreign=true, foreignAutoRefresh=true)
+  public EpisodeFile  file;
+
   @DatabaseField
   public float playedDuration = 0f;
   @DatabaseField

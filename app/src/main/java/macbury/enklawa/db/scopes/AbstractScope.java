@@ -17,7 +17,7 @@ import macbury.enklawa.db.models.BaseModel;
 // K is for dbObject Class
 // T is for apiObject
 
-public abstract class AbstractScope<T, K> {
+public abstract class AbstractScope<K> {
   protected Dao<K, Integer> dao;
 
   public AbstractScope(Dao<K, Integer> dao) {
@@ -31,12 +31,6 @@ public abstract class AbstractScope<T, K> {
       e.printStackTrace();
     }
     return null;
-  }
-
-  public abstract K buildFromApi(T apiObject);
-
-  public boolean save(T apiObject) {
-    return update(buildFromApi(apiObject));
   }
 
   public boolean update(K dbObject) {
@@ -78,7 +72,6 @@ public abstract class AbstractScope<T, K> {
     }
   }
 
-  public abstract K find(T apiObject);
 
   private boolean haveCallbacksInterface(K dbObject) {
     return DBCallbacks.class.isInstance(dbObject);

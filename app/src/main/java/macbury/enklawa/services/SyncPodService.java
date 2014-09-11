@@ -21,6 +21,7 @@ import macbury.enklawa.api.APIResponse;
 import macbury.enklawa.db.ExternalDBCallbacks;
 import macbury.enklawa.db.models.BaseModel;
 import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.db.scopes.EpisodesScope;
 import macbury.enklawa.db.scopes.ProgramsScope;
@@ -73,8 +74,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
       request.proxy(app.settings.getProxyHost(), app.settings.getProxyPort());
     }
 
-    request.noCache().progress(this).as(new TypeToken<APIResponse>() {
-    }).setCallback(this);
+    request.progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
   }
 
   @Override
@@ -105,12 +105,18 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
   private void showNotificationsForNewEpisodesOrDownloadThem(ArrayList<Episode> newEpisodes) {
     for(Episode episode : newEpisodes) {
+      app.db.episodeFiles.createFromEpisode(episode);
       if (episode.program.isFavorite()) {
         Log.i(TAG, "Show notification!!!!");
       }
       Log.i(TAG, "New episode: " + episode.name);
     }
     // else show summary
+    // start download service
+
+    for(EpisodeFile file : app.db.episodeFiles.all()) {
+      Log.i(TAG, file.toString());
+    }
   }
 
   private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements ExternalDBCallbacks {
@@ -128,7 +134,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
       for (APIProgram apiProgram : result.programs) {
         current++;
-        if (programs.save(apiProgram)) {
+        if (programs.update(programs.buildFromApi(apiProgram))) {
           Program program = programs.find(apiProgram);
           Log.v(TAG, "Program: " +program.name);
           for(APIEpisode apiEpisode : apiProgram.episodes) {

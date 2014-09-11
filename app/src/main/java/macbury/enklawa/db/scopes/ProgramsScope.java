@@ -8,13 +8,12 @@ import macbury.enklawa.db.models.Program;
 /**
  * Created by macbury on 09.09.14.
  */
-public class ProgramsScope extends AbstractScope<APIProgram, Program> {
+public class ProgramsScope extends AbstractScope<Program> {
 
   public ProgramsScope(Dao<Program, Integer> dao) {
     super(dao);
   }
 
-  @Override
   public Program buildFromApi(APIProgram apiObject) {
     Program program     = new Program();
     program.id          = apiObject.id;
@@ -26,7 +25,6 @@ public class ProgramsScope extends AbstractScope<APIProgram, Program> {
     return program;
   }
 
-  @Override
   public Program find(APIProgram apiObject) {
     return find(apiObject.id);
   }
