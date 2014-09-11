@@ -35,7 +35,6 @@ public class CoolProgress extends SmoothProgressBar {
         observer.removeGlobalOnLayoutListener(this);
       }
     });
-
     //this.setIndeterminate(true);
     //this.progressiveStart();
     this.progressiveStop();

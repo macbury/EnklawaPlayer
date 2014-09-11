@@ -8,9 +8,10 @@
   </integer-array>
 
 
-  <color name="progress_color_1">#11A7D9</color>
+  <color name="progress_color_1">#004B8E</color>
   <color name="progress_color_3">#00B15E</color>
   <color name="progress_color_4">#ED1E79</color>
   <color name="progress_color_5">#FFA500</color>
-  <color name="actionbar_color">#004B8E</color>
+  <color name="actionbar_color">#11A7D9</color>
+  <color name="drawer_background_color">#f3f3f3</color>
 </resources>
