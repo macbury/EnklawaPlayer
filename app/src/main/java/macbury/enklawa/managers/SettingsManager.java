@@ -3,8 +3,16 @@ package macbury.enklawa.managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.koushikdutta.ion.Ion;
+
+import java.util.Date;
 
 import macbury.enklawa.R;
+import macbury.enklawa.extensions.DateDeserializer;
 
 /**
  * Created by macbury on 09.09.14.
@@ -22,10 +30,33 @@ public class SettingsManager {
   public static final String DEFAULT_PROXY_HOST = "127.0.0.1";
 
   private final SharedPreferences settings;
+  private final Context context;
 
   public SettingsManager(Context context) {
-    settings = PreferenceManager.getDefaultSharedPreferences(context);
+    this.context = context;
+    settings     = PreferenceManager.getDefaultSharedPreferences(context);
     PreferenceManager.setDefaultValues(context, R.xml.settings, false);
+    update();
+  }
+
+  public void update() {
+    updateION();
+    // update alarms
+  }
+
+  private void updateION() {
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Date.class, new DateDeserializer())
+            .create();
+    Ion.Config ionConfig = Ion.getDefault(context).configure();
+    ionConfig.setLogging("ION", Log.VERBOSE);
+    if (useProxy()) {
+      ionConfig.proxy(getProxyHost(), getProxyPort());
+    } else {
+      ionConfig.disableProxy();
+    }
+
+    ionConfig.setGson(gson);
   }
 
   public String getApiEndpoint() {

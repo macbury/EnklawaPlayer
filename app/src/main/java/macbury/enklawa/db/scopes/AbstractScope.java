@@ -72,6 +72,14 @@ public abstract class AbstractScope<K> {
     }
   }
 
+  public long count() {
+    try {
+      return dao.countOf();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
 
   private boolean haveCallbacksInterface(K dbObject) {
     return DBCallbacks.class.isInstance(dbObject);

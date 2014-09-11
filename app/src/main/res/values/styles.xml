@@ -1,7 +1,7 @@
 <resources>
 
-  <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-    <item name="android:actionBarStyle">@style/FlatActionBar</item>
+  <style name="AppTheme" parent="Theme.HoloAccent.Light.ColoredActionBar.Inverse">
+    <item name="accentColor">@color/actionbar_color</item>
     <item name="spbStyle">@style/EnklawaProgressBar</item>
   </style>
   <style name="FlatActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">

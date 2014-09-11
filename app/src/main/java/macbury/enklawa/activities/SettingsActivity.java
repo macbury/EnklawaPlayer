@@ -5,12 +5,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import macbury.enklawa.activities.ext.AccentFragmentActivity;
 import macbury.enklawa.fragments.SettingsFragment;
 
 /**
  * Created by macbury on 09.09.14.
  */
-public class SettingsActivity extends FragmentActivity {
+public class SettingsActivity extends AccentFragmentActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

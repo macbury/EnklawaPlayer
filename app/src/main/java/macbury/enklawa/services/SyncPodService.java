@@ -35,7 +35,13 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   private PowerManager powerManager;
   private PowerManager.WakeLock wakeLock;
 
+  private static boolean running = false;
+
   public SyncPodService() {
+  }
+
+  public static boolean isRunning() {
+    return running;
   }
 
   @Override
@@ -49,16 +55,20 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     Log.d(TAG, "Destroy");
     wakeLock.release();
     Ion.getDefault(this).cancelAll(this);
+    running = false;
+    app.broadcasts.podSync();
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
     Log.d(TAG, "Create");
+    running           = true;
     this.app          = (ApplicationManager)getApplication();
     this.powerManager = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock     = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.wakeLock.acquire();
+    app.broadcasts.podSync();
     syncPod();
   }
 
@@ -69,12 +79,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   private void syncPod() {
     progress(0);
     Log.i(TAG, "Syncing pod: "+app.settings.getApiEndpoint());
-    Builders.Any.B request = Ion.with(this).load(app.settings.getApiEndpoint());
-    if (app.settings.useProxy()) {
-      request.proxy(app.settings.getProxyHost(), app.settings.getProxyPort());
-    }
-
-    request.progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
+    Ion.with(this).load(app.settings.getApiEndpoint()).progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
   }
 
   @Override

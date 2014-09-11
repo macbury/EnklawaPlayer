@@ -21,7 +21,7 @@ import macbury.enklawa.db.scopes.ProgramsScope;
  * Created by macbury on 09.09.14.
  */
 public class DatabaseManager extends OrmLiteSqliteOpenHelper {
-  private static final int DATABASE_VERSION = 30;
+  private static final int DATABASE_VERSION = 31;
   private static final String DATABASE_NAME = "pods.db";
   private static final String TAG           = "DatabaseManager";
   public EpisodeFilesScope episodeFiles;

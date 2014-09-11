@@ -22,29 +22,29 @@ public class ApplicationManager extends Application {
   public IntentManager  intents;
   public SettingsManager settings;
   public NotificationsManager notifications;
+  public BroadcastsManager broadcasts;
 
   private static ApplicationManager current;
-  private Ion.Config ionConfig;
+
 
   @Override
   public void onCreate() {
     super.onCreate();
-    configureION();
     this.current       = this;
+    this.broadcasts    = new BroadcastsManager(this);
     this.db            = new DatabaseManager(this);
     this.services      = new ServiceManager(this);
     this.intents       = new IntentManager(this);
     this.settings      = new SettingsManager(this);
     this.notifications = new NotificationsManager(this.getApplicationContext());
+
+    syncIfFirstBoot();
   }
 
-  private void configureION() {
-    Gson gson = new GsonBuilder()
-              .registerTypeAdapter(Date.class, new DateDeserializer())
-              .create();
-    ionConfig = Ion.getDefault(this).configure();
-    ionConfig.setLogging("ION", Log.VERBOSE);
-    ionConfig.setGson(gson);
+  private void syncIfFirstBoot() {
+    if (ApplicationManager.current().db.episodes.count() == 0) {
+      services.syncPodService();
+    }
   }
 
   public static synchronized ApplicationManager current() {
