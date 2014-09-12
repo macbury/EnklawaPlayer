@@ -1,6 +1,10 @@
 package macbury.enklawa.db.scopes;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+
+import java.sql.SQLException;
+import java.util.List;
 
 import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
@@ -24,11 +28,24 @@ public class EpisodesScope extends AbstractScope<Episode> {
     episode.mp3      = apiObject.mp3;
     episode.pubDate  = apiObject.pub_date;
     episode.id       = apiObject.id;
+    episode.description = apiObject.description;
     return episode;
   }
 
 
   public Episode find(APIEpisode apiObject) {
     return find(apiObject.id);
+  }
+
+  public List<Episode> latest(long limit) {
+    QueryBuilder<Episode, Integer> builder = dao.queryBuilder();
+    builder.limit(limit);
+    builder.orderBy("pub_date", false);
+    try {
+      return builder.query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

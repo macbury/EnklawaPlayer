@@ -2,6 +2,7 @@ package macbury.enklawa.activities.main;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import macbury.enklawa.services.SyncPodService;
 import macbury.enklawa.views.CoolProgress;
 
 public class MainActivity extends AccentActivity implements NavigationListener {
+  private static final String SAVE_STATE_SELECTED_NAVBAR_ITEM = "SAVE_STATE_SELECTED_NAVBAR_ITEM";
+
   private CoolProgress                  syncProgressBar;
   private DrawerLayout                  mDrawerLayout;
   private ActionBarDrawerToggle         mDrawerToggle;
@@ -48,6 +51,18 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     this.invalidateOptionsMenu();
 
     navigationController.refresh();
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    super.onRestoreInstanceState(savedInstanceState);
+    navigationController.setSelected(savedInstanceState.getInt(SAVE_STATE_SELECTED_NAVBAR_ITEM));
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putInt(SAVE_STATE_SELECTED_NAVBAR_ITEM, navigationController.getSelected());
   }
 
   @Override
@@ -146,6 +161,10 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
   @Override
   public void onNavigationFragmentSelect(Fragment fragment) {
+    FragmentManager fragmentManager = getFragmentManager();
+    fragmentManager.beginTransaction()
+            .replace(R.id.content_frame, fragment)
+            .commit();
 
   }
 }

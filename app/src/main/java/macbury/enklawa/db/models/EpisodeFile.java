@@ -1,10 +1,14 @@
 package macbury.enklawa.db.models;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.File;
+import java.io.OutputStream;
 
 import macbury.enklawa.db.DBCallbacks;
 
@@ -13,6 +17,8 @@ import macbury.enklawa.db.DBCallbacks;
  */
 @DatabaseTable(tableName = "episode_files")
 public class EpisodeFile extends BaseModel implements DBCallbacks {
+  public static final int MAX_RETRY = 5;
+
   public enum Status {
     Pending, Downloading, Ready, Failed
   }
@@ -39,5 +45,29 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
   @Override
   public void afterSave() {
 
+  }
+
+  public boolean isDownloadedAndExists() {
+    return status == Status.Ready;
+  }
+
+  public File file(Context context) {
+    return new File(context.getFilesDir(), getFileName());
+  }
+
+  private String getFileName() {
+    return "episode_"+id+".mp3";
+  }
+
+
+  public void fail() {
+    status = EpisodeFile.Status.Failed;
+    retryCount++;
+  }
+
+
+  public void success() {
+    this.retryCount = 0;
+    this.status = Status.Ready;
   }
 }

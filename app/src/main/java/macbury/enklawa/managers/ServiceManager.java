@@ -2,6 +2,7 @@ package macbury.enklawa.managers;
 
 import android.content.Intent;
 
+import macbury.enklawa.services.DownloadService;
 import macbury.enklawa.services.SyncPodService;
 
 /**
@@ -16,6 +17,11 @@ public class ServiceManager {
 
   public void syncPodService() {
     Intent intent = new Intent(context, SyncPodService.class);
+    context.startService(intent);
+  }
+
+  public void downloadPendingEpisodes() {
+    Intent intent = new Intent(context, DownloadService.class);
     context.startService(intent);
   }
 }

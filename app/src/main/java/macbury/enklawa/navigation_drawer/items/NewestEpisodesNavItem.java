@@ -5,11 +5,14 @@ import android.content.Context;
 
 import be.webelite.ion.Icon;
 import macbury.enklawa.R;
+import macbury.enklawa.fragments.main.NewestEpisodesFragment;
 
 /**
  * Created by macbury on 11.09.14.
  */
 public class NewestEpisodesNavItem extends NavItemFragment {
+  private NewestEpisodesFragment fragment;
+
   public NewestEpisodesNavItem(Context context) {
     super(context);
   }
@@ -26,6 +29,9 @@ public class NewestEpisodesNavItem extends NavItemFragment {
 
   @Override
   public Fragment getFragment() {
-    return null;
+    if (fragment == null) {
+      fragment = new NewestEpisodesFragment();
+    }
+    return fragment;
   }
 }

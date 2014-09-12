@@ -5,11 +5,14 @@ import android.content.Context;
 
 import be.webelite.ion.Icon;
 import macbury.enklawa.R;
+import macbury.enklawa.fragments.main.AllProgramsFragment;
 
 /**
  * Created by macbury on 11.09.14.
  */
 public class AllProgramsNavItem extends NavItemFragment {
+  private AllProgramsFragment fragment;
+
   public AllProgramsNavItem(Context context) {
     super(context);
   }
@@ -26,6 +29,9 @@ public class AllProgramsNavItem extends NavItemFragment {
 
   @Override
   public Fragment getFragment() {
-    return null;
+    if (fragment == null) {
+      fragment = new AllProgramsFragment();
+    }
+    return fragment;
   }
 }

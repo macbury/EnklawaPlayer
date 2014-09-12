@@ -7,5 +7,6 @@
   <string name="action_refresh">Odśwież</string>
   <string name="main_activity_action_bar_sub_title">Wolne radio. U nas można!</string>
   <string name="pref_proxy_header">Proxy</string>
+  <string name="new_label">Nowy</string>
 
 </resources>

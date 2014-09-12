@@ -66,7 +66,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
     setSelected(position);
   }
 
-  private void setSelected(int position) {
+  public void setSelected(int position) {
     if (drawerNavAdapter.isNavItemFragment(position)) {
       NavItemFragment itemFragment = (NavItemFragment)drawerNavAdapter.getItem(position);
       this.listener.onNavigationFragmentSelect(itemFragment.getFragment());
@@ -76,5 +76,9 @@ public class NavigationController implements AdapterView.OnItemClickListener {
 
   public void setListener(NavigationListener listener) {
     this.listener = listener;
+  }
+
+  public int getSelected() {
+    return drawerNavAdapter.getSelected();
   }
 }

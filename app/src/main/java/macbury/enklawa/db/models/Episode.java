@@ -13,7 +13,7 @@ import java.util.Date;
 
 @DatabaseTable(tableName = "episodes")
 public class Episode extends BaseModel {
-  private static final int FRESH_AFTER_DAYS = 7;
+  private static final int FRESH_AFTER_DAYS = 3;
   @DatabaseField(canBeNull = false, id = true)
   public int id;
   @DatabaseField
@@ -38,6 +38,8 @@ public class Episode extends BaseModel {
   public float playedDuration = 0f;
   @DatabaseField
   public boolean played = false;
+  @DatabaseField
+  public String description;
 
   public boolean isFresh() {
     DateTime fromDate = new DateTime();
@@ -51,5 +53,13 @@ public class Episode extends BaseModel {
 
   private boolean isPlayed() {
     return played;
+  }
+
+  public boolean isDownloaded() {
+    return file != null && file.isDownloadedAndExists();
+  }
+
+  public boolean isUnread() {
+    return !played;
   }
 }

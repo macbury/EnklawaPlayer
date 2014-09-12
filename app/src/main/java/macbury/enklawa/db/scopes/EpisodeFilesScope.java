@@ -1,8 +1,10 @@
 package macbury.enklawa.db.scopes;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
@@ -33,5 +35,15 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public List<EpisodeFile> pending() {
+    QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.where().in("status", EpisodeFile.Status.Failed, EpisodeFile.Status.Pending).and().le("retry_count", EpisodeFile.MAX_RETRY).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

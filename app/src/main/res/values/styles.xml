@@ -22,5 +22,17 @@
     <item name="spb_generate_background_with_colors">false</item>
   </style>
 
+  <style name="AppTheme.TextView.ListItemPrimaryTitle" parent="@android:style/TextAppearance.Small">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">?android:attr/textColorPrimary</item>
+    <item name="android:lines">2</item>
+    <item name="android:ellipsize">end</item>
+  </style>
+
+  <style name="AppTheme.TextView.UnreadIndicator" parent="@android:style/TextAppearance.Small">
+    <item name="android:textSize">@dimen/text_size_micro</item>
+    <item name="android:textColor">@color/new_indicator_green</item>
+    <item name="android:text">@string/new_label</item>
+  </style>
 
 </resources>

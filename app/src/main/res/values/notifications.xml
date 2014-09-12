@@ -3,4 +3,6 @@
   <string name="notification_sync_pod_title">Coś tam robię</string>
   <string name="notification_sync_pod_content">Sprawdzam czy coś ciekawego jest...</string>
   <string name="notification_sync_pod_error_title">Ojć! Ale urwał!</string>
+  <string name="notification_download_title">Zasysam audycję</string>
+  <string name="notification_download_content">Czekam na serwer...</string>
 </resources>

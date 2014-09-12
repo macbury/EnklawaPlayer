@@ -121,10 +121,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     }
     // else show summary
     // start download service
-
-    for(EpisodeFile file : app.db.episodeFiles.all()) {
-      Log.i(TAG, file.toString());
-    }
+    app.services.downloadPendingEpisodes();
   }
 
   private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements ExternalDBCallbacks {
