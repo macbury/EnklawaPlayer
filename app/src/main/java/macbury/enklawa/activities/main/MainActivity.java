@@ -1,6 +1,7 @@
 package macbury.enklawa.activities.main;
 
 import android.app.ActionBar;
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,25 +17,23 @@ import android.widget.ListView;
 import com.negusoft.holoaccent.activity.AccentActivity;
 
 import macbury.enklawa.R;
-import macbury.enklawa.adapters.NavAdapter;
-import macbury.enklawa.adapters.navigation.AllProgramsNavItem;
-import macbury.enklawa.adapters.navigation.DownloadedEpisodesNavItem;
-import macbury.enklawa.adapters.navigation.NewestEpisodesNavItem;
+import macbury.enklawa.navigation_drawer.NavAdapter;
+import macbury.enklawa.navigation_drawer.NavDivider;
+import macbury.enklawa.navigation_drawer.items.AllProgramsNavItem;
+import macbury.enklawa.navigation_drawer.items.DownloadedEpisodesNavItem;
+import macbury.enklawa.navigation_drawer.items.ForumNavItem;
+import macbury.enklawa.navigation_drawer.items.NewestEpisodesNavItem;
 import macbury.enklawa.managers.ApplicationManager;
 import macbury.enklawa.services.SyncPodService;
 import macbury.enklawa.views.CoolProgress;
 
-public class MainActivity extends AccentActivity {
+public class MainActivity extends AccentActivity implements NavigationListener {
   private CoolProgress                  syncProgressBar;
   private DrawerLayout                  mDrawerLayout;
   private ActionBarDrawerToggle         mDrawerToggle;
   private boolean                       drawerOpened;
   private ListView                      navDrawerListView;
-  private NavAdapter                    drawerNavAdapter;
-  private NewestEpisodesNavItem         newestEpisodesItemNav;
-  private AllProgramsNavItem            allProgamsItemNav;
-  private DownloadedEpisodesNavItem     downloadedItemNav;
-
+  private NavigationController          navigationController;
 
   private void updateUI() {
     if (SyncPodService.isRunning()) {
@@ -48,11 +47,7 @@ public class MainActivity extends AccentActivity {
     }
     this.invalidateOptionsMenu();
 
-    drawerNavAdapter.clear();
-    drawerNavAdapter.add(newestEpisodesItemNav);
-    drawerNavAdapter.add(allProgamsItemNav);
-    drawerNavAdapter.add(downloadedItemNav);
-    navDrawerListView.setAdapter(drawerNavAdapter);
+    navigationController.refresh();
   }
 
   @Override
@@ -62,17 +57,14 @@ public class MainActivity extends AccentActivity {
     setProgressBarIndeterminateVisibility(true);
     setContentView(R.layout.activity_main);
 
-    this.downloadedItemNav        = new DownloadedEpisodesNavItem(this);
-    this.allProgamsItemNav        = new AllProgramsNavItem(this);
-    this.newestEpisodesItemNav    = new NewestEpisodesNavItem(this);
-    this.drawerNavAdapter         = new NavAdapter(this);
-    this.syncProgressBar          = new CoolProgress(this);
     navDrawerListView             = (ListView) findViewById(R.id.left_drawer);
     mDrawerLayout                 = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerToggle                 = new MainActivityActionBarToggle(this, mDrawerLayout);
+    this.navigationController     = new NavigationController(this, navDrawerListView, mDrawerLayout, this);
+    this.syncProgressBar          = new CoolProgress(this);
 
     mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+    navigationController.setListener(this);
     // TODO move to style
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -151,4 +143,9 @@ public class MainActivity extends AccentActivity {
       MainActivity.this.updateUI();
     }
   };
+
+  @Override
+  public void onNavigationFragmentSelect(Fragment fragment) {
+
+  }
 }

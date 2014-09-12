@@ -2,8 +2,6 @@ package macbury.enklawa.api;
 
 import java.util.ArrayList;
 
-import macbury.enklawa.db.models.Program;
-
 /**
  * Created by macbury on 09.09.14.
  */
@@ -14,10 +12,11 @@ public class APIResponse {
   public String radio;
 
   public ArrayList<APICategory> categories;
-  public ArrayList<APIProgram> programs;
+  public ArrayList<APIProgram>  programs;
+  public ArrayList<APIThread>   forum;
 
   public int countProgramsAndEpisodes() {
-    int total = 1;
+    int total = 1 + forum.size();
     for(APIProgram program : programs) {
       total++;
       total += program.episodes.size();

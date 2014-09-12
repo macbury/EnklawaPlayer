@@ -1,6 +1,8 @@
 package macbury.enklawa.services;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -11,20 +13,22 @@ import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
-import com.koushikdutta.ion.builder.Builders;
 
 import java.util.ArrayList;
 
 import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.api.APIResponse;
+import macbury.enklawa.api.APIThread;
 import macbury.enklawa.db.ExternalDBCallbacks;
 import macbury.enklawa.db.models.BaseModel;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.db.models.ForumThread;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.db.scopes.EpisodesScope;
 import macbury.enklawa.db.scopes.ProgramsScope;
+import macbury.enklawa.db.scopes.ThreadScope;
 import macbury.enklawa.managers.ApplicationManager;
 
 public class SyncPodService extends Service implements FutureCallback<APIResponse>, ProgressCallback {
@@ -99,8 +103,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   }
 
   private void showErrorSyncNotification(Exception e) {
-    throw(new RuntimeException("Implement this"));
-    //TODO implement this
+    app.notifications.manager.notify(1, app.notifications.syncPodError(e));
   }
 
   @Override
@@ -129,15 +132,10 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     private float current = 0;
     private float total   = 1;
 
-    @Override
-    protected Boolean doInBackground(APIResponse... params) {
-      newEpisodes            = new ArrayList<Episode>();
-      APIResponse result     = params[0];
-      this.total             = result.countProgramsAndEpisodes();
+    private void syncProgramsAndEpisodes(ArrayList<APIProgram> resultPrograms) {
       ProgramsScope programs = app.db.programs;
       EpisodesScope episodes = app.db.episodes;
-
-      for (APIProgram apiProgram : result.programs) {
+      for (APIProgram apiProgram : resultPrograms) {
         current++;
         if (programs.update(programs.buildFromApi(apiProgram))) {
           Program program = programs.find(apiProgram);
@@ -158,6 +156,29 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
           Log.e(TAG, "Could not save program: " + apiProgram.name);
         }
       }
+    }
+
+    private void syncThreads(ArrayList<APIThread> resultThreads) {
+      ThreadScope threads = app.db.threads;
+      for (APIThread apiThread : resultThreads) {
+        current++;
+        ForumThread thread = threads.find(apiThread);
+        if (thread == null) {
+          thread = threads.buildFromApi(apiThread);
+          thread.setListener(this);
+          threads.update(thread);
+        }
+      }
+    }
+
+    @Override
+    protected Boolean doInBackground(APIResponse... params) {
+      newEpisodes            = new ArrayList<Episode>();
+      APIResponse result     = params[0];
+      this.total             = result.countProgramsAndEpisodes();
+
+      syncThreads(result.forum);
+      syncProgramsAndEpisodes(result.programs);
 
       return true;
     }
@@ -182,7 +203,11 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
         if (episode.isFresh()) {
           newEpisodes.add(episode);
         }
+      }
 
+      if (ForumThread.class.isInstance(model)) {
+        ForumThread thread = (ForumThread)model;
+        Log.i("New thread", thread.title);
       }
     }
 

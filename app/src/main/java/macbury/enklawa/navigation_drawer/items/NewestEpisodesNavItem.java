@@ -1,8 +1,9 @@
-package macbury.enklawa.adapters.navigation;
+package macbury.enklawa.navigation_drawer.items;
 
 import android.app.Fragment;
 import android.content.Context;
 
+import be.webelite.ion.Icon;
 import macbury.enklawa.R;
 
 /**
@@ -19,8 +20,8 @@ public class NewestEpisodesNavItem extends NavItemFragment {
   }
 
   @Override
-  public int getIcon() {
-    return 0;
+  public Icon getIcon() {
+    return Icon.ion_beer;
   }
 
   @Override

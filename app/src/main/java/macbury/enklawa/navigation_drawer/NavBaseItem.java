@@ -1,4 +1,4 @@
-package macbury.enklawa.adapters.navigation;
+package macbury.enklawa.navigation_drawer;
 
 import android.content.Context;
 

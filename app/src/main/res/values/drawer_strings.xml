@@ -5,4 +5,6 @@
   <string name="nav_newest_episodes">Najnowsze odcinki</string>
   <string name="nav_all_programs">Wszystkie programy</string>
   <string name="nav_downloaded_episodes">Pobrane</string>
+  <string name="nav_divider_favorite">Ulubione</string>
+  <string name="nav_forum">Forum</string>
 </resources>
