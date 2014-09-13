@@ -113,8 +113,8 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
   private void showNotificationsForNewEpisodesOrDownloadThem(ArrayList<Episode> newEpisodes) {
     for(Episode episode : newEpisodes) {
-      app.db.episodeFiles.createFromEpisode(episode);
       if (episode.program.isFavorite()) {
+        app.db.episodeFiles.createFromEpisode(episode);// TODO check if can do
         Log.i(TAG, "Show notification!!!!");
       }
       Log.i(TAG, "New episode: " + episode.name);

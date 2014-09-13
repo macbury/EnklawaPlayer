@@ -53,7 +53,7 @@
         </activity>
 
         <service
-            android:name=".services.DownloadService"
+            android:name=".services.download.DownloadService"
             android:enabled="true"
             android:exported="true" >
         </service>

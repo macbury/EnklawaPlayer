@@ -38,6 +38,7 @@ public class ApplicationManager extends Application {
     this.settings      = new SettingsManager(this);
     this.notifications = new NotificationsManager(this.getApplicationContext());
 
+    this.db.episodeFiles.markDownloadingAsFailed();
     syncIfFirstBoot();
   }
 

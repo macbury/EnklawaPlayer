@@ -5,13 +5,12 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
@@ -19,15 +18,24 @@ import java.util.List;
 
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
-import macbury.enklawa.db.models.Program;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.extensions.Converter;
+import macbury.enklawa.services.download.DownloadService;
 
 /**
  * Created by macbury on 12.09.14.
  */
-public class EpisodesAdapter extends BaseAdapter {
+public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener {
+  public enum SecondaryAction {
+    Download, CancelDownload, Pause, Play, None
+  }
   private final Context context;
   private ArrayList<Episode> episodesArray;
+  private EpisodesAdapterListener listener;
+
+  public void setListener(EpisodesAdapterListener listener) {
+    this.listener = listener;
+  }
 
   public EpisodesAdapter(Context context) {
     super();
@@ -42,18 +50,24 @@ public class EpisodesAdapter extends BaseAdapter {
 
   @Override
   public Episode getItem(int position) {
-    return episodesArray.get(position);
+    if (position < episodesArray.size() && position != -1){
+      return episodesArray.get(position);
+    } else {
+      return null;
+    }
   }
 
   @Override
   public long getItemId(int position) {
-    return getItem(position).id;
+    Episode episode = getItem(position);
+    return episode == null ? -1 : episode.id;
   }
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     EpisodeHolder holder = null;
     Episode episode      = getItem(position);
+
     if (convertView == null) {
       holder                      = new EpisodeHolder();
       LayoutInflater inflater     = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -62,30 +76,46 @@ public class EpisodesAdapter extends BaseAdapter {
       holder.titleTextView        = (TextView)convertView.findViewById(R.id.item_episode_title);
       holder.previewImageView     = (ImageView)convertView.findViewById(R.id.item_episode_preview);
       holder.durationTextView     = (TextView)convertView.findViewById(R.id.item_episode_duration);
-      holder.secondaryAction      = (ImageView)convertView.findViewById(R.id.item_episode_button_secondary_action);
+      holder.secondaryAction      = (ImageButton)convertView.findViewById(R.id.item_episode_button_secondary_action);
       holder.statusTextView       = (TextView)convertView.findViewById(R.id.item_episode_status);
       holder.progressBar          = (ProgressBar) convertView.findViewById(R.id.item_episode_progress);
       holder.container            = convertView;
+
+      holder.secondaryAction.setTag(holder);
+      holder.secondaryAction.setOnClickListener(this);
       convertView.setTag(holder);
     } else {
       holder  = (EpisodeHolder)convertView.getTag();
     }
 
+    holder.episode              = episode;
+    holder.position             = position;
+
     holder.titleTextView.setText(episode.name);
-    holder.durationTextView.setText(Converter.getDurationStringShort(episode.duration));
+    holder.durationTextView.setText(Converter.getDurationStringShort(episode.getDuration()));
     holder.pubDateTextView.setText(DateUtils.formatDateTime(context, episode.pubDate.getTime(), DateUtils.FORMAT_SHOW_DATE));
 
-    if (episode.isDownloaded()) {
-      holder.secondaryAction.setImageResource(R.drawable.ic_action_av_play);
+    EpisodeFile episodeFile = episode.getFile();
+    holder.progressBar.setVisibility(View.INVISIBLE);
+
+    if (episodeFile == null || episodeFile.haveFailed()) {
+      holder.actionType = SecondaryAction.Download;
+      holder.secondaryAction.setImageResource(R.drawable.av_download);
+    } else if (episodeFile.isDownloading() || episodeFile.isPending()) {
+      holder.actionType = SecondaryAction.CancelDownload;
+      if (episodeFile.isDownloading()) {
+        holder.secondaryAction.setImageResource(R.drawable.navigation_cancel);
+        holder.progressBar.setVisibility(View.VISIBLE);
+        holder.progressBar.setProgress(DownloadService.progress);
+      }
     } else {
-      holder.secondaryAction.setImageResource(R.drawable.ic_action_av_download);
+      holder.actionType = SecondaryAction.Play;
+      holder.secondaryAction.setImageResource(R.drawable.av_play);
     }
 
     if (episode.isUnread()) {
       holder.statusTextView.setText(context.getString(R.string.new_label));
-      holder.progressBar.setVisibility(View.INVISIBLE);
     } else {
-      holder.progressBar.setVisibility(View.VISIBLE);
       holder.statusTextView.setText("");
     }
 
@@ -99,14 +129,35 @@ public class EpisodesAdapter extends BaseAdapter {
     notifyDataSetChanged();
   }
 
+  @Override
+  public void onClick(View view) {
+    EpisodeHolder holder = (EpisodeHolder) view.getTag();
+    if (holder.secondaryAction == view){
+      switch (holder.actionType) {
+        case Download:
+          listener.onDownloadEpisodeButtonClick(holder.episode);
+        break;
+
+        case CancelDownload:
+          listener.onCancelEpisodeDownloadButtonClick(holder.episode);
+        break;
+      }
+
+    }
+    notifyDataSetChanged();
+  }
+
   public class EpisodeHolder {
     public TextView titleTextView;
     public ImageView previewImageView;
     public View container;
     public TextView pubDateTextView;
     public TextView durationTextView;
-    public ImageView secondaryAction;
+    public ImageButton secondaryAction;
     public TextView statusTextView;
     public ProgressBar progressBar;
+    public int position;
+    public SecondaryAction actionType;
+    public Episode episode;
   }
 }

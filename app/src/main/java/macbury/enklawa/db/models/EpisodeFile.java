@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.File;
@@ -29,7 +30,7 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
   public Status   status;
   @DatabaseField(columnName = "retry_count", defaultValue = "0")
   public int retryCount = 0;
-  @DatabaseField(foreign=true, foreignAutoRefresh=true, columnName = "episode_id")
+  @DatabaseField(foreign=true, foreignAutoRefresh=true)
   public Episode  episode;
 
   @Override
@@ -60,14 +61,16 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
   }
 
 
-  public void fail() {
-    status = EpisodeFile.Status.Failed;
-    retryCount++;
+  public boolean haveFailed() {
+    return status == Status.Failed;
   }
 
-
-  public void success() {
-    this.retryCount = 0;
-    this.status = Status.Ready;
+  public boolean isPending() {
+    return status == Status.Pending;
   }
+
+  public boolean isDownloading() {
+    return status == Status.Downloading;
+  }
+
 }

@@ -5,4 +5,5 @@
   <string name="notification_sync_pod_error_title">Ojć! Ale urwał!</string>
   <string name="notification_download_title">Zasysam audycję</string>
   <string name="notification_download_content">Czekam na serwer...</string>
+  <string name="stop_download">Zatrzymaj</string>
 </resources>

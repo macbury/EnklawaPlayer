@@ -2,12 +2,16 @@ package macbury.enklawa.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.koushikdutta.async.http.AsyncHttpRequest;
+import com.koushikdutta.async.http.libcore.RawHeaders;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.loader.AsyncHttpRequestFactory;
 
 import java.util.Date;
 
@@ -41,7 +45,7 @@ public class SettingsManager {
 
   public void update() {
     updateION();
-    // update alarms
+    // onSyncPodUpdate alarms
   }
 
   private void updateION() {
@@ -49,7 +53,8 @@ public class SettingsManager {
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .create();
     Ion.Config ionConfig = Ion.getDefault(context).configure();
-    ionConfig.setLogging("ION", Log.VERBOSE);
+    ionConfig.setLogging("ION", Log.INFO);
+    ionConfig.userAgent("Enklawa Pod");
     if (useProxy()) {
       ionConfig.proxy(getProxyHost(), getProxyPort());
     } else {

@@ -4,6 +4,7 @@ import android.app.ListFragment;
 
 import java.util.List;
 
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.managers.ApplicationManager;
 
@@ -14,7 +15,12 @@ public class AllProgramsFragment extends EnklawaBaseAbstractListFragment {
   private List<Program> programsArray;
 
   @Override
-  protected void update() {
+  protected void onSyncPodUpdate() {
     this.programsArray = ApplicationManager.current().db.programs.all();
+  }
+
+  @Override
+  protected void onDownloadUpdate(int progress, EpisodeFile file) {
+
   }
 }

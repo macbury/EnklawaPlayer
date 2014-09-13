@@ -20,12 +20,12 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
   public boolean createFromEpisode(Episode episode) {
     EpisodeFile file = findByEpisodeId(episode.id);
     if (file == null) {
-      file = new EpisodeFile();
+      file             = new EpisodeFile();
       file.episode     = episode;
-      return update(file);
-    } else {
-      return true;
     }
+    file.retryCount  = 0;
+
+    return update(file);
   }
 
   public EpisodeFile findByEpisodeId(int id) {
@@ -45,5 +45,38 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
       e.printStackTrace();
     }
     return null;
+  }
+
+  public List<EpisodeFile> downloading() {
+    QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.where().in("status", EpisodeFile.Status.Downloading).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public void markDownloadingAsFailed() {
+    for (EpisodeFile file : downloading()) {
+      markAsFailed(file);
+    }
+  }
+
+  public void markAsRunning(EpisodeFile epf) {
+    epf.status = EpisodeFile.Status.Downloading;
+    update(epf);
+  }
+
+  public void markAsFailed(EpisodeFile epf) {
+    epf.status        = EpisodeFile.Status.Failed;
+    epf.retryCount++;
+    update(epf);
+  }
+
+  public void markAsSuccess(EpisodeFile epf) {
+    epf.status        = EpisodeFile.Status.Ready;
+    epf.retryCount    = 0;
+    update(epf);
   }
 }
