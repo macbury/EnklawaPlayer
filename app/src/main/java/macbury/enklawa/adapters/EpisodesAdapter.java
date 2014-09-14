@@ -20,8 +20,7 @@ import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.extensions.Converter;
-import macbury.enklawa.services.download.DownloadManager;
-import macbury.enklawa.services.download.DownloadService;
+import macbury.enklawa.managers.download.DownloadManager;
 
 /**
  * Created by macbury on 12.09.14.
@@ -93,7 +92,7 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
     holder.position             = position;
 
     holder.titleTextView.setText(episode.name);
-    holder.durationTextView.setText(Converter.getDurationStringShort(episode.getDuration()));
+    holder.durationTextView.setText(Converter.getDurationStringLong(episode.getDuration()));
     holder.pubDateTextView.setText(DateUtils.formatDateTime(context, episode.pubDate.getTime(), DateUtils.FORMAT_SHOW_DATE));
 
     EpisodeFile episodeFile = episode.getFile();

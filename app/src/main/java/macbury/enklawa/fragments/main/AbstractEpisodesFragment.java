@@ -14,13 +14,12 @@ import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.managers.ApplicationManager;
 
 /**
- * Created by macbury on 12.09.14.
+ * Created by macbury on 14.09.14.
  */
-public class NewestEpisodesFragment extends EnklawaBaseAbstractListFragment implements EpisodesAdapterListener {
-  private static final long MAX_ITEMS = 16;
-  private static final String TAG     = "NewestEpisodesFragment";
-  private List<Episode> episodesArray;
-  private EpisodesAdapter episodeAdapter;
+public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFragment implements EpisodesAdapterListener {
+  protected static final String TAG     = "AbstractEpisodesFragment";
+  protected List<Episode> episodesArray;
+  protected EpisodesAdapter episodeAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -32,19 +31,21 @@ public class NewestEpisodesFragment extends EnklawaBaseAbstractListFragment impl
 
   @Override
   public void onSyncPodUpdate() {
-    this.episodesArray = ApplicationManager.current().db.episodes.latest(MAX_ITEMS);
+    this.episodesArray = getEpisodes();
     this.episodeAdapter.set(episodesArray);
   }
 
+  public abstract List<Episode> getEpisodes();
+
   @Override
   protected void onDownloadUpdate(int progress, EpisodeFile file) {
-    //episodeAdapter.updateProgressFor(getListView(), file, progress);
     episodeAdapter.notifyDataSetChanged();
   }
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
+    //onEpisodeClick();
   }
 
   @Override

@@ -2,7 +2,7 @@ package macbury.enklawa.managers;
 
 import android.content.Intent;
 
-import macbury.enklawa.services.download.DownloadService;
+import macbury.enklawa.services.DownloadService;
 import macbury.enklawa.services.SyncPodService;
 
 /**

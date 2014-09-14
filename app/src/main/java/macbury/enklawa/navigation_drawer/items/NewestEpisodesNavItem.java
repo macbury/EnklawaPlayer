@@ -5,7 +5,7 @@ import android.content.Context;
 
 import be.webelite.ion.Icon;
 import macbury.enklawa.R;
-import macbury.enklawa.fragments.main.NewestEpisodesFragment;
+import macbury.enklawa.fragments.main.episodes.NewestEpisodesFragment;
 
 /**
  * Created by macbury on 11.09.14.

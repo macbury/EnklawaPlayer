@@ -80,4 +80,14 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
     epf.retryCount    = 0;
     update(epf);
   }
+
+  public List<EpisodeFile> downloadedOrPendingOrFailed() {
+    QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.orderBy("id", true).where().in("status", EpisodeFile.Status.Pending, EpisodeFile.Status.Ready, EpisodeFile.Status.Failed).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

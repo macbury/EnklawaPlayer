@@ -1,4 +1,4 @@
-package macbury.enklawa.services.download;
+package macbury.enklawa.services;
 
 import android.app.Notification;
 import android.app.Service;
@@ -20,6 +20,9 @@ import java.util.concurrent.CancellationException;
 
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.download.DownloadEpisode;
+import macbury.enklawa.managers.download.DownloadManager;
+import macbury.enklawa.managers.download.DownloadManagerListener;
 
 public class DownloadService extends Service implements DownloadManagerListener {
   private static final String TAG             = "DownloadService";

@@ -1,9 +1,8 @@
-package macbury.enklawa.services.download;
+package macbury.enklawa.managers.download;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
@@ -116,13 +115,12 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   public void onCompleted(Exception e, File result) {
     EpisodeFile epf = currentDownload.getEpisodeFile();
     if (e != null) {
+      app.db.episodeFiles.markAsFailed(epf);
+      listener.onDownloadFail(currentDownload, e);
       if (CancellationException.class.isInstance(e)) {
-        Log.e(TAG, "Forced cancel");
         app.db.episodeFiles.destroy(epf);
       } else {
         Log.e(TAG, "Something failed:" +e.toString());
-        app.db.episodeFiles.markAsFailed(epf);
-        listener.onDownloadFail(currentDownload, e);
       }
     } else {
       Log.i(TAG, "Downloaded successul!");

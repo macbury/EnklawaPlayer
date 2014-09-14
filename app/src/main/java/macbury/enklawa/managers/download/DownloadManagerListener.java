@@ -1,4 +1,4 @@
-package macbury.enklawa.services.download;
+package macbury.enklawa.managers.download;
 
 /**
  * Created by macbury on 13.09.14.

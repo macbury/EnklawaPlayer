@@ -1,4 +1,4 @@
-package macbury.enklawa.services.download;
+package macbury.enklawa.managers.download;
 
 import android.content.Context;
 
@@ -8,6 +8,7 @@ import com.koushikdutta.ion.Ion;
 import java.io.File;
 
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.managers.download.DownloadManager;
 
 /**
  * Created by macbury on 13.09.14.

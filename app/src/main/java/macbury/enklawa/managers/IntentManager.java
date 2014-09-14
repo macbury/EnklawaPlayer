@@ -5,9 +5,8 @@ import android.content.Intent;
 
 import macbury.enklawa.activities.SettingsActivity;
 import macbury.enklawa.db.models.Episode;
-import macbury.enklawa.db.models.EpisodeFile;
-import macbury.enklawa.services.download.DownloadEpisode;
-import macbury.enklawa.services.download.DownloadService;
+import macbury.enklawa.managers.download.DownloadEpisode;
+import macbury.enklawa.services.DownloadService;
 
 /**
  * Created by macbury on 09.09.14.

@@ -10,6 +10,7 @@ import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.Program;
+import macbury.enklawa.managers.ApplicationManager;
 
 /**
  * Created by macbury on 10.09.14.
@@ -48,4 +49,5 @@ public class EpisodesScope extends AbstractScope<Episode> {
     }
     return null;
   }
+
 }
