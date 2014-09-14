@@ -25,6 +25,7 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   private final ArrayList<EpisodeFile> queue;
   private final ApplicationManager app;
   private final DownloadManagerListener listener;
+  public static DownloadManager current;
   private DownloadEpisode currentDownload;
 
   public DownloadManager(Context context, DownloadManagerListener listener) {
@@ -32,15 +33,19 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
     this.context  = context;
     this.app      = ApplicationManager.current();
     this.queue    = new ArrayList<EpisodeFile>();
+    this.current  = this;
   }
 
   public void push(ArrayList<EpisodeFile> episodeFiles) {
     for (EpisodeFile epf : episodeFiles) {
-      if (queue.indexOf(epf) == -1)
+      if (queue.indexOf(epf) == -1) {
+        Log.v(TAG, "Pushed next episode: "+ epf.episode.name);
         queue.add(epf);
+      }
     }
 
     if (!isRunning()) {
+      Log.v(TAG, "Starting download!");
       next();
     }
   }
@@ -48,24 +53,41 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   private void next() {
     if (queue.size() > 0) {
       EpisodeFile epf = queue.remove(0);
+      Log.v(TAG, "Fetching next episode: "+ epf.episode.name);
       app.db.episodeFiles.markAsRunning(epf);
       currentDownload = new DownloadEpisode(epf, this);
       listener.onDownloadStart(currentDownload);
     } else {
-      listener.onDownloadManagerFinishedAll();
+      Log.v(TAG, "Queue is clear. Finish!");
+      finish();
     }
   }
 
-  private boolean isRunning() {
+  private void finish() {
+    Log.v(TAG, "Finishing...");
+    listener.onDownloadManagerFinishedAll();
+    current = null;
+  }
+
+  public boolean isRunning() {
     return currentDownload != null;
   }
 
   public void cancelEpisode(Episode episode) {
     if (isRunning() && currentDownload.getEpisodeFile().id == episode.id) {
+      Log.v(TAG, "Canceling running episode::" + episode.name);
       currentDownload.getDownload().cancel();
     } else {
+      Log.v(TAG, "Canceling episode:" + episode.name);
       queue.remove(episode.getFile());
     }
+    app.db.episodeFiles.destroy(episode.getFile());
+    Ion.getDefault(context).cancelAll();
+  }
+
+  public void cancelEpisodeById(int episodeId) {
+    Log.v(TAG, "Canceling episode by id:" + episodeId);
+    cancelEpisode(app.db.episodes.find(episodeId));
   }
 
   public void cancelAll() {
@@ -84,9 +106,9 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
 
   @Override
   public void onProgress(long downloaded, long total) {
-    float progress = (int) (((float)downloaded/(float)total) * 100);
-    if (progress % 5 == 0) {
-      listener.onDownloadProgress(currentDownload, progress);
+    currentDownload.progress = (int) (((float)downloaded/(float)total) * 100);
+    if (currentDownload.progress % 5 == 0) {
+      listener.onDownloadProgress(currentDownload);
     }
   }
 
@@ -105,9 +127,18 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
     } else {
       Log.i(TAG, "Downloaded successul!");
       app.db.episodeFiles.markAsSuccess(epf);
+      listener.onDownloadSuccess(currentDownload);
     }
 
     currentDownload = null;
     next();
+  }
+
+  public int size() {
+    return queue.size();
+  }
+
+  public int getProgress() {
+    return isRunning() ? currentDownload.progress : 0;
   }
 }

@@ -1,5 +1,6 @@
 package macbury.enklawa.services.download;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -20,17 +21,14 @@ import java.util.concurrent.CancellationException;
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.managers.ApplicationManager;
 
-public class DownloadService extends Service implements ProgressCallback, FutureCallback<File> {
+public class DownloadService extends Service implements DownloadManagerListener {
   private static final String TAG             = "DownloadService";
   private static final String WAKE_LOCK_TAG   = "DownloadService";
   private static final int NOTIFICATION_ID    = 123;
-  private ArrayList<EpisodeFile> pendingEpisodes;
-  public static EpisodeFile currentEpisodeFile;
-  public static int progress;
   private PowerManager powerManager;
   private PowerManager.WakeLock wakeLock;
   private ApplicationManager app;
-  private Future<File> currentDownload;
+  private static DownloadManager downloadManager;
 
   public DownloadService() {
   }
@@ -47,9 +45,8 @@ public class DownloadService extends Service implements ProgressCallback, Future
     this.app             = ApplicationManager.current();
     this.powerManager    = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock        = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
-    this.pendingEpisodes = new ArrayList();
+    this.downloadManager = new DownloadManager(this, this);
     this.wakeLock.acquire();
-
     app.db.episodeFiles.markDownloadingAsFailed();
   }
 
@@ -57,127 +54,64 @@ public class DownloadService extends Service implements ProgressCallback, Future
   public void onDestroy() {
     super.onDestroy();
     wakeLock.release();
-    Ion.getDefault(this).cancelAll(this);
-    currentEpisodeFile = null;
+    downloadManager.cancelAll();
   }
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     if (app.intents.haveCancelExtra(intent)) {
-      Log.i(TAG, "Recived cancel task intent action");
       if (app.intents.haveEpisode(intent)) {
-        cancelEpisodeById(app.intents.getEpisodeId(intent));
+        Log.i(TAG, "Have episode id in intent, Canceling it!");
+        downloadManager.cancelEpisodeById(app.intents.getEpisodeId(intent));
       } else {
         Log.i(TAG, "Cancel all downloads!");
-        finish();
+        downloadManager.cancelAll();
       }
-
     } else {
-      pendingEpisodes.clear();
-      pendingEpisodes.addAll(ApplicationManager.current().db.episodeFiles.pending());
-      nextUnlessRunning();
+      Log.i(TAG, "Pushing all pending episodes");
+      downloadManager.push(new ArrayList<EpisodeFile>(app.db.episodeFiles.pending()));
     }
     return super.onStartCommand(intent, flags, startId);
   }
 
-  private void cancelEpisodeById(int episodeId) {
-    if (currentEpisodeFile != null && currentEpisodeFile.episode.id == episodeId) {
-      Log.d(TAG, "Canceling current task!");
-      if (currentDownload != null)
-        currentDownload.cancel(true);
-      currentDownload = null;
-    } else {
-      Log.d(TAG, "Finding task in queue");
-      EpisodeFile toRemove = null;
-      for(EpisodeFile file : pendingEpisodes) {
-        if (file.episode.id == episodeId) {
-          toRemove = file;
-        }
-      }
 
-      if (toRemove != null) {
-        pendingEpisodes.remove(toRemove);
-      }
-    }
+  private void sendStatusFor(DownloadEpisode download) {
+    sendBroadcast(app.intents.downloadStatus(download));
   }
 
-  private void nextUnlessRunning() {
-    if (currentEpisodeFile == null) {
-      next();
-    }
+  private void updateNotification(DownloadEpisode download) {
+    Notification notification = app.notifications.downloadEpisode(download.getEpisodeFile().episode, download.progress, downloadManager.size());
+    startForeground(NOTIFICATION_ID, notification);
+  }
+
+  @Override
+  public void onDownloadStart(DownloadEpisode download) {
+    updateNotification(download);
+    sendStatusFor(download);
+  }
+
+  @Override
+  public void onDownloadProgress(DownloadEpisode download) {
+    updateNotification(download);
+    sendStatusFor(download);
+  }
+
+  @Override
+  public void onDownloadFail(DownloadEpisode download, Exception e) {
+    updateNotification(download);
+    sendStatusFor(download);
+  }
+
+  @Override
+  public void onDownloadSuccess(DownloadEpisode download) {
+    updateNotification(download);
+    sendStatusFor(download);
   }
 
 
-  private void finish() {
-    if (currentEpisodeFile != null) {
-      currentEpisodeFile.fail();
-      ApplicationManager.current().db.episodeFiles.update(currentEpisodeFile);
-      status(0);
-    }
+  @Override
+  public void onDownloadManagerFinishedAll() {
     stopSelf();
   }
 
-  private void next() {
-    if (this.pendingEpisodes.size() > 0) {
-      currentEpisodeFile = this.pendingEpisodes.remove(0);
-      currentEpisodeFile.running();
-      ApplicationManager.current().db.episodeFiles.update(currentEpisodeFile);
-
-      status(0);
-      Log.i(TAG, "Downloading: " + currentEpisodeFile.episode.name);
-
-      currentDownload = Ion.with(this).load(currentEpisodeFile.episode.mp3).progress(this).write(currentEpisodeFile.file(this)).setCallback(this);
-    } else {
-      afterDownloadAll();
-    }
-  }
-
-  @Override
-  public void onProgress(long downloaded, long total) {
-    progress = (int) (((float)downloaded/(float)total) * 100);
-
-    if (progress % 5 == 0) {
-      status(progress);
-    }
-  }
-
-  private void status(int progress) {
-    sendBroadcast(ApplicationManager.current().intents.downloadStatus(currentEpisodeFile, progress));
-    startForeground(NOTIFICATION_ID, ApplicationManager.current().notifications.downloadEpisode(currentEpisodeFile.episode, progress, pendingEpisodes.size()));
-  }
-
-  @Override
-  public void onCompleted(Exception e, File result) {
-    if (e != null) {
-      if (CancellationException.class.isInstance(e)) {
-        Log.e(TAG, "Forced cancel");
-        app.db.episodeFiles.destroy(currentEpisodeFile);
-      } else {
-        Log.e(TAG, "Something failed:" +e.toString());
-        currentEpisodeFile.fail();
-        app.db.episodeFiles.update(currentEpisodeFile);
-      }
-
-    } else {
-      Log.i(TAG, "Downloaded successul!");
-      currentEpisodeFile.success();
-      app.db.episodeFiles.update(currentEpisodeFile);
-    }
-
-    status(100);
-    currentEpisodeFile = null;
-    currentDownload    = null;
-    next();
-  }
-
-  private void afterDownloadAll() {
-    Log.i(TAG, "After download all!");
-    currentEpisodeFile = null;
-    currentDownload    = null;
-    finish();
-  }
-
-  public boolean isRunning() {
-    return currentEpisodeFile != null;
-  }
 }

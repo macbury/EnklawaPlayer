@@ -20,6 +20,7 @@ import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.extensions.Converter;
+import macbury.enklawa.services.download.DownloadManager;
 import macbury.enklawa.services.download.DownloadService;
 
 /**
@@ -103,10 +104,16 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
       holder.secondaryAction.setImageResource(R.drawable.av_download);
     } else if (episodeFile.isDownloading() || episodeFile.isPending()) {
       holder.actionType = SecondaryAction.CancelDownload;
+      holder.secondaryAction.setImageResource(R.drawable.navigation_cancel);
       if (episodeFile.isDownloading()) {
-        holder.secondaryAction.setImageResource(R.drawable.navigation_cancel);
         holder.progressBar.setVisibility(View.VISIBLE);
-        holder.progressBar.setProgress(DownloadService.progress);
+        if (DownloadManager.current.getProgress() == 0) {
+          holder.progressBar.setIndeterminate(true);
+        } else {
+          holder.progressBar.setIndeterminate(false);
+          holder.progressBar.setProgress(DownloadManager.current.getProgress());
+        }
+
       }
     } else {
       holder.actionType = SecondaryAction.Play;

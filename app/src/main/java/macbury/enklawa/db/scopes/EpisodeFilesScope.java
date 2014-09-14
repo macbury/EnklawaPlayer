@@ -22,6 +22,7 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
     if (file == null) {
       file             = new EpisodeFile();
       file.episode     = episode;
+      file.status      = EpisodeFile.Status.Pending;
     }
     file.retryCount  = 0;
 

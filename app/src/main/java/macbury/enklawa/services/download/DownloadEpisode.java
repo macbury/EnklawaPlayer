@@ -15,6 +15,7 @@ import macbury.enklawa.db.models.EpisodeFile;
 public class DownloadEpisode {
   private EpisodeFile  episodeFile;
   private Future<File> download;
+  public int progress = 0;
 
   public DownloadEpisode(EpisodeFile episodeFile, DownloadManager manager) {
     this.episodeFile  = episodeFile;

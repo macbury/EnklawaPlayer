@@ -86,7 +86,7 @@ public abstract class AbstractScope<K> {
   }
 
   private boolean haveCallbacks(K dbObject) {
-    return callbacks(dbObject).getListener() != null;
+    return dbObject != null && callbacks(dbObject).getListener() != null;
   }
 
   private DBCallbacks callbacksInterface(K dbObject) {

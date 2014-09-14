@@ -6,6 +6,7 @@ import android.content.Intent;
 import macbury.enklawa.activities.SettingsActivity;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.services.download.DownloadEpisode;
 import macbury.enklawa.services.download.DownloadService;
 
 /**
@@ -53,10 +54,10 @@ public class IntentManager {
     return intent.getIntExtra(EXTRA_EPISODE, -1);
   }
 
-  public Intent downloadStatus(EpisodeFile episodeFile, int progress) {
+  public Intent downloadStatus(DownloadEpisode download) {
     Intent intent = new Intent(BroadcastsManager.BROADCAST_ACTION_DOWNLOADING);
-    intent.putExtra(EXTRA_EPISODE_FILE_ID, episodeFile.id);
-    intent.putExtra(EXTRA_PROGRESS, progress);
+    intent.putExtra(EXTRA_EPISODE_FILE_ID, download.getEpisodeFile().id);
+    intent.putExtra(EXTRA_PROGRESS, download.progress);
     return intent;
   }
 }

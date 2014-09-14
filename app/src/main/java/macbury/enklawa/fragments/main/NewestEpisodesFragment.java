@@ -49,14 +49,14 @@ public class NewestEpisodesFragment extends EnklawaBaseAbstractListFragment impl
 
   @Override
   public void onDownloadEpisodeButtonClick(Episode episode) {
-    Log.i(TAG, "Clicked download episode: " + episode.name);
+    Log.v(TAG, "Clicked download episode: " + episode.name);
     app.db.episodeFiles.createFromEpisode(episode);
     app.services.downloadPendingEpisodes();
   }
 
   @Override
   public void onCancelEpisodeDownloadButtonClick(Episode episode) {
-    Log.i(TAG, "Clicked cancel download episode: " + episode.name);
+    Log.v(TAG, "Clicked cancel download episode: " + episode.name);
     getActivity().startService(app.intents.cancelEpisodeDownloadService(episode));
   }
 }

@@ -5,7 +5,9 @@ package macbury.enklawa.services.download;
  */
 public interface DownloadManagerListener {
   public void onDownloadManagerFinishedAll();
-  public void onDownloadProgress(DownloadEpisode currentDownload, float progress);
+  public void onDownloadProgress(DownloadEpisode currentDownload);
   public void onDownloadStart(DownloadEpisode currentDownload);
   public void onDownloadFail(DownloadEpisode currentDownload, Exception e);
+
+  public void onDownloadSuccess(DownloadEpisode currentDownload);
 }
