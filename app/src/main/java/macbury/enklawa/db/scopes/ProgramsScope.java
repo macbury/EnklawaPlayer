@@ -1,8 +1,13 @@
 package macbury.enklawa.db.scopes;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+
+import java.sql.SQLException;
+import java.util.List;
 
 import macbury.enklawa.api.APIProgram;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
 
 /**
@@ -27,5 +32,15 @@ public class ProgramsScope extends AbstractScope<Program> {
 
   public Program find(APIProgram apiObject) {
     return find(apiObject.id);
+  }
+
+  public List<Program> allOrderedByName() {
+    QueryBuilder<Program, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.orderBy("name", true).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

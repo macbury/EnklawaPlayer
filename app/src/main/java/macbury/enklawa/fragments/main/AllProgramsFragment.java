@@ -40,7 +40,7 @@ public class AllProgramsFragment extends Fragment {
   }
 
   private void loadPrograms() {
-    List<Program> programs = ApplicationManager.current().db.programs.all();
+    List<Program> programs = ApplicationManager.current().db.programs.allOrderedByName();
     if (programs.size() > 0) {
       this.gridView.setAdapter(new ProgramsAdapter(this.getActivity().getApplicationContext(), programs));
     }
