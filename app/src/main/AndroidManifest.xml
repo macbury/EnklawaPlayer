@@ -52,6 +52,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+          android:name=".activities.ProgramEpisodesActivity"
+          android:configChanges="keyboardHidden|orientation"
+          android:label="@string/title_activity_settings"
+          android:parentActivityName=".activities.main.MainActivity" >
+        </activity>
+
         <service
             android:name=".services.DownloadService"
             android:enabled="true"

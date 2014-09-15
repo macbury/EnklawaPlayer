@@ -4,6 +4,7 @@
   android:orientation="horizontal"
   android:id="@+id/program_grid_container"
   android:layout_width="match_parent"
+  android:background="?android:attr/activatedBackgroundIndicator"
   android:layout_height="wrap_content"
   android:descendantFocusability="blocksDescendants">
   <ImageView

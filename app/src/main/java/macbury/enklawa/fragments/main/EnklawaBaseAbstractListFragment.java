@@ -4,6 +4,11 @@ import android.app.ListFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.managers.ApplicationManager;
@@ -37,6 +42,13 @@ public abstract class EnklawaBaseAbstractListFragment extends ListFragment {
 
   protected abstract void onSyncPodUpdate();
   protected abstract void onDownloadUpdate(int progress, EpisodeFile file);
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View view = super.onCreateView(inflater, container, savedInstanceState);
+    view.setBackgroundColor(Color.WHITE);
+    return view;
+  }
 
   @Override
   public void onResume() {

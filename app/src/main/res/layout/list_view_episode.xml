@@ -4,6 +4,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:orientation="horizontal"
+              android:descendantFocusability="blocksDescendants"
+              android:background="@drawable/episode_item_selector"
               android:layout_height="match_parent">
 
   <ImageView

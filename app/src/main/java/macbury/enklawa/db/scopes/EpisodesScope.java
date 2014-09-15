@@ -9,6 +9,7 @@ import java.util.List;
 import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.managers.ApplicationManager;
 
@@ -50,4 +51,13 @@ public class EpisodesScope extends AbstractScope<Episode> {
     return null;
   }
 
+  public List<Episode> allForProgram(Program program) {
+    QueryBuilder<Episode, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.orderBy("id", false).where().in("program_id", program.id).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
