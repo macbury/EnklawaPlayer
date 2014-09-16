@@ -11,17 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import macbury.enklawa.db.models.EpisodeFile;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.IntentManager;
 
 /**
  * Created by macbury on 12.09.14.
  */
 public abstract class EnklawaBaseAbstractListFragment extends ListFragment {
-  protected ApplicationManager app;
+  protected Enklawa app;
 
   public EnklawaBaseAbstractListFragment() {
-    app = ApplicationManager.current();
+    app = Enklawa.current();
   }
 
   private BroadcastReceiver syncRefreshReceiver = new BroadcastReceiver() {
@@ -35,7 +35,7 @@ public abstract class EnklawaBaseAbstractListFragment extends ListFragment {
     @Override
     public void onReceive(Context context, Intent intent) {
       int eid        = intent.getIntExtra(IntentManager.EXTRA_EPISODE_FILE_ID, -1);
-      EpisodeFile ep = ApplicationManager.current().db.episodeFiles.find(eid);
+      EpisodeFile ep = Enklawa.current().db.episodeFiles.find(eid);
       onDownloadUpdate(intent.getIntExtra(IntentManager.EXTRA_PROGRESS, 0), ep);
     }
   };

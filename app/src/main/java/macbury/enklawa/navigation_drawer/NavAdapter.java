@@ -73,7 +73,7 @@ public class NavAdapter extends BaseAdapter{
     } else if(isDivider(position)) {
       return getDividerItemView((NavDivider)item, convertView, parent);
     } else if(isNavFavoriteProgramItem(position)) {
-      return getFavoriteProgramItemView((FavoriteProgramNavItem) item, convertView, parent);
+      return getFavoriteProgramItemView((FavoriteProgramNavItem) item, convertView, parent, position);
     }
     return null;
   }
@@ -86,7 +86,7 @@ public class NavAdapter extends BaseAdapter{
     return FavoriteProgramNavItem.class.isInstance(getItem(position));
   }
 
-  private View getFavoriteProgramItemView(FavoriteProgramNavItem item, View convertView, ViewGroup parent) {
+  private View getFavoriteProgramItemView(FavoriteProgramNavItem item, View convertView, ViewGroup parent, int position) {
     FavoriteProgramItemItemHolder holder = null;
 
     if (convertView == null) {
@@ -104,6 +104,12 @@ public class NavAdapter extends BaseAdapter{
 
     holder.titleView.setText(program.name);
     Ion.with(context).load(program.image).withBitmap().intoImageView(holder.previewImage);
+
+    if (position == selected) {
+      holder.titleView.setTypeface(null, Typeface.BOLD);
+    } else {
+      holder.titleView.setTypeface(null, Typeface.NORMAL);
+    }
 
     return convertView;
   }

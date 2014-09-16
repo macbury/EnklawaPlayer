@@ -6,11 +6,6 @@
         android:icon="@drawable/ic_action_rating_not_important"
         android:orderInCategory="100"
         android:showAsAction="always" />
-  <item android:id="@+id/action_website"
-        android:title="@string/action_website"
-        android:icon="@drawable/ic_action_location_web_site"
-        android:orderInCategory="100"
-        android:showAsAction="always" />
   <item android:id="@+id/action_about"
         android:title="@string/action_about"
         android:icon="@drawable/ic_action_action_about"

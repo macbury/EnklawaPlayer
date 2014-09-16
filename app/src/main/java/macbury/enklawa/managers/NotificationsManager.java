@@ -57,7 +57,7 @@ public class NotificationsManager {
       builder.setProgress(100, progress, false);
     }
 
-    builder.addAction(R.drawable.ic_action_av_pause, context.getString(R.string.stop_download), ApplicationManager.current().intents.cancelDownloadService());
+    builder.addAction(R.drawable.ic_action_av_pause, context.getString(R.string.stop_download), Enklawa.current().intents.cancelDownloadService());
     Notification notification = builder.build();
     return notification;
   }

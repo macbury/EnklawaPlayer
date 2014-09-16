@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Program;
+import macbury.enklawa.fragments.main.episodes.ProgramEpisodesFragment;
 import macbury.enklawa.navigation_drawer.NavAdapter;
 import macbury.enklawa.navigation_drawer.NavDivider;
 import macbury.enklawa.navigation_drawer.items.AllProgramsNavItem;
@@ -30,6 +31,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
   private NavDivider                  favoriteDividerNav;
   private ForumNavItem                forumNavItem;
   private NavigationListener          listener;
+  private ProgramEpisodesFragment     programEpisodesFragment;
 
   public NavigationController(MainActivity activity, ListView navDrawerListView, DrawerLayout mDrawerLayout, NavigationListener listener) {
     this.activity                 = activity;
@@ -74,9 +76,20 @@ public class NavigationController implements AdapterView.OnItemClickListener {
   }
 
   public void setSelected(int position) {
+    if (position >= drawerNavAdapter.getCount()) {
+      position = 0;
+    }
+
     if (drawerNavAdapter.isNavItemFragment(position)) {
       NavItemFragment itemFragment = (NavItemFragment)drawerNavAdapter.getItem(position);
       this.listener.onNavigationFragmentSelect(itemFragment.getFragment());
+    } else if (drawerNavAdapter.isNavFavoriteProgramItem(position)) {
+      FavoriteProgramNavItem itemFragment = (FavoriteProgramNavItem)drawerNavAdapter.getItem(position);
+      if (programEpisodesFragment == null) {
+        programEpisodesFragment = new ProgramEpisodesFragment();
+      }
+      programEpisodesFragment.setProgram(itemFragment.getProgram());
+      this.listener.onNavigationFragmentSelect(programEpisodesFragment);
     }
     this.drawerNavAdapter.setSelected(position);
   }

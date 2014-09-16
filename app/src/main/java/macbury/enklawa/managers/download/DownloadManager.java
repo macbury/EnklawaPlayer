@@ -13,7 +13,7 @@ import java.util.concurrent.CancellationException;
 
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 13.09.14.
@@ -22,7 +22,7 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   private static final String TAG = "DownloadManager";
   private final Context context;
   private final ArrayList<EpisodeFile> queue;
-  private final ApplicationManager app;
+  private final Enklawa app;
   private final DownloadManagerListener listener;
   public static DownloadManager current;
   private DownloadEpisode currentDownload;
@@ -30,7 +30,7 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   public DownloadManager(Context context, DownloadManagerListener listener) {
     this.listener = listener;
     this.context  = context;
-    this.app      = ApplicationManager.current();
+    this.app      = Enklawa.current();
     this.queue    = new ArrayList<EpisodeFile>();
     this.current  = this;
   }

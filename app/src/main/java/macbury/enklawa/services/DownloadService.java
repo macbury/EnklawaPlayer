@@ -7,19 +7,10 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.koushikdutta.async.future.Future;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.ProgressCallback;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.util.concurrent.CancellationException;
 
 import macbury.enklawa.db.models.EpisodeFile;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.download.DownloadEpisode;
 import macbury.enklawa.managers.download.DownloadManager;
 import macbury.enklawa.managers.download.DownloadManagerListener;
@@ -30,7 +21,7 @@ public class DownloadService extends Service implements DownloadManagerListener 
   private static final int NOTIFICATION_ID    = 123;
   private PowerManager powerManager;
   private PowerManager.WakeLock wakeLock;
-  private ApplicationManager app;
+  private Enklawa app;
   private static DownloadManager downloadManager;
 
   public DownloadService() {
@@ -45,7 +36,7 @@ public class DownloadService extends Service implements DownloadManagerListener 
   @Override
   public void onCreate() {
     super.onCreate();
-    this.app             = ApplicationManager.current();
+    this.app             = Enklawa.current();
     this.powerManager    = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock        = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.downloadManager = new DownloadManager(this, this);

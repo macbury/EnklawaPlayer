@@ -11,7 +11,6 @@ import macbury.enklawa.adapters.EpisodesAdapter;
 import macbury.enklawa.adapters.EpisodesAdapterListener;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
-import macbury.enklawa.managers.ApplicationManager;
 
 /**
  * Created by macbury on 14.09.14.
@@ -31,8 +30,13 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
 
   @Override
   public void onSyncPodUpdate() {
+    updateEpisodes();
+  }
+
+  public void updateEpisodes() {
     this.episodesArray = getEpisodes();
     this.episodeAdapter.set(episodesArray);
+    episodeAdapter.notifyDataSetChanged();
   }
 
   public abstract List<Episode> getEpisodes();

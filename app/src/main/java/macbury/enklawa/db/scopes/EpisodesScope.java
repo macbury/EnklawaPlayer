@@ -7,11 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import macbury.enklawa.api.APIEpisode;
-import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.db.models.Episode;
-import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
-import macbury.enklawa.managers.ApplicationManager;
 
 /**
  * Created by macbury on 10.09.14.

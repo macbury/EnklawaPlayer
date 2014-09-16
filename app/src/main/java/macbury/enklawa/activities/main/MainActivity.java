@@ -21,13 +21,7 @@ import java.util.List;
 
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Program;
-import macbury.enklawa.navigation_drawer.NavAdapter;
-import macbury.enklawa.navigation_drawer.NavDivider;
-import macbury.enklawa.navigation_drawer.items.AllProgramsNavItem;
-import macbury.enklawa.navigation_drawer.items.DownloadedEpisodesNavItem;
-import macbury.enklawa.navigation_drawer.items.ForumNavItem;
-import macbury.enklawa.navigation_drawer.items.NewestEpisodesNavItem;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 import macbury.enklawa.views.CoolProgress;
 
@@ -108,13 +102,16 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   @Override
   protected void onResume() {
     super.onResume();
-    ApplicationManager.current().broadcasts.podSyncReceiver(this, syncReceiver);
+    Enklawa app = Enklawa.current();
+    app.broadcasts.podSyncReceiver(this, syncReceiver);
+    app.broadcasts.favoriteProgramChangeReceiver(this, updateUIReceiver);
     updateUI();
   }
 
   @Override
   protected void onPause() {
     unregisterReceiver(syncReceiver);
+    unregisterReceiver(updateUIReceiver);
     super.onPause();
   }
 
@@ -137,7 +134,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
     int id = item.getItemId();
     if (id == R.id.action_settings) {
-      startActivity(ApplicationManager.current().intents.showSettingsActivity());
+      startActivity(Enklawa.current().intents.showSettingsActivity());
       return true;
     } else if (id == R.id.action_refresh) {
       syncProgressBar.setIndeterminate(true);
@@ -156,7 +153,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   }
 
   public void startManualSync() {
-    ApplicationManager.current().services.syncPodService();
+    Enklawa.current().services.syncPodService();
   }
 
   public void drawerStateChange(boolean opened) {
@@ -165,6 +162,13 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   }
 
   BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      MainActivity.this.updateUI();
+    }
+  };
+
+  BroadcastReceiver updateUIReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       MainActivity.this.updateUI();
@@ -182,6 +186,6 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
   @Override
   public List<Program> getNavigationControllerFavoritedPrograms() {
-    return ApplicationManager.current().db.programs.allFavorited();
+    return Enklawa.current().db.programs.allFavorited();
   }
 }

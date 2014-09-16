@@ -1,8 +1,6 @@
 package macbury.enklawa.services;
 
-import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -23,19 +21,18 @@ import macbury.enklawa.api.APIThread;
 import macbury.enklawa.db.ExternalDBCallbacks;
 import macbury.enklawa.db.models.BaseModel;
 import macbury.enklawa.db.models.Episode;
-import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.ForumThread;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.db.scopes.EpisodesScope;
 import macbury.enklawa.db.scopes.ProgramsScope;
 import macbury.enklawa.db.scopes.ThreadScope;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 
 public class SyncPodService extends Service implements FutureCallback<APIResponse>, ProgressCallback {
   private static final String TAG = "SyncPodService";
   private static final String WAKE_LOCK_TAG = "SyncPodWakeLock";
   private static final int SYNC_POD_NOTIFICATION_ID = 666;
-  private ApplicationManager app;
+  private Enklawa app;
   private PowerManager powerManager;
   private PowerManager.WakeLock wakeLock;
 
@@ -68,7 +65,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     super.onCreate();
     Log.d(TAG, "Create");
     running           = true;
-    this.app          = (ApplicationManager)getApplication();
+    this.app          = (Enklawa)getApplication();
     this.powerManager = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock     = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.wakeLock.acquire();

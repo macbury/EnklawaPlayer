@@ -4,12 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import macbury.enklawa.R;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.SettingsManager;
 
 /**
@@ -33,7 +32,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
   private void updateUI() {
     PreferenceScreen screen                = getPreferenceScreen();
-    ApplicationManager application         = (ApplicationManager)(getActivity().getApplication());
+    Enklawa application         = (Enklawa)(getActivity().getApplication());
     SettingsManager    manager             = application.settings;
 
     EditTextPreference endpointPreference  = (EditTextPreference)screen.findPreference(SettingsManager.KEY_API_ENDPOINT);
@@ -52,7 +51,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
   @Override
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     updateUI();
-    ApplicationManager.current().settings.update();
+    Enklawa.current().settings.update();
   }
 
   @Override

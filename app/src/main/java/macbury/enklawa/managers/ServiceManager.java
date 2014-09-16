@@ -9,10 +9,10 @@ import macbury.enklawa.services.SyncPodService;
  * Created by macbury on 09.09.14.
  */
 public class ServiceManager {
-  private final ApplicationManager context;
+  private final Enklawa context;
 
-  public ServiceManager(ApplicationManager applicationManager) {
-    this.context = applicationManager;
+  public ServiceManager(Enklawa enklawa) {
+    this.context = enklawa;
   }
 
   public void syncPodService() {

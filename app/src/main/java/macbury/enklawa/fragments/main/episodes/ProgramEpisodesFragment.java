@@ -1,8 +1,5 @@
 package macbury.enklawa.fragments.main.episodes;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +12,7 @@ import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.fragments.main.AbstractEpisodesFragment;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 15.09.14.
@@ -34,6 +31,10 @@ public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
 
   public void setProgram(Program program) {
     this.program = program;
+    if (isAdded()) {
+      updateEpisodes();
+      getActivity().invalidateOptionsMenu();
+    }
   }
 
   @Override
@@ -71,8 +72,10 @@ public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
   }
 
   private void toggleFavorite() {
-    program.favorite = !program.favorite;
-    ApplicationManager.current().db.programs.update(program);
+    Enklawa app = Enklawa.current();
+    program.favorite       = !program.favorite;
+    app.db.programs.update(program);
+    app.broadcasts.favoriteProgramChange(program);
     Toast.makeText(getActivity(), program.favorite ? R.string.action_marked_as_favorite : R.string.action_marked_as_not_favorite, Toast.LENGTH_SHORT).show();
     getActivity().invalidateOptionsMenu();
   }

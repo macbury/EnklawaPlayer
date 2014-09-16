@@ -1,22 +1,11 @@
 package macbury.enklawa.managers;
 
 import android.app.Application;
-import android.content.Intent;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.koushikdutta.ion.Ion;
-
-import java.util.Date;
-
-import macbury.enklawa.extensions.DateDeserializer;
-import macbury.enklawa.fragments.SettingsFragment;
 
 /**
  * Created by macbury on 09.09.14.
  */
-public class ApplicationManager extends Application {
+public class Enklawa extends Application {
   public DatabaseManager db;
   public ServiceManager services;
   public IntentManager  intents;
@@ -24,7 +13,7 @@ public class ApplicationManager extends Application {
   public NotificationsManager notifications;
   public BroadcastsManager broadcasts;
 
-  private static ApplicationManager current;
+  private static Enklawa current;
 
 
   @Override
@@ -43,12 +32,12 @@ public class ApplicationManager extends Application {
   }
 
   private void syncIfFirstBoot() {
-    if (ApplicationManager.current().db.episodes.count() == 0) {
+    if (Enklawa.current().db.episodes.count() == 0) {
       services.syncPodService();
     }
   }
 
-  public static synchronized ApplicationManager current() {
+  public static synchronized Enklawa current() {
     return current;
   }
 

@@ -20,10 +20,10 @@ public class IntentManager {
   public static final String EXTRA_EPISODE                 = "EXTRA_EPISODE";
   public static final String EXTRA_PROGRAM_ID              = "EXTRA_PROGRAM_ID";
 
-  private final ApplicationManager context;
+  private final Enklawa context;
 
-  public IntentManager(ApplicationManager applicationManager) {
-    this.context = applicationManager;
+  public IntentManager(Enklawa enklawa) {
+    this.context = enklawa;
   }
 
   public Intent showSettingsActivity() {
@@ -73,6 +73,12 @@ public class IntentManager {
 
   public Intent activityForProgramEpisodes(Program program) {
     Intent intent         = new Intent(context, ProgramEpisodesActivity.class);
+    intent.putExtra(EXTRA_PROGRAM_ID, program.id);
+    return intent;
+  }
+
+  public Intent favoriteProgram(Program program) {
+    Intent intent         = new Intent(BroadcastsManager.BROADCAST_FAVORITE_PROGRAM);
     intent.putExtra(EXTRA_PROGRAM_ID, program.id);
     return intent;
   }

@@ -1,9 +1,6 @@
 package macbury.enklawa.fragments.main;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,20 +9,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.List;
 
 import macbury.enklawa.R;
-import macbury.enklawa.activities.ProgramEpisodesActivity;
 import macbury.enklawa.adapters.ProgramsAdapter;
-import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
-import macbury.enklawa.fragments.main.episodes.NewestEpisodesFragment;
-import macbury.enklawa.fragments.main.episodes.ProgramEpisodesFragment;
-import macbury.enklawa.managers.ApplicationManager;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 12.09.14.
@@ -58,11 +50,11 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
   public void onResume() {
     super.onResume();
     loadPrograms();
-    ApplicationManager.current().broadcasts.podSyncReceiver(this.getActivity(), syncRefreshReceiver);
+    Enklawa.current().broadcasts.podSyncReceiver(this.getActivity(), syncRefreshReceiver);
   }
 
   private void loadPrograms() {
-    List<Program> programs = ApplicationManager.current().db.programs.allOrderedByName();
+    List<Program> programs = Enklawa.current().db.programs.allOrderedByName();
     if (programs.size() > 0) {
       this.adapter = new ProgramsAdapter(this.getActivity().getApplicationContext(), programs, this);
       this.gridView.setAdapter(adapter);
@@ -79,6 +71,6 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
 
   @Override
   public void onProgramSelect(Program program) {
-    getActivity().startActivity(ApplicationManager.current().intents.activityForProgramEpisodes(program));
+    getActivity().startActivity(Enklawa.current().intents.activityForProgramEpisodes(program));
   }
 }
