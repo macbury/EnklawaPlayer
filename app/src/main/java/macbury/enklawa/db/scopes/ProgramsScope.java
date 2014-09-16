@@ -43,4 +43,23 @@ public class ProgramsScope extends AbstractScope<Program> {
     }
     return null;
   }
+
+  public List<Program> allFavorited() {
+    QueryBuilder<Program, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.orderBy("name", true).where().eq("favorite", true).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public boolean updateFromApi(APIProgram apiProgram) {
+    Program oldProgram = find(apiProgram);
+    Program newProgram = buildFromApi(apiProgram);
+    if (oldProgram != null) {
+      newProgram.favorite = oldProgram.favorite;
+    }
+    return update(newProgram);
+  }
 }

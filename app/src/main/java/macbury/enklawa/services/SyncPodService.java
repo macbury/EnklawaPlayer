@@ -134,7 +134,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
       EpisodesScope episodes = app.db.episodes;
       for (APIProgram apiProgram : resultPrograms) {
         current++;
-        if (programs.update(programs.buildFromApi(apiProgram))) {
+        if (programs.updateFromApi(apiProgram)) {
           Program program = programs.find(apiProgram);
           Log.v(TAG, "Program: " +program.name);
           for(APIEpisode apiEpisode : apiProgram.episodes) {

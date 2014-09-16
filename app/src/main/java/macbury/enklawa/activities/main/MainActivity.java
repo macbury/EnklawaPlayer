@@ -17,7 +17,10 @@ import android.widget.ListView;
 
 import com.negusoft.holoaccent.activity.AccentActivity;
 
+import java.util.List;
+
 import macbury.enklawa.R;
+import macbury.enklawa.db.models.Program;
 import macbury.enklawa.navigation_drawer.NavAdapter;
 import macbury.enklawa.navigation_drawer.NavDivider;
 import macbury.enklawa.navigation_drawer.items.AllProgramsNavItem;
@@ -143,6 +146,15 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     return super.onOptionsItemSelected(item);
   }
 
+  @Override
+  public void onBackPressed() {
+    if (drawerOpened) {
+      mDrawerLayout.closeDrawers();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
   public void startManualSync() {
     ApplicationManager.current().services.syncPodService();
   }
@@ -166,5 +178,10 @@ public class MainActivity extends AccentActivity implements NavigationListener {
             .replace(R.id.content_frame, fragment)
             .commit();
 
+  }
+
+  @Override
+  public List<Program> getNavigationControllerFavoritedPrograms() {
+    return ApplicationManager.current().db.programs.allFavorited();
   }
 }

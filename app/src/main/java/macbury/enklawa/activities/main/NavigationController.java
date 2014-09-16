@@ -6,10 +6,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import macbury.enklawa.R;
+import macbury.enklawa.db.models.Program;
 import macbury.enklawa.navigation_drawer.NavAdapter;
 import macbury.enklawa.navigation_drawer.NavDivider;
 import macbury.enklawa.navigation_drawer.items.AllProgramsNavItem;
 import macbury.enklawa.navigation_drawer.items.DownloadedEpisodesNavItem;
+import macbury.enklawa.navigation_drawer.items.FavoriteProgramNavItem;
 import macbury.enklawa.navigation_drawer.items.ForumNavItem;
 import macbury.enklawa.navigation_drawer.items.NavItemFragment;
 import macbury.enklawa.navigation_drawer.items.NewestEpisodesNavItem;
@@ -53,7 +55,12 @@ public class NavigationController implements AdapterView.OnItemClickListener {
     drawerNavAdapter.add(allProgamsItemNav);
     drawerNavAdapter.add(downloadedItemNav);
     drawerNavAdapter.add(forumNavItem);
+
     drawerNavAdapter.add(favoriteDividerNav);
+    for(Program program : listener.getNavigationControllerFavoritedPrograms()) {
+      drawerNavAdapter.add(new FavoriteProgramNavItem(activity, program));
+    }
+
     drawerNavAdapter.notifyDataSetChanged();
   }
 

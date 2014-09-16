@@ -9,6 +9,7 @@ import java.util.List;
 
 import macbury.enklawa.db.DBCallbacks;
 import macbury.enklawa.db.models.BaseModel;
+import macbury.enklawa.db.models.Program;
 
 /**
  * Created by macbury on 09.09.14.
@@ -56,7 +57,6 @@ public abstract class AbstractScope<K> {
     try {
       return dao.queryForId(id);
     } catch (SQLException e) {
-      e.printStackTrace();
       return null;
     }
   }
@@ -126,4 +126,6 @@ public abstract class AbstractScope<K> {
       callbacks(dbObject).getListener().afterDestroy((BaseModel)dbObject);
     }
   }
+
+
 }

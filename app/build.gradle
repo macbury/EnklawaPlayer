@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.noveogroup.android:highlightify:+'
+    //compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
     compile 'com.etsy.android.grid:library:1.0.5'
     compile 'com.koushikdutta.ion:ion:1.+'
     compile 'com.google.code.gson:gson:1.7.2'

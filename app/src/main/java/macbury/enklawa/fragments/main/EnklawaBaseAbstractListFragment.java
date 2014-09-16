@@ -53,8 +53,8 @@ public abstract class EnklawaBaseAbstractListFragment extends ListFragment {
   @Override
   public void onResume() {
     super.onResume();
-    ApplicationManager.current().broadcasts.podSyncReceiver(this.getActivity(), syncRefreshReceiver);
-    ApplicationManager.current().broadcasts.downloadReceiver(this.getActivity(), downloadRefreshReceiver);
+    app.broadcasts.podSyncReceiver(this.getActivity(), syncRefreshReceiver);
+    app.broadcasts.downloadReceiver(this.getActivity(), downloadRefreshReceiver);
     onSyncPodUpdate();
   }
 

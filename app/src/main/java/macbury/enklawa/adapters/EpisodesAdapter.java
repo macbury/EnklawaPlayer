@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
-import com.noveogroup.highlightify.Highlightify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +83,6 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
 
       holder.secondaryAction.setTag(holder);
       holder.secondaryAction.setOnClickListener(this);
-
-      Highlightify highlightify = new Highlightify();
-      highlightify.highlightWithChildren(convertView);
 
       convertView.setTag(holder);
     } else {

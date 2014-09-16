@@ -2,17 +2,25 @@ package macbury.enklawa.navigation_drawer;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+
+import com.koushikdutta.ion.Ion;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import be.webelite.ion.IconView;
 import macbury.enklawa.R;
+import macbury.enklawa.db.models.Program;
+import macbury.enklawa.navigation_drawer.items.FavoriteProgramNavItem;
 import macbury.enklawa.navigation_drawer.items.NavItemFragment;
 
 /**
@@ -64,12 +72,40 @@ public class NavAdapter extends BaseAdapter{
       return getNavItemView((NavItemFragment)item, convertView, parent, position);
     } else if(isDivider(position)) {
       return getDividerItemView((NavDivider)item, convertView, parent);
+    } else if(isNavFavoriteProgramItem(position)) {
+      return getFavoriteProgramItemView((FavoriteProgramNavItem) item, convertView, parent);
     }
     return null;
   }
 
   public boolean isNavItemFragment(int position) {
     return NavItemFragment.class.isInstance(getItem(position));
+  }
+
+  public boolean isNavFavoriteProgramItem(int position) {
+    return FavoriteProgramNavItem.class.isInstance(getItem(position));
+  }
+
+  private View getFavoriteProgramItemView(FavoriteProgramNavItem item, View convertView, ViewGroup parent) {
+    FavoriteProgramItemItemHolder holder = null;
+
+    if (convertView == null) {
+      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView             = inflater.inflate(R.layout.nav_item_favorite_program, parent, false);
+      holder                  = new FavoriteProgramItemItemHolder();
+      holder.previewImage     = (ImageView)convertView.findViewById(R.id.program_preview);
+      holder.titleView        = (TextView)convertView.findViewById(R.id.program_title);
+      convertView.setTag(holder);
+    } else {
+      holder = (FavoriteProgramItemItemHolder) convertView.getTag();
+    }
+
+    Program program = item.getProgram();
+
+    holder.titleView.setText(program.name);
+    Ion.with(context).load(program.image).withBitmap().intoImageView(holder.previewImage);
+
+    return convertView;
   }
 
   private View getDividerItemView(NavDivider item, View convertView, ViewGroup parent) {
@@ -141,6 +177,11 @@ public class NavAdapter extends BaseAdapter{
   public class SimpleNavItemHolder {
     public IconView         iconView;
     public TextView         titleView;
+  }
+
+  public class FavoriteProgramItemItemHolder {
+    public TextView         titleView;
+    public ImageView previewImage;
   }
 
   public class DividerItemHolder {

@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -34,9 +35,11 @@ public class ProgramsAdapter extends BaseAdapter {
   private static final String TAG = "ProgramsAdapter";
   private final Context context;
   private final ArrayList<Program> programs;
+  private final ProgramsAdapterListener listener;
 
-  public ProgramsAdapter(Context context, List<Program> programs) {
-    this.context = context;
+  public ProgramsAdapter(Context context, List<Program> programs, ProgramsAdapterListener listener) {
+    this.context  = context;
+    this.listener = listener;
     this.programs = new ArrayList<Program>();
     set(programs);
   }
@@ -73,21 +76,48 @@ public class ProgramsAdapter extends BaseAdapter {
       convertView                 = inflater.inflate(R.layout.program_grid_item, parent, false);
       holder.programPreview       = (ImageView)convertView.findViewById(R.id.program_preview);
       holder.programTitle         = (TextView)convertView.findViewById(R.id.program_title);
-
+      holder.convertView          = convertView;
+      holder.convertView.setOnTouchListener(holder);
       convertView.setTag(holder);
     } else {
       holder                      = (ProgramHolder)convertView.getTag();
     }
 
     Program program = getItem(position);
-
+    holder.position = position;
     Ion.with(context).load(program.image).withBitmap().intoImageView(holder.programPreview);
     holder.programTitle.setText(program.name);
     return convertView;
   }
 
-  public class ProgramHolder {
+  public class ProgramHolder implements View.OnTouchListener {
     public ImageView programPreview;
     public TextView programTitle;
+    public View convertView;
+    public int position;
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+      switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN: {
+          convertView.setAlpha(0.6f);
+          convertView.invalidate();
+          break;
+        }
+        case MotionEvent.ACTION_UP:
+          listener.onProgramSelect(getItem(position));
+        case MotionEvent.ACTION_CANCEL: {
+          convertView.setAlpha(1f);
+          convertView.invalidate();
+          break;
+        }
+      }
+      return true;
+    }
+  }
+
+  public interface ProgramsAdapterListener {
+    public void onProgramSelect(Program program);
   }
 }

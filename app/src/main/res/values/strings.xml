@@ -9,4 +9,12 @@
   <string name="pref_proxy_header">Proxy</string>
   <string name="new_label">Nowy</string>
 
+  <string name="action_website">Strona WWW</string>
+  <string name="action_about">O programie</string>
+
+  <string name="action_mark_as_favorite">Dodaj do ulubionych</string>
+  <string name="action_mark_as_not_favorite">Usuń z ulubionych</string>
+
+  <string name="action_marked_as_favorite">Dodano do ulubionych</string>
+  <string name="action_marked_as_not_favorite">Usunięto z ulubionych</string>
 </resources>
