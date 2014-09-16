@@ -35,4 +35,11 @@
     <item name="android:text">@string/new_label</item>
   </style>
 
+  <style name="AppTheme.Dialog.Title" parent="@android:style/TextAppearance.Medium">
+    <item name="android:textSize">@dimen/text_size_small</item>
+    <item name="android:textColor">@color/actionbar_color</item>
+    <item name="android:maxLines">2</item>
+    <item name="android:ellipsize">end</item>
+  </style>
+
 </resources>

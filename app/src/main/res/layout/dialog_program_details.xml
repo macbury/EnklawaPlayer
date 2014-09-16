@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:id="@+id/" android:weightSum="1">
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:id="@+id/txtvTitle"
+    android:layout_alignParentTop="true" android:text="Bardzo długi tytuł np lorem ipsum lub lewatywa mózgu"
+    style="@style/AppTheme.Dialog.Title"/>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:layout_below="@id/txtvTitle"
+    android:background="@color/actionbar_color"/>
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageButton
+      android:id="@+id/imageButton"
+      android:layout_height="48dp"
+      android:layout_weight="1"
+      android:background="@drawable/borderless_button" android:layout_width="match_parent"/>
+    <ImageButton android:id="@+id/imageButton5" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent"/>
+    <ImageButton android:id="@+id/imageButton4" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent"/>
+
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/actionbar_color"/>
+  <WebView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/webView"/>
+</LinearLayout>
