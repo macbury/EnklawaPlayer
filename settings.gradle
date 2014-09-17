@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':html-textview'
+project(':html-textview').projectDir = new File('app/libs/html-textview')

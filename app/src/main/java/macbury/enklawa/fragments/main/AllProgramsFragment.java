@@ -57,10 +57,10 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
     List<Program> programs = Enklawa.current().db.programs.allOrderedByName();
     if (adapter == null) {
       this.adapter = new ProgramsAdapter(this.getActivity().getApplicationContext(), programs, this);
-      this.gridView.setAdapter(adapter);
     } else {
       adapter.set(programs);
     }
+    this.gridView.setAdapter(adapter);
   }
 
   @Override

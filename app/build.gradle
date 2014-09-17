@@ -35,4 +35,5 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library:0.5.2'
     compile 'com.negusoft.holoaccent:library:1.0.1'
     compile 'be.webelite:ion-iconview:1.0.+@aar'
+    compile project(':html-textview')
 }

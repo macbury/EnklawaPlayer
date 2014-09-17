@@ -19,14 +19,14 @@ public class EpisodesScope extends AbstractScope<Episode> {
   }
 
   public Episode buildFromApi(APIEpisode apiObject) {
-    Episode episode  = new Episode();
-    episode.name     = apiObject.name;
-    episode.duration = apiObject.duration;
-    episode.image    = apiObject.image;
-    episode.link     = apiObject.link;
-    episode.mp3      = apiObject.mp3;
-    episode.pubDate  = apiObject.pub_date;
-    episode.id       = apiObject.id;
+    Episode episode     = new Episode();
+    episode.name        = apiObject.name;
+    episode.duration    = apiObject.duration;
+    episode.image       = apiObject.image;
+    episode.link        = apiObject.link;
+    episode.mp3         = apiObject.mp3;
+    episode.pubDate     = apiObject.pub_date;
+    episode.id          = apiObject.id;
     episode.description = apiObject.description;
     return episode;
   }

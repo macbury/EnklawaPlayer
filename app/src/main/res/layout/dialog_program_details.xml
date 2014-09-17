@@ -11,33 +11,18 @@
     android:id="@+id/program_title"
     android:layout_alignParentTop="true" android:text="Bardzo długi tytuł np lorem ipsum lub lewatywa mózgu"
     style="@style/AppTheme.Dialog.Title"/>
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="2dp"
-    android:layout_below="@id/program_title"
-    android:background="@color/actionbar_color"/>
   <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <ImageButton
-      android:id="@+id/imageButton"
-      android:layout_height="48dp"
-      android:layout_weight="1"
-      android:background="@drawable/borderless_button" android:layout_width="match_parent"/>
-    <ImageButton android:id="@+id/imageButton2" android:layout_height="48dp"
-                 android:layout_weight="1" android:background="@drawable/borderless_button"
-                 android:layout_width="match_parent"/>
-    <ImageButton android:id="@+id/imageButton5" android:layout_height="48dp"
-                 android:layout_weight="1" android:background="@drawable/borderless_button"
-                 android:layout_width="match_parent"/>
-    <ImageButton android:id="@+id/imageButton4" android:layout_height="48dp"
-                 android:layout_weight="1" android:background="@drawable/borderless_button"
-                 android:layout_width="match_parent"/>
 
   </LinearLayout>
   <View
     android:layout_width="match_parent"
     android:layout_height="2dp"
     android:background="@color/actionbar_color"/>
+  <org.sufficientlysecure.htmltextview.HtmlTextView android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_margin="10dp"
+                                                    android:id="@+id/program_description"/>
 </LinearLayout>

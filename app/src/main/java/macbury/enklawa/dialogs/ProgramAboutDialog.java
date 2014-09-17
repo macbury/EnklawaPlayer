@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 import org.w3c.dom.Text;
 
 import macbury.enklawa.R;
@@ -27,6 +28,7 @@ import macbury.enklawa.managers.IntentManager;
 public class ProgramAboutDialog extends Dialog {
   private Program program;
   private TextView titleTextView;
+  private HtmlTextView descriptionTextView;
 
   public ProgramAboutDialog(Context context, Program program) {
     super(context);
@@ -40,10 +42,11 @@ public class ProgramAboutDialog extends Dialog {
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.dialog_program_details);
 
-    titleTextView   = (TextView)findViewById(R.id.program_title);
-
+    titleTextView        = (TextView)findViewById(R.id.program_title);
+    descriptionTextView  = (HtmlTextView)findViewById(R.id.program_description);
 
     titleTextView.setText(program.name);
+    descriptionTextView.setHtmlFromString(program.description, true);
     //int programId = getArguments().getInt(IntentManager.EXTRA_PROGRAM_ID);
     //program       = Enklawa.current().db.programs.find(programId);
 

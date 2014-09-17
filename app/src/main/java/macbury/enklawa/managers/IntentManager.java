@@ -2,6 +2,7 @@ package macbury.enklawa.managers;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 
 import macbury.enklawa.activities.ProgramEpisodesActivity;
 import macbury.enklawa.activities.SettingsActivity;
@@ -81,5 +82,9 @@ public class IntentManager {
     Intent intent         = new Intent(BroadcastsManager.BROADCAST_FAVORITE_PROGRAM);
     intent.putExtra(EXTRA_PROGRAM_ID, program.id);
     return intent;
+  }
+
+  public Intent openURL(String link) {
+    return new Intent(Intent.ACTION_VIEW).setData(Uri.parse(link));
   }
 }

@@ -11,6 +11,7 @@ import macbury.enklawa.adapters.EpisodesAdapter;
 import macbury.enklawa.adapters.EpisodesAdapterListener;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.dialogs.EpisodeAboutDialog;
 
 /**
  * Created by macbury on 14.09.14.
@@ -49,7 +50,9 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
-    //onEpisodeClick();
+    Episode episode           = episodeAdapter.getItem(position);
+    EpisodeAboutDialog dialog = new EpisodeAboutDialog(getActivity(), episode);
+    dialog.show();
   }
 
   @Override
