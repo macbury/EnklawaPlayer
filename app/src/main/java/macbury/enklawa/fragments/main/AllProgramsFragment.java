@@ -55,9 +55,11 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
 
   private void loadPrograms() {
     List<Program> programs = Enklawa.current().db.programs.allOrderedByName();
-    if (programs.size() > 0) {
+    if (adapter == null) {
       this.adapter = new ProgramsAdapter(this.getActivity().getApplicationContext(), programs, this);
       this.gridView.setAdapter(adapter);
+    } else {
+      adapter.set(programs);
     }
   }
 

@@ -11,6 +11,7 @@ import java.util.List;
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.Program;
+import macbury.enklawa.dialogs.ProgramAboutDialog;
 import macbury.enklawa.fragments.main.AbstractEpisodesFragment;
 import macbury.enklawa.managers.Enklawa;
 
@@ -66,6 +67,11 @@ public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
       case R.id.action_favorite:
         toggleFavorite();
       break;
+
+      case R.id.action_about:
+        ProgramAboutDialog dialog = new ProgramAboutDialog(getActivity(), program);
+        dialog.show();
+      break;
     }
 
     return super.onOptionsItemSelected(item);
@@ -78,5 +84,9 @@ public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
     app.broadcasts.favoriteProgramChange(program);
     Toast.makeText(getActivity(), program.favorite ? R.string.action_marked_as_favorite : R.string.action_marked_as_not_favorite, Toast.LENGTH_SHORT).show();
     getActivity().invalidateOptionsMenu();
+  }
+
+  public Program getProgram() {
+    return program;
   }
 }

@@ -77,6 +77,7 @@ public class ProgramsAdapter extends BaseAdapter {
       holder.programPreview       = (ImageView)convertView.findViewById(R.id.program_preview);
       holder.programTitle         = (TextView)convertView.findViewById(R.id.program_title);
       holder.convertView          = convertView;
+
       holder.convertView.setOnTouchListener(holder);
       convertView.setTag(holder);
     } else {

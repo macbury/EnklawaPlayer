@@ -1,5 +1,6 @@
 package macbury.enklawa.activities.main;
 
+import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +33,8 @@ public class NavigationController implements AdapterView.OnItemClickListener {
   private ForumNavItem                forumNavItem;
   private NavigationListener          listener;
   private ProgramEpisodesFragment     programEpisodesFragment;
+  private Program                     currentProgram;
+  private Fragment                    currentFragment;
 
   public NavigationController(MainActivity activity, ListView navDrawerListView, DrawerLayout mDrawerLayout, NavigationListener listener) {
     this.activity                 = activity;
@@ -81,15 +84,24 @@ public class NavigationController implements AdapterView.OnItemClickListener {
     }
 
     if (drawerNavAdapter.isNavItemFragment(position)) {
+      currentProgram               = null;
       NavItemFragment itemFragment = (NavItemFragment)drawerNavAdapter.getItem(position);
-      this.listener.onNavigationFragmentSelect(itemFragment.getFragment());
+
+      if (currentFragment != itemFragment.getFragment()) {
+        currentFragment              = itemFragment.getFragment();
+        this.listener.onNavigationFragmentSelect(itemFragment.getFragment());
+      }
     } else if (drawerNavAdapter.isNavFavoriteProgramItem(position)) {
       FavoriteProgramNavItem itemFragment = (FavoriteProgramNavItem)drawerNavAdapter.getItem(position);
       if (programEpisodesFragment == null) {
         programEpisodesFragment = new ProgramEpisodesFragment();
       }
-      programEpisodesFragment.setProgram(itemFragment.getProgram());
-      this.listener.onNavigationFragmentSelect(programEpisodesFragment);
+
+      if (currentProgram != itemFragment.getProgram()) {
+        currentProgram = itemFragment.getProgram();
+        programEpisodesFragment.setProgram(itemFragment.getProgram());
+        this.listener.onNavigationFragmentSelect(programEpisodesFragment);
+      }
     }
     this.drawerNavAdapter.setSelected(position);
   }

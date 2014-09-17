@@ -73,4 +73,13 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
     return status == Status.Downloading;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (EpisodeFile.class.isInstance(o)) {
+      EpisodeFile epf = (EpisodeFile)o;
+      return epf.id == id;
+    } else {
+      return super.equals(o);
+    }
+  }
 }

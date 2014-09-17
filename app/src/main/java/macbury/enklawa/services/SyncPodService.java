@@ -80,7 +80,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   private void syncPod() {
     progress(0);
     Log.i(TAG, "Syncing pod: "+app.settings.getApiEndpoint());
-    Ion.with(this).load(app.settings.getApiEndpoint()).progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
+    Ion.with(this).load(app.settings.getApiEndpoint()).noCache().progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
   }
 
   @Override

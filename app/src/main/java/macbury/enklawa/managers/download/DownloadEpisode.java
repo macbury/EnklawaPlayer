@@ -31,4 +31,6 @@ public class DownloadEpisode {
     return episodeFile;
   }
 
+  public int getEpisodeFileId() { return episodeFile.id; }
+
 }

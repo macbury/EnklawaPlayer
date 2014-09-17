@@ -37,7 +37,9 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
 
   public void push(ArrayList<EpisodeFile> episodeFiles) {
     for (EpisodeFile epf : episodeFiles) {
-      if (queue.indexOf(epf) == -1) {
+      if (isRunning() && currentDownload.getEpisodeFileId() == epf.id) {
+        Log.v(TAG, "Already downloading episode: "+ epf.episode.name);
+      } else if (queue.indexOf(epf) == -1) {
         Log.v(TAG, "Pushed next episode: "+ epf.episode.name);
         queue.add(epf);
       }

@@ -161,7 +161,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     this.invalidateOptionsMenu();
   }
 
-  BroadcastReceiver syncReceiver = new BroadcastReceiver() {
+  BroadcastReceiver syncReceiver     = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
       MainActivity.this.updateUI();
@@ -170,9 +170,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
   BroadcastReceiver updateUIReceiver = new BroadcastReceiver() {
     @Override
-    public void onReceive(Context context, Intent intent) {
-      MainActivity.this.updateUI();
-    }
+    public void onReceive(Context context, Intent intent) { MainActivity.this.updateUI(); }
   };
 
   @Override

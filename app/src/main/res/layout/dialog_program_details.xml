@@ -3,18 +3,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent" android:id="@+id/" android:weightSum="1">
+              android:layout_height="match_parent" android:id="@+id/dialog_program_details" android:weightSum="1">
   <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:id="@+id/txtvTitle"
+    android:id="@+id/program_title"
     android:layout_alignParentTop="true" android:text="Bardzo długi tytuł np lorem ipsum lub lewatywa mózgu"
     style="@style/AppTheme.Dialog.Title"/>
   <View
     android:layout_width="match_parent"
     android:layout_height="2dp"
-    android:layout_below="@id/txtvTitle"
+    android:layout_below="@id/program_title"
     android:background="@color/actionbar_color"/>
   <LinearLayout
     android:orientation="horizontal"
@@ -25,6 +25,9 @@
       android:layout_height="48dp"
       android:layout_weight="1"
       android:background="@drawable/borderless_button" android:layout_width="match_parent"/>
+    <ImageButton android:id="@+id/imageButton2" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent"/>
     <ImageButton android:id="@+id/imageButton5" android:layout_height="48dp"
                  android:layout_weight="1" android:background="@drawable/borderless_button"
                  android:layout_width="match_parent"/>
@@ -37,8 +40,4 @@
     android:layout_width="match_parent"
     android:layout_height="2dp"
     android:background="@color/actionbar_color"/>
-  <WebView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/webView"/>
 </LinearLayout>
