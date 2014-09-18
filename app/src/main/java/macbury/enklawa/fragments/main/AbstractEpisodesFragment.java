@@ -20,6 +20,7 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   protected static final String TAG     = "AbstractEpisodesFragment";
   protected List<Episode> episodesArray;
   protected EpisodesAdapter episodeAdapter;
+  private EpisodeAboutDialog dialog;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,21 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
     Episode episode           = episodeAdapter.getItem(position);
-    EpisodeAboutDialog dialog = new EpisodeAboutDialog(getActivity(), episode);
+    if (dialog != null) {
+      dialog.hide();
+      dialog = null;
+    }
+    this.dialog               = new EpisodeAboutDialog(getActivity(), episode);
     dialog.show();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (dialog != null) {
+      dialog.hide();
+      dialog = null;
+    }
   }
 
   @Override
@@ -66,5 +80,16 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   public void onCancelEpisodeDownloadButtonClick(Episode episode) {
     Log.v(TAG, "Clicked cancel download episode: " + episode.name);
     getActivity().startService(app.intents.cancelEpisodeDownloadService(episode));
+  }
+
+  @Override
+  public void onPauseEpisodeDownloadButtonClick(Episode episode) {
+
+  }
+
+  @Override
+  public void onPlayEpisodeDownloadButtonClick(Episode episode) {
+    Log.v(TAG, "Clicked play download episode: " + episode.name);
+    getActivity().startActivity(app.intents.openPlayerForEpisode(episode));
   }
 }

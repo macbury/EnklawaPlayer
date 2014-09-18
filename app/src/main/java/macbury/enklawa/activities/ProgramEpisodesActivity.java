@@ -19,7 +19,7 @@ public class ProgramEpisodesActivity extends AccentActivity {
     super.onCreate(savedInstanceState);
 
     Enklawa app           = Enklawa.current();
-    Program program                  = app.db.programs.find(app.intents.getProgramId(getIntent()));
+    Program program       = app.db.programs.find(app.intents.getProgramId(getIntent()));
 
     getActionBar().setTitle(program.name);
 

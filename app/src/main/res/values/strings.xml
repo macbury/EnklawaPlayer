@@ -4,17 +4,17 @@
     <string name="app_name">EnklawaPod</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Ustawienia</string>
-  <string name="action_refresh">Odśwież</string>
-  <string name="main_activity_action_bar_sub_title">Wolne radio. U nas można!</string>
-  <string name="pref_proxy_header">Proxy</string>
-  <string name="new_label">Nowy</string>
+    <string name="action_refresh">Odśwież</string>
+    <string name="main_activity_action_bar_sub_title">Wolne radio. U nas można!</string>
+    <string name="pref_proxy_header">Proxy</string>
+    <string name="new_label">Nowy</string>
+    <string name="action_website">Strona WWW</string>
+    <string name="action_about">O programie</string>
+    <string name="action_mark_as_favorite">Dodaj do ulubionych</string>
+    <string name="action_mark_as_not_favorite">Usuń z ulubionych</string>
+    <string name="action_marked_as_favorite">Dodano do ulubionych</string>
+    <string name="action_marked_as_not_favorite">Usunięto z ulubionych</string>
+    <string name="episode_no_description">Brak opisu dla audycji</string>
+    <string name="title_activity_player">PlayerActivity</string>
 
-  <string name="action_website">Strona WWW</string>
-  <string name="action_about">O programie</string>
-
-  <string name="action_mark_as_favorite">Dodaj do ulubionych</string>
-  <string name="action_mark_as_not_favorite">Usuń z ulubionych</string>
-
-  <string name="action_marked_as_favorite">Dodano do ulubionych</string>
-  <string name="action_marked_as_not_favorite">Usunięto z ulubionych</string>
 </resources>

@@ -20,6 +20,7 @@ import macbury.enklawa.managers.Enklawa;
  */
 public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
   private Program program;
+  private ProgramAboutDialog dialog;
 
   public ProgramEpisodesFragment() {
     super();
@@ -69,12 +70,21 @@ public class ProgramEpisodesFragment extends AbstractEpisodesFragment {
       break;
 
       case R.id.action_about:
-        ProgramAboutDialog dialog = new ProgramAboutDialog(getActivity(), program);
+        this.dialog = new ProgramAboutDialog(getActivity(), program);
         dialog.show();
       break;
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (dialog != null) {
+      dialog.hide();
+      dialog = null;
+    }
   }
 
   private void toggleFavorite() {

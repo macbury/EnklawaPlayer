@@ -73,6 +73,10 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
     return status == Status.Downloading;
   }
 
+  public boolean inDownloadQueue() {
+    return isDownloading() || isPending();
+  }
+
   @Override
   public boolean equals(Object o) {
     if (EpisodeFile.class.isInstance(o)) {

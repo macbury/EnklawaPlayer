@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 
+import macbury.enklawa.activities.PlayerActivity;
 import macbury.enklawa.activities.ProgramEpisodesActivity;
 import macbury.enklawa.activities.SettingsActivity;
 import macbury.enklawa.db.models.Episode;
@@ -86,5 +87,19 @@ public class IntentManager {
 
   public Intent openURL(String link) {
     return new Intent(Intent.ACTION_VIEW).setData(Uri.parse(link));
+  }
+
+  public Intent openPlayerForEpisode(Episode episode) {
+    Intent intent         = new Intent(context, PlayerActivity.class);
+    intent.putExtra(EXTRA_EPISODE, episode.id);
+    return intent;
+  }
+
+  public Intent shareUrl(String link) {
+    Intent sendIntent = new Intent();
+    sendIntent.setAction(Intent.ACTION_SEND);
+    sendIntent.putExtra(Intent.EXTRA_TEXT, link);
+    sendIntent.setType("text/plain");
+    return sendIntent;
   }
 }

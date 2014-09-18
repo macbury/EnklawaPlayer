@@ -51,12 +51,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-          android:name=".activities.ProgramEpisodesActivity"
-          android:configChanges="keyboardHidden|orientation"
-          android:label="@string/title_activity_settings"
-          android:parentActivityName=".activities.main.MainActivity" >
+            android:name=".activities.ProgramEpisodesActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.main.MainActivity" >
         </activity>
 
         <service
@@ -64,6 +63,16 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <activity
+            android:name=".activities.PlayerActivity"
+            android:label="@string/title_activity_player"
+            android:theme="@style/PlayerActionBarTheme.Dark"
+            android:parentActivityName=".activities.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="macbury.enklawa.activities.main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:id="@+id/dialog_program_details" android:weightSum="1">
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:id="@+id/episode_title"
+    android:layout_alignParentTop="true" android:text="Bardzo długi tytuł np lorem ipsum lub lewatywa mózgu"
+    style="@style/AppTheme.Dialog.Title"/>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:layout_below="@id/episode_title"
+    android:background="@color/actionbar_color"/>
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageButton
+      android:id="@+id/button_download_play"
+      android:layout_height="48dp"
+      android:layout_weight="1"
+      android:background="@drawable/borderless_button" android:layout_width="match_parent"
+      android:src="@drawable/av_download"/>
+    <ImageButton android:id="@+id/button_stream" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent"
+                 android:src="@drawable/ic_action_device_access_network_wifi"/>
+    <ImageButton android:id="@+id/button_website" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent"
+                 android:src="@drawable/ic_action_location_web_site_dark"/>
+
+  </LinearLayout>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/actionbar_color"/>
+  <org.sufficientlysecure.htmltextview.HtmlTextView android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_margin="10dp"
+                                                    android:id="@+id/episode_description"/>
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:layout_below="@id/episode_title"
+    android:background="@color/actionbar_color"/>
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+    <Button android:id="@+id/button_go_to_program" android:layout_height="48dp"
+            style="@style/AppTheme.Dialog.Title"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent" android:text="Przejdź do programu"/>
+  </LinearLayout>
+</LinearLayout>

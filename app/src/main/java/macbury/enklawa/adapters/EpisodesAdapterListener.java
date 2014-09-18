@@ -8,4 +8,6 @@ import macbury.enklawa.db.models.Episode;
 public interface EpisodesAdapterListener {
   public void onDownloadEpisodeButtonClick(Episode episode);
   public void onCancelEpisodeDownloadButtonClick(Episode episode);
+  public void onPlayEpisodeDownloadButtonClick(Episode episode);
+  public void onPauseEpisodeDownloadButtonClick(Episode episode);
 }

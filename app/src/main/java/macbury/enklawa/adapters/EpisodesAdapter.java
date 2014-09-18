@@ -148,6 +148,14 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
         case CancelDownload:
           listener.onCancelEpisodeDownloadButtonClick(holder.episode);
         break;
+
+        case Play:
+          listener.onPlayEpisodeDownloadButtonClick(holder.episode);
+        break;
+
+        case Pause:
+          listener.onPauseEpisodeDownloadButtonClick(holder.episode);
+        break;
       }
 
     }

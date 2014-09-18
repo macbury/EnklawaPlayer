@@ -17,4 +17,6 @@
 
   <dimen name="text_size_micro">12sp</dimen>
   <dimen name="listview_secondary_button_width">48dp</dimen>
+  <dimen name="episode_preview_height">160dp</dimen>
+  <dimen name="player_about">15dp</dimen>
 </resources>
