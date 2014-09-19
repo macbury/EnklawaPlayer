@@ -16,5 +16,6 @@
     <string name="action_marked_as_not_favorite">Usunięto z ulubionych</string>
     <string name="episode_no_description">Brak opisu dla audycji</string>
     <string name="title_activity_player">PlayerActivity</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

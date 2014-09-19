@@ -1,9 +1,11 @@
 package macbury.enklawa.activities;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import org.michaelevans.colorart.library.FadingImageView;
 
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.fragments.PlayerControllerFragment;
 import macbury.enklawa.managers.Enklawa;
 
 public class PlayerActivity extends Activity {
@@ -32,6 +35,7 @@ public class PlayerActivity extends Activity {
   private TextView descriptionLabel;
   private TextView dateLabel;
   private View mainView;
+  private PlayerControllerFragment playerFragmentController;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,10 @@ public class PlayerActivity extends Activity {
     descriptionLabel  = (TextView) findViewById(R.id.episode_description);
     int newEpisodeId  = Enklawa.current().intents.getEpisodeId(getIntent());
     Episode episode   = Enklawa.current().db.episodes.find(newEpisodeId);
+
+    playerFragmentController = new PlayerControllerFragment();
+    FragmentManager fm       = getFragmentManager();
+    fm.beginTransaction().replace(R.id.player_frame, playerFragmentController).commit();
 
     setEpisode(episode);
   }
@@ -74,6 +82,7 @@ public class PlayerActivity extends Activity {
   public void setEpisode(Episode episode) {
     this.episode = episode;
     updateUIForEpisode();
+    Enklawa.current().services.playEpisodeStream(episode);
   }
 
   private void updateUIForEpisode() {

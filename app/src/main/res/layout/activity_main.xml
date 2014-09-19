@@ -5,10 +5,22 @@
   android:layout_height="match_parent"
   android:id="@+id/drawer_layout"
   tools:context=".MainActivity">
-  <FrameLayout
-    android:id="@+id/content_frame"
+  <LinearLayout
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent">
+    <FrameLayout
+      android:id="@+id/content_frame"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" android:layout_weight="1"/>
+    <FrameLayout
+      android:id="@+id/player_frame"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"></FrameLayout>
+  </LinearLayout>
+
+
+
   <ListView android:id="@+id/left_drawer"
             android:layout_width="240dp"
             android:layout_height="match_parent"

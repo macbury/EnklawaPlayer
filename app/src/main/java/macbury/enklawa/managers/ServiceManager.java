@@ -2,6 +2,8 @@ package macbury.enklawa.managers;
 
 import android.content.Intent;
 
+import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.services.DownloadService;
 import macbury.enklawa.services.SyncPodService;
 
@@ -23,5 +25,17 @@ public class ServiceManager {
   public void downloadPendingEpisodes() {
     Intent intent = new Intent(context, DownloadService.class);
     context.startService(intent);
+  }
+
+  public void playEpisodeStream(Episode episode) {
+    context.startService(context.intents.playEpisodeStream(episode));
+  }
+
+  public void playEpisodeFile(EpisodeFile epf) {
+    context.startService(context.intents.playEpisodeFile(epf));
+  }
+
+  public void pausePlayer() {
+    context.startService(context.intents.pausePlayer());
   }
 }

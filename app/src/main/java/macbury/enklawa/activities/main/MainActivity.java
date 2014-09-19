@@ -12,6 +12,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 import macbury.enklawa.R;
 import macbury.enklawa.db.models.Program;
+import macbury.enklawa.fragments.PlayerControllerFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 import macbury.enklawa.views.CoolProgress;
@@ -34,6 +36,8 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   private boolean                       drawerOpened;
   private ListView                      navDrawerListView;
   private NavigationController          navigationController;
+  private View                          playerFrameView;
+  private PlayerControllerFragment      playerControllerFragment;
 
   private void updateUI() {
     if (SyncPodService.isRunning()) {
@@ -69,6 +73,8 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     setProgressBarIndeterminateVisibility(true);
     setContentView(R.layout.activity_main);
 
+
+    playerFrameView               = (View)findViewById(R.id.player_frame);
     navDrawerListView             = (ListView) findViewById(R.id.left_drawer);
     mDrawerLayout                 = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerToggle                 = new MainActivityActionBarToggle(this, mDrawerLayout);
@@ -85,6 +91,16 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     actionBar.setDisplayUseLogoEnabled(true);
     actionBar.setDisplayShowTitleEnabled(false);
     actionBar.setLogo(R.drawable.ic_logo_wide);
+  }
+
+  private void showPlayer() {
+    if (playerControllerFragment == null){
+      playerControllerFragment = new PlayerControllerFragment();
+    }
+    FragmentManager fragmentManager = getFragmentManager();
+    fragmentManager.beginTransaction()
+            .replace(R.id.player_frame, playerControllerFragment)
+            .commit();
   }
 
   @Override

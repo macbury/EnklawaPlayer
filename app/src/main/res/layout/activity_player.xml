@@ -53,31 +53,11 @@
           android:textAppearance="?android:attr/textAppearanceSmall" />
       </LinearLayout>
     </ScrollView>
-    <LinearLayout
-      android:id="@+id/rel"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/drawer_background_color"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentLeft="true" android:layout_gravity="bottom">
+  <FrameLayout
+    android:id="@+id/player_frame"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+  </FrameLayout>
 
-      <ImageButton
-        android:id="@+id/playPauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:onClick="onPlayPauseButtonClick"
-        android:src="@drawable/av_play" android:background="@drawable/borderless_button"/>
 
-      <SeekBar
-        android:id="@+id/playerSeekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="false" />
-
-    </LinearLayout>
-  </LinearLayout>
+</LinearLayout>

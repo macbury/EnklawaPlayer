@@ -84,7 +84,7 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
 
   @Override
   public void onPauseEpisodeDownloadButtonClick(Episode episode) {
-
+    app.services.pausePlayer();
   }
 
   @Override

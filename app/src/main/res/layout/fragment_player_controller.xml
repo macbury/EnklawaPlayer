@@ -1,0 +1,44 @@
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    tools:context="macbury.enklawa.fragments.PlayerControllerFragment">
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:background="@color/actionbar_color"/>
+    <LinearLayout
+      android:id="@+id/rel"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/drawer_background_color"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentLeft="true" android:layout_gravity="bottom">
+
+      <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/imageView"/>
+      <ImageButton
+        android:id="@+id/button_play_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/av_play" android:background="@drawable/borderless_button"/>
+
+      <SeekBar
+        android:id="@+id/seek_bar_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="false" />
+
+    </LinearLayout>
+
+</LinearLayout>

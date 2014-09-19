@@ -67,12 +67,18 @@
         <activity
             android:name=".activities.PlayerActivity"
             android:label="@string/title_activity_player"
-            android:theme="@style/PlayerActionBarTheme.Dark"
-            android:parentActivityName=".activities.main.MainActivity" >
+            android:parentActivityName=".activities.main.MainActivity"
+            android:theme="@style/PlayerActionBarTheme.Dark" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="macbury.enklawa.activities.main.MainActivity" />
         </activity>
+
+        <service
+            android:name=".services.PlayerService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

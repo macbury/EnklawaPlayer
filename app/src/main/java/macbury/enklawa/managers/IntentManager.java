@@ -8,14 +8,17 @@ import macbury.enklawa.activities.PlayerActivity;
 import macbury.enklawa.activities.ProgramEpisodesActivity;
 import macbury.enklawa.activities.SettingsActivity;
 import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.managers.download.DownloadEpisode;
 import macbury.enklawa.services.DownloadService;
+import macbury.enklawa.services.PlayerService;
 
 /**
  * Created by macbury on 09.09.14.
  */
 public class IntentManager {
+  public static final String EXTRA_ACTION_PAUSE            = "EXTRA_ACTION_PAUSE";
   public static final String EXTRA_ACTION_CANCEL           = "EXTRA_ACTION_CANCEL";
   public static final String EXTRA_PROGRESS                = "EXTRA_PROGRESS";
   public static final String EXTRA_EPISODE_FILE_ID         = "EXTRA_EPISODE_FILE_ID";
@@ -101,5 +104,29 @@ public class IntentManager {
     sendIntent.putExtra(Intent.EXTRA_TEXT, link);
     sendIntent.setType("text/plain");
     return sendIntent;
+  }
+
+  public Intent playEpisodeFile(EpisodeFile epf) {
+    Intent intent = new Intent(context, PlayerService.class);
+    intent.putExtra(EXTRA_EPISODE_FILE_ID, epf.id);
+    return intent;
+  }
+
+  public Intent playEpisodeStream(Episode episode) {
+    Intent intent = new Intent(context, PlayerService.class);
+    intent.putExtra(EXTRA_EPISODE, episode.id);
+    return intent;
+  }
+
+  public Intent pausePlayer() {
+    Intent intent = new Intent(context, PlayerService.class);
+    intent.putExtra(EXTRA_ACTION_PAUSE, true);
+    return intent;
+  }
+
+  public Intent stopPlayer() {
+    Intent intent = new Intent(context, PlayerService.class);
+    intent.putExtra(EXTRA_ACTION_CANCEL, true);
+    return intent;
   }
 }
