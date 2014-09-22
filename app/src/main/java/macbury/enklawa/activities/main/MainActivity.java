@@ -32,7 +32,6 @@ import macbury.enklawa.views.CoolProgress;
 public class MainActivity extends AccentActivity implements NavigationListener {
   private static final String SAVE_STATE_SELECTED_NAVBAR_ITEM = "SAVE_STATE_SELECTED_NAVBAR_ITEM";
 
-  private CoolProgress                  syncProgressBar;
   private DrawerLayout                  mDrawerLayout;
   private ActionBarDrawerToggle         mDrawerToggle;
   private boolean                       drawerOpened;
@@ -44,13 +43,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
   private void updateUI() {
     if (SyncPodService.isRunning()) {
-      syncProgressBar.setIndeterminate(true);
-      syncProgressBar.progressiveStart();
-      syncProgressBar.setAlpha(1);
     } else {
-      syncProgressBar.setIndeterminate(false);
-      syncProgressBar.progressiveStop();
-      syncProgressBar.setAlpha(0);
     }
     this.invalidateOptionsMenu();
 
@@ -83,7 +76,6 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     mDrawerToggle                 = new MainActivityActionBarToggle(this, mDrawerLayout);
     mainContainer                 = findViewById(R.id.main_container);
     this.navigationController     = new NavigationController(this, navDrawerListView, mDrawerLayout, this);
-    this.syncProgressBar          = new CoolProgress(this);
 
     mDrawerLayout.setDrawerListener(mDrawerToggle);
     navigationController.setListener(this);
@@ -158,7 +150,6 @@ public class MainActivity extends AccentActivity implements NavigationListener {
       startActivity(Enklawa.current().intents.showSettingsActivity());
       return true;
     } else if (id == R.id.action_refresh) {
-      syncProgressBar.setIndeterminate(true);
       startManualSync();
     }
     return super.onOptionsItemSelected(item);

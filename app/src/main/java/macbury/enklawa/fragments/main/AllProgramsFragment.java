@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,16 @@ import macbury.enklawa.R;
 import macbury.enklawa.adapters.ProgramsAdapter;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.managers.Enklawa;
+import macbury.enklawa.services.SyncPodService;
 
 /**
  * Created by macbury on 12.09.14.
  */
-public class AllProgramsFragment extends Fragment implements ProgramsAdapter.ProgramsAdapterListener {
+public class AllProgramsFragment extends Fragment implements ProgramsAdapter.ProgramsAdapterListener, SwipeRefreshLayout.OnRefreshListener {
   private List<Program> programsArray;
   private StaggeredGridView gridView;
   private ProgramsAdapter adapter;
+  private SwipeRefreshLayout swipeRefreshLayout;
 
   private BroadcastReceiver syncRefreshReceiver = new BroadcastReceiver() {
     @Override
@@ -34,6 +37,7 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
     }
   };
 
+
   private void onSyncPodUpdate() {
     loadPrograms();
   }
@@ -41,8 +45,12 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view     = inflater.inflate(R.layout.all_programs, container, false);
-    this.gridView = (StaggeredGridView) view.findViewById(R.id.grid_view);
+    View view               = inflater.inflate(R.layout.all_programs, container, false);
+    this.swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_container);
+    this.gridView           = (StaggeredGridView) view.findViewById(R.id.grid_view);
+    
+    swipeRefreshLayout.setOnRefreshListener(this);
+    swipeRefreshLayout.setColorSchemeResources(R.color.progress_color_1, R.color.progress_color_3, R.color.progress_color_4, R.color.progress_color_5);
     return view;
   }
 
@@ -54,6 +62,7 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
   }
 
   private void loadPrograms() {
+    swipeRefreshLayout.setRefreshing(SyncPodService.isRunning());
     List<Program> programs = Enklawa.current().db.programs.allOrderedByName();
     if (adapter == null) {
       this.adapter = new ProgramsAdapter(this.getActivity().getApplicationContext(), programs, this);
@@ -74,5 +83,10 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
   @Override
   public void onProgramSelect(Program program) {
     getActivity().startActivity(Enklawa.current().intents.activityForProgramEpisodes(program));
+  }
+
+  @Override
+  public void onRefresh() {
+    Enklawa.current().services.syncPodService();
   }
 }
