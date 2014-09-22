@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -23,12 +24,14 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 import java.util.List;
 
 import macbury.enklawa.R;
+import macbury.enklawa.activities.DonateActivity;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.fragments.PlayerControllerFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 
 public class MainActivity extends AccentActivity implements NavigationListener {
+  private final static String DONTAE_PAGE_URL                 = "http://macbury.ninja/donate/bitcoin";
   private static final String SAVE_STATE_SELECTED_NAVBAR_ITEM = "SAVE_STATE_SELECTED_NAVBAR_ITEM";
 
   private DrawerLayout                  mDrawerLayout;
@@ -150,8 +153,15 @@ public class MainActivity extends AccentActivity implements NavigationListener {
       return true;
     } else if (id == R.id.action_refresh) {
       startManualSync();
+    } else if (id == R.id.action_donate) {
+      donate();
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void donate() {
+    Intent donateIntent = new Intent(this, DonateActivity.class);
+    startActivity(donateIntent);
   }
 
   @Override

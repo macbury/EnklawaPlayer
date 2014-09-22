@@ -65,6 +65,14 @@
         </service>
 
         <activity
+            android:name=".activities.DonateActivity"
+            android:label="@string/title_activity_donate"
+            android:parentActivityName=".activities.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="macbury.enklawa.activities.main.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.PlayerActivity"
             android:label="@string/title_activity_player"
             android:parentActivityName=".activities.main.MainActivity"

@@ -96,7 +96,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
       if (programEpisodesFragment == null) {
         programEpisodesFragment = new ProgramEpisodesFragment();
       }
-
+      currentFragment = null;
       if (currentProgram != itemFragment.getProgram()) {
         currentProgram = itemFragment.getProgram();
         programEpisodesFragment.setProgram(itemFragment.getProgram());
