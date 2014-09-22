@@ -48,7 +48,7 @@ public class AllProgramsFragment extends Fragment implements ProgramsAdapter.Pro
     View view               = inflater.inflate(R.layout.all_programs, container, false);
     this.swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe_container);
     this.gridView           = (StaggeredGridView) view.findViewById(R.id.grid_view);
-    
+
     swipeRefreshLayout.setOnRefreshListener(this);
     swipeRefreshLayout.setColorSchemeResources(R.color.progress_color_1, R.color.progress_color_3, R.color.progress_color_4, R.color.progress_color_5);
     return view;

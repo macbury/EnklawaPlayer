@@ -33,7 +33,6 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.android.support:support-v4:20.0.0'
     compile 'joda-time:joda-time:2.4'
-    compile 'com.github.castorflex.smoothprogressbar:library:0.5.2'
     compile 'com.negusoft.holoaccent:library:1.0.1'
     compile 'be.webelite:ion-iconview:1.0.+@aar'
     compile project(':html-textview')

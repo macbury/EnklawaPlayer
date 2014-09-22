@@ -27,7 +27,6 @@ import macbury.enklawa.db.models.Program;
 import macbury.enklawa.fragments.PlayerControllerFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
-import macbury.enklawa.views.CoolProgress;
 
 public class MainActivity extends AccentActivity implements NavigationListener {
   private static final String SAVE_STATE_SELECTED_NAVBAR_ITEM = "SAVE_STATE_SELECTED_NAVBAR_ITEM";
