@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
+import macbury.enklawa.R;
 import macbury.enklawa.activities.ext.AccentFragmentActivity;
 import macbury.enklawa.fragments.SettingsFragment;
 
@@ -20,6 +24,14 @@ public class SettingsActivity extends AccentFragmentActivity {
             .replace(android.R.id.content, new SettingsFragment())
             .commit();
     getActionBar().setDisplayHomeAsUpEnabled(true);
+
+    SystemBarTintManager tintManager = new SystemBarTintManager(this);
+    tintManager.setStatusBarTintEnabled(true);
+    tintManager.setStatusBarTintResource(R.color.statusbar_color);
+
+    View mainContentView = findViewById(android.R.id.content);
+    SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+    mainContentView.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
   }
 
   @Override

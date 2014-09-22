@@ -16,4 +16,5 @@
   <color name="drawer_background_color">#f3f3f3</color>
   <color name="gray">#808080</color>
   <color name="selection_background_color_light">#E3E3E3</color>
+  <color name="statusbar_color">#0E8DB8</color>
 </resources>

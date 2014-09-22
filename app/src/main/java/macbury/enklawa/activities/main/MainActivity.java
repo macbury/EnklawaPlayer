@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import android.view.Window;
 import android.widget.ListView;
 
 import com.negusoft.holoaccent.activity.AccentActivity;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   private NavigationController          navigationController;
   private View                          playerFrameView;
   private PlayerControllerFragment      playerControllerFragment;
+  private View                          mainContainer;
 
   private void updateUI() {
     if (SyncPodService.isRunning()) {
@@ -69,28 +72,30 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-    setProgressBarIndeterminateVisibility(true);
     setContentView(R.layout.activity_main);
 
-
+    SystemBarTintManager tintManager = new SystemBarTintManager(this);
+    tintManager.setStatusBarTintEnabled(true);
+    tintManager.setStatusBarTintResource(R.color.statusbar_color);
     playerFrameView               = (View)findViewById(R.id.player_frame);
     navDrawerListView             = (ListView) findViewById(R.id.left_drawer);
     mDrawerLayout                 = (DrawerLayout) findViewById(R.id.drawer_layout);
     mDrawerToggle                 = new MainActivityActionBarToggle(this, mDrawerLayout);
+    mainContainer                 = findViewById(R.id.main_container);
     this.navigationController     = new NavigationController(this, navDrawerListView, mDrawerLayout, this);
     this.syncProgressBar          = new CoolProgress(this);
 
     mDrawerLayout.setDrawerListener(mDrawerToggle);
     navigationController.setListener(this);
-    // TODO move to style
+
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeButtonEnabled(true);
     actionBar.setDisplayShowHomeEnabled(true);
-    actionBar.setDisplayUseLogoEnabled(true);
-    actionBar.setDisplayShowTitleEnabled(false);
-    actionBar.setLogo(R.drawable.ic_logo_wide);
+
+    SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+    mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    navDrawerListView.setPadding((int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(true), (int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
   }
 
   private void showPlayer() {

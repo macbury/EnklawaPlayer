@@ -86,7 +86,7 @@ public class ProgramsAdapter extends BaseAdapter {
 
     Program program = getItem(position);
     holder.position = position;
-    Ion.with(context).load(program.image).withBitmap().intoImageView(holder.programPreview);
+    Ion.with(context).load(program.image).withBitmap().placeholder(R.drawable.placeholder).intoImageView(holder.programPreview);
     holder.programTitle.setText(program.name);
     return convertView;
   }

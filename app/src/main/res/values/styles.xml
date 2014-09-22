@@ -1,15 +1,27 @@
 <resources>
 
-  <style name="AppTheme" parent="Theme.HoloAccent.Light.ColoredActionBar.Inverse">
+  <style name="BaseAppTheme" parent="Theme.HoloAccent.Light.ColoredActionBar.Inverse">
     <item name="accentColor">@color/actionbar_color</item>
     <item name="spbStyle">@style/EnklawaProgressBar</item>
+    <item name="android:actionBarStyle">@style/BaseAppTheme.ActionBar</item>
   </style>
 
-  <style name="PlayerActionBarTheme.Dark" parent="android:Theme.Holo">
+  <style name="BaseAppTheme.ActionBar" parent="HoloAccent.ActionBar.Light.Solid.Inverse.Colored">
+    <item name="android:displayOptions">useLogo|showHome</item>
+    <item name="android:logo">@drawable/ic_logo_wide</item>
+  </style>
+
+  <style name="AppTheme" parent="BaseAppTheme">
+  </style>
+
+  <style name="BasePlayerActionBarTheme.Dark" parent="android:Theme.Holo">
     <item name="android:windowActionBarOverlay">true</item>
     <item name="android:windowActionBar">true</item>
     <item name="android:windowContentOverlay">@null</item>
     <item name="android:actionBarStyle">@style/PlayerActionBarTheme.Dark.Transparent</item>
+  </style>
+
+  <style name="PlayerActionBarTheme.Dark" parent="BasePlayerActionBarTheme.Dark">
   </style>
 
   <style name="PlayerActionBarTheme.Dark.Transparent" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">

@@ -7,6 +7,7 @@
   tools:context=".MainActivity">
   <LinearLayout
     android:orientation="vertical"
+    android:id="@+id/main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FrameLayout
@@ -20,15 +21,13 @@
   </LinearLayout>
 
 
-
-  <ListView android:id="@+id/left_drawer"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:choiceMode="singleChoice"
-            android:scrollbarStyle="outsideOverlay"
-            android:paddingLeft="@dimen/nav_bar_padding"
-            android:paddingRight="@dimen/nav_bar_padding"
-            android:background="@color/drawer_background_color"/>
-
+    <ListView android:id="@+id/left_drawer"
+              android:layout_width="@dimen/drawer_width"
+              android:layout_height="match_parent"
+              android:layout_gravity="start"
+              android:choiceMode="singleChoice"
+              android:scrollbarStyle="outsideOverlay"
+              android:paddingLeft="@dimen/nav_bar_padding"
+              android:paddingRight="@dimen/nav_bar_padding"
+              android:background="@color/drawer_background_color"/>
 </android.support.v4.widget.DrawerLayout>

@@ -18,7 +18,12 @@ public class PlayerService extends Service {
   public void onCreate() {
     super.onCreate();
     this.app           = Enklawa.current();
-    this.playerManager = new PlayerManager();
+    this.playerManager = new PlayerManager(getApplicationContext());
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
   }
 
   @Override

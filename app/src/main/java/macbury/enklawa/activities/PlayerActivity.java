@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import org.michaelevans.colorart.library.ColorArt;
 import org.michaelevans.colorart.library.FadingImageView;
@@ -36,6 +37,7 @@ public class PlayerActivity extends Activity {
   private TextView dateLabel;
   private View mainView;
   private PlayerControllerFragment playerFragmentController;
+  private SystemBarTintManager tintManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,12 @@ public class PlayerActivity extends Activity {
     playerFragmentController = new PlayerControllerFragment();
     FragmentManager fm       = getFragmentManager();
     fm.beginTransaction().replace(R.id.player_frame, playerFragmentController).commit();
+
+
+
+    //View mainContentView = findViewById(R.id.player_frame);
+    //SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+    //mainContentView.setPadding(0, config.getPixelInsetTop(false), config.getPixelInsetRight(), config.getPixelInsetBottom());
 
     setEpisode(episode);
   }
@@ -116,9 +124,9 @@ public class PlayerActivity extends Activity {
       setTheme(R.style.PlayerActionBarTheme_Light);
     }
 
-
+   // tintManager.setStatusBarTintColor(colorArt.getBackgroundColor());
     mainView.setBackgroundColor(colorArt.getBackgroundColor());
-    previewImage.setBackgroundColor(colorArt.getBackgroundColor(), FadingImageView.FadeSide.BOTTOM);
+    previewImage.setBackgroundColor(colorArt.getBackgroundColor(), FadingImageView.FadeSide.BOTTOM );
     titleLabel.setTextColor(colorArt.getPrimaryColor());
     dateLabel.setTextColor(colorArt.getDetailColor());
     descriptionLabel.setTextColor(colorArt.getSecondaryColor());

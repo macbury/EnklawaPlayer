@@ -126,7 +126,7 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
       holder.statusTextView.setText("");
     }
 
-    Ion.with(context).load(episode.image).withBitmap().intoImageView(holder.previewImageView);
+    Ion.with(context).load(episode.image).withBitmap().placeholder(R.drawable.placeholder).intoImageView(holder.previewImageView);
     return convertView;
   }
 
