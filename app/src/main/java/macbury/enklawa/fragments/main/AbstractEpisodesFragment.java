@@ -1,5 +1,6 @@
 package macbury.enklawa.fragments.main;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,7 @@ import macbury.enklawa.dialogs.EpisodeAboutDialog;
 /**
  * Created by macbury on 14.09.14.
  */
-public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFragment implements EpisodesAdapterListener {
+public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFragment implements EpisodesAdapterListener, DialogInterface.OnDismissListener {
   protected static final String TAG     = "AbstractEpisodesFragment";
   protected List<Episode> episodesArray;
   protected EpisodesAdapter episodeAdapter;
@@ -57,6 +58,7 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
       dialog = null;
     }
     this.dialog               = new EpisodeAboutDialog(getActivity(), episode);
+    dialog.setOnDismissListener(this);
     dialog.show();
   }
 
@@ -91,5 +93,10 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   public void onPlayEpisodeDownloadButtonClick(Episode episode) {
     Log.v(TAG, "Clicked play download episode: " + episode.name);
     getActivity().startActivity(app.intents.openPlayerForEpisode(episode));
+  }
+
+  @Override
+  public void onDismiss(DialogInterface dialog) {
+    episodeAdapter.notifyDataSetChanged();
   }
 }

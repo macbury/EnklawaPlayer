@@ -31,6 +31,7 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
   private Button goToProgramButton;
   private ImageButton playDownloadButton;
   private ImageButton streamButton;
+  private ImageButton deleteFileButton;
 
   public EpisodeAboutDialog(Activity activity, Episode episode) {
     super(activity);
@@ -46,6 +47,7 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
 
     streamButton        = (ImageButton)findViewById(R.id.button_stream);
     playDownloadButton  = (ImageButton)findViewById(R.id.button_download_play);
+    deleteFileButton    = (ImageButton)findViewById(R.id.button_trash);
     goToProgramButton   = (Button)findViewById(R.id.button_go_to_program);
     websiteButton       = (ImageButton)findViewById(R.id.button_website);
     titleTextView       = (TextView)findViewById(R.id.episode_title);
@@ -62,18 +64,21 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
     websiteButton.setOnClickListener(this);
     goToProgramButton.setOnClickListener(this);
     playDownloadButton.setOnClickListener(this);
-
+    deleteFileButton.setOnClickListener(this);
     updateUI();
   }
 
   private void updateUI() {
     EpisodeFile epf = episode.getFile();
-
+    streamButton.setVisibility(View.GONE);
+    deleteFileButton.setVisibility(View.GONE);
     if (epf != null && epf.inDownloadQueue()) {
       playDownloadButton.setImageResource(R.drawable.navigation_cancel);
     } else if (epf != null && epf.isDownloadedAndExists()) {
       playDownloadButton.setImageResource(R.drawable.av_play);
+      deleteFileButton.setVisibility(View.VISIBLE);
     } else {
+      streamButton.setVisibility(View.VISIBLE);
       playDownloadButton.setImageResource(R.drawable.av_download);
     }
   }
@@ -90,9 +95,11 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
       downloadOrPlay();
     } else if (v == streamButton) {
       playEpisode();
+    } else if (v == deleteFileButton) {
+      app.db.episodeFiles.destroy(episode.getFile());
     }
 
-    hide();
+    dismiss();
   }
 
   private void playEpisode() {

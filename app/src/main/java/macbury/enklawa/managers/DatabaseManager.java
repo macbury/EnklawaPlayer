@@ -26,14 +26,15 @@ import macbury.enklawa.db.scopes.ThreadScope;
  * Created by macbury on 09.09.14.
  */
 public class DatabaseManager extends OrmLiteSqliteOpenHelper {
-  private static final int DATABASE_VERSION = 46;
+  private static final int DATABASE_VERSION = 50;
   private static final String DATABASE_NAME = "pods.db";
   private static final String TAG           = "DatabaseManager";
-  public EnqueueEpisodeScope queue;
-  public ThreadScope threads;
-  public EpisodeFilesScope episodeFiles;
-  public EpisodesScope episodes;
-  public ProgramsScope programs;
+
+  public EnqueueEpisodeScope      queue;
+  public ThreadScope              threads;
+  public EpisodeFilesScope        episodeFiles;
+  public EpisodesScope            episodes;
+  public ProgramsScope            programs;
 
   public DatabaseManager(Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);

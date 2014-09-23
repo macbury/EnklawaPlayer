@@ -32,5 +32,6 @@
   </string>
   <string name="action_stream">Słuchaj radia</string>
   <string name="nav_play_queue">Kolejka odtwarzania</string>
+  <string name="go_to_program_activity">Pokaż wszystkie odcinki dla tego programu</string>
 
 </resources>

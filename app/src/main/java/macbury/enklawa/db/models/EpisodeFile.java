@@ -10,6 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.util.Date;
 
 
 /**
@@ -31,18 +32,12 @@ public class EpisodeFile  {
   public int retryCount = 0;
   @DatabaseField(foreign=true, foreignAutoRefresh=true)
   public Episode  episode;
+  @DatabaseField(columnName = "created_at")
+  public Date createdAt;
 
 
   public boolean isDownloadedAndExists() {
     return status == Status.Ready;
-  }
-
-  public File file(Context context) {
-    return new File(context.getFilesDir(), getFileName());
-  }
-
-  private String getFileName() {
-    return "episode_"+id+".mp3";
   }
 
 

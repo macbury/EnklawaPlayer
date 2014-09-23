@@ -8,6 +8,7 @@ import com.koushikdutta.ion.Ion;
 import java.io.File;
 
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.download.DownloadManager;
 
 /**
@@ -20,7 +21,11 @@ public class DownloadEpisode {
 
   public DownloadEpisode(EpisodeFile episodeFile, DownloadManager manager) {
     this.episodeFile  = episodeFile;
-    this.download     = Ion.with(manager.getContext()).load(episodeFile.episode.mp3).progress(manager).write(episodeFile.file(manager.getContext())).setCallback(manager);
+    this.download     = Ion.with(manager.getContext())
+            .load(episodeFile.episode.mp3)
+            .progress(manager)
+            .write(Enklawa.current().storage.getEpisodeFile(episodeFile))
+            .setCallback(manager);
   }
 
   public Future<File> getDownload() {

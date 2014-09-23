@@ -20,6 +20,9 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ImageButton android:id="@+id/button_trash" android:layout_height="48dp"
+                 android:layout_weight="1" android:background="@drawable/borderless_button"
+                 android:layout_width="match_parent" android:src="@drawable/ic_action_content_discard"/>
     <ImageButton
       android:id="@+id/button_download_play"
       android:layout_height="48dp"
@@ -56,6 +59,6 @@
     <Button android:id="@+id/button_go_to_program" android:layout_height="48dp"
             style="@style/AppTheme.Dialog.Title"
                  android:layout_weight="1" android:background="@drawable/borderless_button"
-                 android:layout_width="match_parent" android:text="Przejdź do programu"/>
+                 android:layout_width="match_parent" android:text="@string/go_to_program_activity"/>
   </LinearLayout>
 </LinearLayout>

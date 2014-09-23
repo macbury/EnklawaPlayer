@@ -1,18 +1,25 @@
 package macbury.enklawa.db.scopes;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
+import java.io.File;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 11.09.14.
  */
 public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
+  private static final String TAG = "EpisodeFilesScope";
+
   public EpisodeFilesScope(Dao<EpisodeFile, Integer> dao) {
     super(dao);
   }
@@ -23,6 +30,7 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
       file             = new EpisodeFile();
       file.episode     = episode;
       file.status      = EpisodeFile.Status.Pending;
+      file.createdAt   = new Date();
     }
     file.retryCount  = 0;
 
@@ -108,7 +116,11 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
 
   @Override
   public void afterDestroy(EpisodeFile object) {
-
+    Log.i(TAG, "Deleting file for: " + object.episode.name);
+    File file = Enklawa.current().storage.getEpisodeFile(object);
+    if (file.exists()) {
+      file.delete();
+    }
   }
 
   @Override
