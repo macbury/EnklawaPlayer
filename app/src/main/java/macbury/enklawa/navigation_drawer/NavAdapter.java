@@ -153,7 +153,7 @@ public class NavAdapter extends BaseAdapter{
     }
     int count = item.getCount();
     if (count <= 0) {
-      holder.countView.setVisibility(View.GONE);
+      holder.countView.setVisibility(View.INVISIBLE);
     } else {
       holder.countView.setText(String.valueOf(count));
       holder.countView.setVisibility(View.VISIBLE);
