@@ -23,24 +23,19 @@ public class NotificationsManager {
     this.manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  public Notification syncPod(int progress) {
+  public Notification syncPod() {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
             .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
             .setContentTitle(context.getString(R.string.notification_sync_pod_title))
             .setContentText(context.getString(R.string.notification_sync_pod_content));
-
-    if (progress == 0) {
-      builder.setProgress(100, 0, true);
-    } else {
-      builder.setProgress(100, progress, false);
-    }
+    builder.setProgress(100, 0, true);
 
     return builder.build();
   }
 
   public Notification syncPodError(Exception e) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(android.R.drawable.stat_notify_error)
+            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
             .setContentTitle(context.getString(R.string.notification_sync_pod_error_title))
             .setContentText(e.getLocalizedMessage());
 

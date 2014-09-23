@@ -31,7 +31,7 @@ public class Episode {
   public int duration;
   @DatabaseField
   public String image;
-  @DatabaseField(foreign=true, foreignAutoRefresh=true)
+  @DatabaseField(foreign=true, foreignAutoRefresh=true, columnName = "program_id")
   public Program program;
   @ForeignCollectionField
   private ForeignCollection<EpisodeFile> files;

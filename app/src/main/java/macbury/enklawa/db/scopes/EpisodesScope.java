@@ -4,6 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import macbury.enklawa.api.APIEpisode;
@@ -71,5 +72,33 @@ public class EpisodesScope extends AbstractScope<Episode> {
   @Override
   public void afterSave(Episode object) {
 
+  }
+
+  public ArrayList<Episode> findEpisodesByApiProgramAndReturnNew(Program program, ArrayList<APIEpisode> rawEpisodes) {
+    ArrayList<Integer> nids = new ArrayList<Integer>();
+    nids.add(-1);
+    for (APIEpisode episode : rawEpisodes) {
+      nids.add(episode.id);
+    }
+    ArrayList<Episode> output              = new ArrayList<Episode>();
+    QueryBuilder<Episode, Integer> builder = dao.queryBuilder();
+
+    try {
+      ArrayList<Integer> existingEpisodesIds = new ArrayList<Integer>();
+
+      for (Episode episode : builder.where().eq("program_id", program.id).and().in("id", nids).query()) {
+        existingEpisodesIds.add(episode.id);
+      }
+
+      for (APIEpisode rawEpisode : rawEpisodes) {
+        if (existingEpisodesIds.indexOf(rawEpisode.id) == -1) {
+          output.add(buildFromApi(rawEpisode));
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return output;
   }
 }

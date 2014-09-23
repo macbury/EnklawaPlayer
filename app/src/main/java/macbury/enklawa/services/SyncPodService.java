@@ -27,7 +27,7 @@ import macbury.enklawa.db.scopes.ProgramsScope;
 import macbury.enklawa.db.scopes.ThreadScope;
 import macbury.enklawa.managers.Enklawa;
 
-public class SyncPodService extends Service implements FutureCallback<APIResponse>, ProgressCallback {
+public class SyncPodService extends Service implements FutureCallback<APIResponse> {
   private static final String TAG = "SyncPodService";
   private static final String WAKE_LOCK_TAG = "SyncPodWakeLock";
   private static final int SYNC_POD_NOTIFICATION_ID = 666;
@@ -72,20 +72,15 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     syncPod();
   }
 
-  private void progress(int progress){
-    startForeground(SYNC_POD_NOTIFICATION_ID, this.app.notifications.syncPod(progress));
-  }
 
   private void syncPod() {
-    progress(0);
+    startForeground(SYNC_POD_NOTIFICATION_ID, this.app.notifications.syncPod());
     Log.i(TAG, "Syncing pod: "+app.settings.getApiEndpoint());
-    Ion.with(this).load(app.settings.getApiEndpoint()).noCache().progress(this).as(new TypeToken<APIResponse>() {}).setCallback(this);
+    Ion.with(this).load(app.settings.getApiEndpoint()).noCache().as(new TypeToken<APIResponse>() {}).setCallback(this);
   }
 
   @Override
   public void onCompleted(Exception e, APIResponse result) {
-    progress(0);
-
     if (e == null) {
       Log.d(TAG, "Downloaded pod data!");
       SyncApiResponseWithDB syncDB = new SyncApiResponseWithDB();
@@ -100,11 +95,6 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
   private void showErrorSyncNotification(Exception e) {
     app.notifications.manager.notify(1, app.notifications.syncPodError(e));
-  }
-
-  @Override
-  public void onProgress(long downloaded, long total) {
-    progress(Math.round(downloaded / total * 100));
   }
 
   private void showNotificationsForNewEpisodesOrDownloadThem(ArrayList<Episode> newEpisodes) {
@@ -122,23 +112,18 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
 
   private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements DatabaseCRUDListener<Episode> {
     private ArrayList<Episode> newEpisodes;
-    private float current = 0;
-    private float total   = 1;
+
 
     private void syncProgramsAndEpisodes(ArrayList<APIProgram> resultPrograms) {
       ProgramsScope programs = app.db.programs;
       EpisodesScope episodes = app.db.episodes;
       episodes.addListener(this);
       for (APIProgram apiProgram : resultPrograms) {
-        current++;
         if (programs.updateFromApi(apiProgram)) {
           Program program = programs.find(apiProgram);
           Log.v(TAG, "Program: " +program.name);
-          for(APIEpisode apiEpisode : apiProgram.episodes) {
-            Episode episode = episodes.buildFromApi(apiEpisode);
+          for(Episode episode : episodes.findEpisodesByApiProgramAndReturnNew(program, apiProgram.episodes)) {
             episode.program = program;
-            current++;
-            publishProgress();
             if (episodes.update(episode)) {
               Log.v(TAG, "Episode: " + episode.name);
             } else {
@@ -156,7 +141,6 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     private void syncThreads(ArrayList<APIThread> resultThreads) {
       ThreadScope threads = app.db.threads;
       for (APIThread apiThread : resultThreads) {
-        current++;
         ForumThread thread = threads.find(apiThread);
         if (thread == null) {
           thread = threads.buildFromApi(apiThread);
@@ -169,18 +153,10 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     protected Boolean doInBackground(APIResponse... params) {
       newEpisodes            = new ArrayList<Episode>();
       APIResponse result     = params[0];
-      this.total             = result.countProgramsAndEpisodes();
-
-      syncThreads(result.forum);
+      //syncThreads(result.forum);
       syncProgramsAndEpisodes(result.programs);
 
       return true;
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-      super.onProgressUpdate(values);
-      SyncPodService.this.progress(Math.round(current / total * 100));
     }
 
     @Override
