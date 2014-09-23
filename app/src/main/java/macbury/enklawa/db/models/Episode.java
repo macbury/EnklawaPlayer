@@ -15,7 +15,7 @@ import java.util.Date;
  */
 
 @DatabaseTable(tableName = "episodes")
-public class Episode extends BaseModel {
+public class Episode {
   private static final int FRESH_AFTER_DAYS = 3;
   @DatabaseField(canBeNull = false, id = true)
   public int id;

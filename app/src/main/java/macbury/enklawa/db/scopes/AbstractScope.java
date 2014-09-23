@@ -5,11 +5,10 @@ import android.util.Log;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import macbury.enklawa.db.DBCallbacks;
-import macbury.enklawa.db.models.BaseModel;
-import macbury.enklawa.db.models.Program;
+import macbury.enklawa.db.DatabaseCRUDListener;
 
 /**
  * Created by macbury on 09.09.14.
@@ -18,11 +17,26 @@ import macbury.enklawa.db.models.Program;
 // K is for dbObject Class
 // T is for apiObject
 
-public abstract class AbstractScope<K> {
+public abstract class AbstractScope<K> implements DatabaseCRUDListener<K> {
   protected Dao<K, Integer> dao;
+  protected ArrayList<DatabaseCRUDListener<K>> listeners;
 
   public AbstractScope(Dao<K, Integer> dao) {
-    this.dao = dao;
+    this.dao       = dao;
+    this.listeners = new ArrayList<DatabaseCRUDListener<K>>();
+    addListener(this);
+  }
+
+  public void addListener(DatabaseCRUDListener<K> listener) {
+    if (listeners.indexOf(listener) == -1) {
+      listeners.add(listener);
+    }
+  }
+
+  public void removeListener(DatabaseCRUDListener<K> listener) {
+    if (listeners.indexOf(listener) != -1) {
+      listeners.remove(listener);
+    }
   }
 
   public List<K> all() {
@@ -81,49 +95,21 @@ public abstract class AbstractScope<K> {
     return 0;
   }
 
-  private boolean haveCallbacksInterface(K dbObject) {
-    return DBCallbacks.class.isInstance(dbObject);
-  }
-
-  private boolean haveCallbacks(K dbObject) {
-    return dbObject != null && callbacks(dbObject).getListener() != null;
-  }
-
-  private DBCallbacks callbacksInterface(K dbObject) {
-    return (DBCallbacks) dbObject;
-  }
-
-  private BaseModel callbacks(K dbObject) {
-    return (BaseModel) dbObject;
-  }
-
   private void triggerAfterCreateCallback(K dbObject) {
-    if (haveCallbacksInterface(dbObject)) {
-      callbacksInterface(dbObject).afterCreate();
-    }
-
-    if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).getListener().afterCreate((BaseModel)dbObject);
+    for (DatabaseCRUDListener listener : listeners) {
+      listener.afterCreate(dbObject);
     }
   }
 
   private void triggerAfterSaveCallback(K dbObject) {
-    if (haveCallbacksInterface(dbObject)) {
-      callbacksInterface(dbObject).afterSave();
-    }
-
-    if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).getListener().afterSave((BaseModel)dbObject);
+    for (DatabaseCRUDListener listener : listeners) {
+      listener.afterSave(dbObject);
     }
   }
 
   private void triggerAfterDestroyCallback(K dbObject) {
-    if (haveCallbacksInterface(dbObject)) {
-      callbacksInterface(dbObject).afterDestroy();
-    }
-
-    if (haveCallbacks(dbObject)) {
-      callbacks(dbObject).getListener().afterDestroy((BaseModel)dbObject);
+    for (DatabaseCRUDListener listener : listeners) {
+      listener.afterDestroy(dbObject);
     }
   }
 

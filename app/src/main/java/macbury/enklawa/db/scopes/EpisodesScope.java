@@ -57,4 +57,19 @@ public class EpisodesScope extends AbstractScope<Episode> {
     }
     return null;
   }
+
+  @Override
+  public void afterCreate(Episode model) {
+
+  }
+
+  @Override
+  public void afterDestroy(Episode object) {
+
+  }
+
+  @Override
+  public void afterSave(Episode object) {
+
+  }
 }

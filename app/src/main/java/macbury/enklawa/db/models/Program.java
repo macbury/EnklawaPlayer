@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 
 @DatabaseTable(tableName = "programs")
-public class Program extends BaseModel {
+public class Program {
   @DatabaseField(canBeNull = false, id = true)
   public int      id;
   @DatabaseField

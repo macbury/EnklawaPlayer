@@ -37,4 +37,19 @@ public class ThreadScope extends AbstractScope<ForumThread> {
       return null;
     }
   }
+
+  @Override
+  public void afterCreate(ForumThread model) {
+
+  }
+
+  @Override
+  public void afterDestroy(ForumThread object) {
+
+  }
+
+  @Override
+  public void afterSave(ForumThread object) {
+
+  }
 }

@@ -100,4 +100,19 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
     }
     return 0;
   }
+
+  @Override
+  public void afterCreate(EpisodeFile model) {
+
+  }
+
+  @Override
+  public void afterDestroy(EpisodeFile object) {
+
+  }
+
+  @Override
+  public void afterSave(EpisodeFile object) {
+
+  }
 }

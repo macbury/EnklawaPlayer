@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by macbury on 12.09.14.
  */
 @DatabaseTable(tableName = "forum_threads")
-public class ForumThread extends BaseModel {
+public class ForumThread {
   @DatabaseField(canBeNull = false, generatedId = true)
   public int      id;
   @DatabaseField

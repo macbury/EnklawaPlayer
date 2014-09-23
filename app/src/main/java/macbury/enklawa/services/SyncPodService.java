@@ -18,8 +18,7 @@ import macbury.enklawa.api.APIEpisode;
 import macbury.enklawa.api.APIProgram;
 import macbury.enklawa.api.APIResponse;
 import macbury.enklawa.api.APIThread;
-import macbury.enklawa.db.ExternalDBCallbacks;
-import macbury.enklawa.db.models.BaseModel;
+import macbury.enklawa.db.DatabaseCRUDListener;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.ForumThread;
 import macbury.enklawa.db.models.Program;
@@ -121,7 +120,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     app.services.downloadPendingEpisodes();
   }
 
-  private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements ExternalDBCallbacks {
+  private class SyncApiResponseWithDB extends AsyncTask<APIResponse, Integer, Boolean> implements DatabaseCRUDListener<Episode> {
     private ArrayList<Episode> newEpisodes;
     private float current = 0;
     private float total   = 1;
@@ -129,6 +128,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     private void syncProgramsAndEpisodes(ArrayList<APIProgram> resultPrograms) {
       ProgramsScope programs = app.db.programs;
       EpisodesScope episodes = app.db.episodes;
+      episodes.addListener(this);
       for (APIProgram apiProgram : resultPrograms) {
         current++;
         if (programs.updateFromApi(apiProgram)) {
@@ -137,7 +137,6 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
           for(APIEpisode apiEpisode : apiProgram.episodes) {
             Episode episode = episodes.buildFromApi(apiEpisode);
             episode.program = program;
-            episode.setListener(this);
             current++;
             publishProgress();
             if (episodes.update(episode)) {
@@ -150,6 +149,8 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
           Log.e(TAG, "Could not save program: " + apiProgram.name);
         }
       }
+
+      episodes.removeListener(this);
     }
 
     private void syncThreads(ArrayList<APIThread> resultThreads) {
@@ -159,7 +160,6 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
         ForumThread thread = threads.find(apiThread);
         if (thread == null) {
           thread = threads.buildFromApi(apiThread);
-          thread.setListener(this);
           threads.update(thread);
         }
       }
@@ -191,27 +191,19 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     }
 
     @Override
-    public void afterCreate(BaseModel model) {
-      if (Episode.class.isInstance(model)) {
-        Episode episode = (Episode)model;
-        if (episode.isFresh()) {
-          newEpisodes.add(episode);
-        }
-      }
-
-      if (ForumThread.class.isInstance(model)) {
-        ForumThread thread = (ForumThread)model;
-        Log.i("New thread", thread.title);
+    public void afterCreate(Episode episode) {
+      if (episode.isFresh()) {
+        newEpisodes.add(episode);
       }
     }
 
     @Override
-    public void afterDestroy(BaseModel object) {
+    public void afterDestroy(Episode object) {
 
     }
 
     @Override
-    public void afterSave(BaseModel object) {
+    public void afterSave(Episode object) {
 
     }
   }

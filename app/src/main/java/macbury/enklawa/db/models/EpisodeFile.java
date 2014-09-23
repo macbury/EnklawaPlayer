@@ -11,13 +11,12 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.io.File;
 import java.io.OutputStream;
 
-import macbury.enklawa.db.DBCallbacks;
 
 /**
  * Created by macbury on 11.09.14.
  */
 @DatabaseTable(tableName = "episode_files")
-public class EpisodeFile extends BaseModel implements DBCallbacks {
+public class EpisodeFile  {
   public static final int MAX_RETRY = 5;
 
   public enum Status {
@@ -33,20 +32,6 @@ public class EpisodeFile extends BaseModel implements DBCallbacks {
   @DatabaseField(foreign=true, foreignAutoRefresh=true)
   public Episode  episode;
 
-  @Override
-  public void afterCreate() {
-
-  }
-
-  @Override
-  public void afterDestroy() {
-    Log.wtf("EpisodeFile", "Remove file here!");
-  }
-
-  @Override
-  public void afterSave() {
-
-  }
 
   public boolean isDownloadedAndExists() {
     return status == Status.Ready;

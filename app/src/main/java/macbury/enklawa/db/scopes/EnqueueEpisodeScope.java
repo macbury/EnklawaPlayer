@@ -12,4 +12,18 @@ public class EnqueueEpisodeScope extends AbstractScope<EnqueueEpisode> {
     super(dao);
   }
 
+  @Override
+  public void afterCreate(EnqueueEpisode model) {
+
+  }
+
+  @Override
+  public void afterDestroy(EnqueueEpisode object) {
+
+  }
+
+  @Override
+  public void afterSave(EnqueueEpisode object) {
+
+  }
 }

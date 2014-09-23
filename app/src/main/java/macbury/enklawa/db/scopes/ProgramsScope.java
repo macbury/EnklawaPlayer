@@ -62,4 +62,19 @@ public class ProgramsScope extends AbstractScope<Program> {
     }
     return update(newProgram);
   }
+
+  @Override
+  public void afterCreate(Program model) {
+
+  }
+
+  @Override
+  public void afterDestroy(Program object) {
+
+  }
+
+  @Override
+  public void afterSave(Program object) {
+
+  }
 }
