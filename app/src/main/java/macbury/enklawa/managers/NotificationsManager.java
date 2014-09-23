@@ -25,7 +25,7 @@ public class NotificationsManager {
 
   public Notification syncPod(int progress) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
             .setContentTitle(context.getString(R.string.notification_sync_pod_title))
             .setContentText(context.getString(R.string.notification_sync_pod_content));
 
@@ -49,13 +49,13 @@ public class NotificationsManager {
 
   public Notification downloadedEpisode(Bitmap preview, Episode episode) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_launcher)
+            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
             .setLargeIcon(preview)
             .setContentTitle(episode.name)
             .setAutoCancel(true)
             .setTicker(episode.name)
             .setContentInfo(Converter.getDurationStringLong(episode.duration))
-            .setContentText(episode.description);
+            .setContentText(episode.program.name);
 
     PendingIntent playEpisodePendingIntent = Enklawa.current().intents.pendingOpenPlayerForEpisode(episode);
     builder.addAction(R.drawable.ic_action_av_play, context.getString(R.string.notification_play_action), playEpisodePendingIntent);
