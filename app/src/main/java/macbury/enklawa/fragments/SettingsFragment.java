@@ -4,8 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+
+import java.text.DateFormat;
 
 import macbury.enklawa.R;
 import macbury.enklawa.managers.Enklawa;
@@ -45,7 +48,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     proxyHostPreference.setSummary(manager.getProxyHost());
 
     EditTextPreference proxyPortPreference = (EditTextPreference)screen.findPreference(SettingsManager.KEY_PROXY_PORT);
-    proxyPortPreference.setSummary(""+manager.getProxyPort());
+    proxyPortPreference.setSummary(String.valueOf(manager.getProxyPort()));
+
   }
 
   @Override

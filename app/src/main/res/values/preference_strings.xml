@@ -12,12 +12,14 @@
   <string name="pref_key_proxy_host_title">Host</string>
   <string name="pref_key_proxy_port_title">Port</string>
   <string-array name="pref_sync_frequency_titles">
+    <item>15 minut</item>
     <item>1 godzina</item>
     <item>12 godziny</item>
     <item>24 godziny</item>
     <item>Ręcznie</item>
   </string-array>
   <string-array name="pref_sync_frequency_values">
+    <item>900000</item>
     <item>3600000</item>
     <item>43200000</item>
     <item>86400000</item>

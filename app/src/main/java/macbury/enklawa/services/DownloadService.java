@@ -1,11 +1,17 @@
 package macbury.enklawa.services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 
@@ -23,6 +29,7 @@ public class DownloadService extends Service implements DownloadManagerListener 
   private PowerManager.WakeLock wakeLock;
   private Enklawa app;
   private static DownloadManager downloadManager;
+  private NotificationManager mNotificationManager;
 
   public DownloadService() {
   }
@@ -36,10 +43,11 @@ public class DownloadService extends Service implements DownloadManagerListener 
   @Override
   public void onCreate() {
     super.onCreate();
-    this.app             = Enklawa.current();
-    this.powerManager    = (PowerManager) getSystemService(POWER_SERVICE);
-    this.wakeLock        = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
-    this.downloadManager = new DownloadManager(this, this);
+    this.mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    this.app                  = Enklawa.current();
+    this.powerManager         = (PowerManager) getSystemService(POWER_SERVICE);
+    this.wakeLock             = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
+    this.downloadManager      = new DownloadManager(this, this);
     this.wakeLock.acquire();
   }
 
@@ -96,9 +104,16 @@ public class DownloadService extends Service implements DownloadManagerListener 
   }
 
   @Override
-  public void onDownloadSuccess(DownloadEpisode download) {
+  public void onDownloadSuccess(final DownloadEpisode download) {
     updateNotification(download);
     sendStatusFor(download);
+
+    Ion.with(this).load(download.getEpisode().image).asBitmap().setCallback(new FutureCallback<Bitmap>() {
+      @Override
+      public void onCompleted(Exception e, Bitmap result) {
+        mNotificationManager.notify(download.getEpisodeFileId(), app.notifications.downloadedEpisode(result, download.getEpisode()));
+      }
+    });
   }
 
 

@@ -140,4 +140,12 @@ public class IntentManager {
     Intent intent         = new Intent(context, DownloadService.class);
     return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
+
+  public PendingIntent pendingPlayEpisodeFile(EpisodeFile file) {
+    return PendingIntent.getService(context, 0, playEpisodeFile(file), PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  public PendingIntent pendingOpenPlayerForEpisode(Episode episode) {
+    return PendingIntent.getActivity(context, 0, openPlayerForEpisode(episode), PendingIntent.FLAG_UPDATE_CURRENT);
+  }
 }

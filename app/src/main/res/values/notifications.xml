@@ -6,4 +6,6 @@
   <string name="notification_download_title">Zasysam audycję</string>
   <string name="notification_download_content">Czekam na serwer...</string>
   <string name="stop_download">Zatrzymaj</string>
+  <string name="notification_downloadaded_title">Pobrano odcinek</string>
+  <string name="notification_play_action">Odtwórz</string>
 </resources>

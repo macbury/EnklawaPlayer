@@ -7,6 +7,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.io.File;
 
+import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.download.DownloadManager;
@@ -38,4 +39,7 @@ public class DownloadEpisode {
 
   public int getEpisodeFileId() { return episodeFile.id; }
 
+  public Episode getEpisode() {
+    return episodeFile.episode;
+  }
 }
