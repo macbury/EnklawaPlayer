@@ -1,5 +1,6 @@
 package macbury.enklawa.managers;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -40,12 +41,11 @@ public class SettingsManager {
     this.context = context;
     settings     = PreferenceManager.getDefaultSharedPreferences(context);
     PreferenceManager.setDefaultValues(context, R.xml.settings, false);
-    update();
   }
 
   public void update() {
     updateION();
-    // onSyncPodUpdate alarms
+    Enklawa.current().alarms.setup();
   }
 
   private void updateION() {
@@ -68,8 +68,8 @@ public class SettingsManager {
     return settings.getString(KEY_API_ENDPOINT, DEFAULT_POD_URL);
   }
 
-  public int getSyncFreq() {
-    return settings.getInt(KEY_SYNC_FREQ, 360);
+  public long getSyncFreq() {
+    return Long.parseLong(settings.getString(KEY_SYNC_FREQ, String.valueOf(AlarmManager.INTERVAL_HOUR)));
   }
   
   public boolean useProxy() {

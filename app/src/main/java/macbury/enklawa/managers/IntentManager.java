@@ -13,6 +13,7 @@ import macbury.enklawa.db.models.Program;
 import macbury.enklawa.managers.download.DownloadEpisode;
 import macbury.enklawa.services.DownloadService;
 import macbury.enklawa.services.PlayerService;
+import macbury.enklawa.services.SyncPodService;
 
 /**
  * Created by macbury on 09.09.14.
@@ -51,6 +52,11 @@ public class IntentManager {
 
   public boolean haveCancelExtra(Intent intent){
     return intent.hasExtra(EXTRA_ACTION_CANCEL) && intent.getBooleanExtra(EXTRA_ACTION_CANCEL, false) == true;
+  }
+
+  public PendingIntent syncPod() {
+    Intent intent         = new Intent(context, SyncPodService.class);
+    return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
   public boolean haveEpisode(Intent intent) {
@@ -128,5 +134,10 @@ public class IntentManager {
     Intent intent = new Intent(context, PlayerService.class);
     intent.putExtra(EXTRA_ACTION_CANCEL, true);
     return intent;
+  }
+
+  public PendingIntent downloadPendingEpisodes() {
+    Intent intent         = new Intent(context, DownloadService.class);
+    return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 }

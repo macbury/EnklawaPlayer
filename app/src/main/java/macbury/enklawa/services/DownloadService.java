@@ -41,7 +41,6 @@ public class DownloadService extends Service implements DownloadManagerListener 
     this.wakeLock        = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.downloadManager = new DownloadManager(this, this);
     this.wakeLock.acquire();
-    app.db.episodeFiles.markDownloadingAsFailed();
   }
 
   @Override

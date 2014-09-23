@@ -13,7 +13,9 @@ public class Enklawa extends Application {
   public NotificationsManager notifications;
   public BroadcastsManager broadcasts;
   public StorageManager storage;
+  public AlarmsManager alarms;
   private static Enklawa current;
+
 
   @Override
   public void onCreate() {
@@ -23,9 +25,11 @@ public class Enklawa extends Application {
     this.db            = new DatabaseManager(this);
     this.services      = new ServiceManager(this);
     this.intents       = new IntentManager(this);
-    this.settings      = new SettingsManager(this);
     this.notifications = new NotificationsManager(this.getApplicationContext());
     this.storage       = new StorageManager();
+    this.settings      = new SettingsManager(this);
+    this.alarms        = new AlarmsManager(this);
+    this.settings.update();
     this.db.episodeFiles.markDownloadingAsFailed();
     syncIfFirstBoot();
   }

@@ -1,6 +1,8 @@
 package macbury.enklawa.managers.download;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.koushikdutta.async.future.FutureCallback;
@@ -52,7 +54,12 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
   }
 
   private void next() {
-    if (queue.size() > 0) {
+    if (!canDownload()) {
+      Log.v(TAG, "Not on wifi connection, Canceling download");
+      currentDownload = null;
+      queue.clear();
+      finish();
+    } else if (queue.size() > 0) {
       EpisodeFile epf = queue.remove(0);
       Log.v(TAG, "Fetching next episode: "+ epf.episode.name);
       app.db.episodeFiles.markAsRunning(epf);
@@ -60,8 +67,15 @@ public class DownloadManager implements ProgressCallback, FutureCallback<File> {
       listener.onDownloadStart(currentDownload);
     } else {
       Log.v(TAG, "Queue is clear. Finish!");
+      app.db.episodeFiles.markDownloadingAsFailed();
       finish();
     }
+  }
+
+  private boolean canDownload() {
+    ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo mWifi               = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+    return mWifi.isConnected();
   }
 
   private void finish() {
