@@ -23,6 +23,7 @@ public class PlayerService extends Service {
 
   @Override
   public void onDestroy() {
+    playerManager.destroy();
     super.onDestroy();
   }
 
@@ -34,7 +35,9 @@ public class PlayerService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
+    if (app.intents.haveEpisode(intent)) {
 
+    }
     return super.onStartCommand(intent, flags, startId);
   }
 }

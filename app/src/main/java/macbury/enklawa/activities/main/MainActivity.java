@@ -31,7 +31,6 @@ import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 
 public class MainActivity extends AccentActivity implements NavigationListener {
-  private final static String DONTAE_PAGE_URL                 = "http://macbury.ninja/donate/bitcoin";
   private static final String SAVE_STATE_SELECTED_NAVBAR_ITEM = "SAVE_STATE_SELECTED_NAVBAR_ITEM";
 
   private DrawerLayout                  mDrawerLayout;

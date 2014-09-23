@@ -29,7 +29,7 @@
     <ImageButton android:id="@+id/button_stream" android:layout_height="48dp"
                  android:layout_weight="1" android:background="@drawable/borderless_button"
                  android:layout_width="match_parent"
-                 android:src="@drawable/ic_action_device_access_network_wifi"/>
+                 android:src="@drawable/action_stream"/>
     <ImageButton android:id="@+id/button_website" android:layout_height="48dp"
                  android:layout_weight="1" android:background="@drawable/borderless_button"
                  android:layout_width="match_parent"

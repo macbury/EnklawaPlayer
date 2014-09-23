@@ -15,6 +15,10 @@ public abstract class NavItemFragment extends NavBaseItem {
     super(context);
   }
 
+  public int getCount() {
+    return -1;
+  }
+
   public abstract String getTitle();
   public abstract Icon getIcon();
   public abstract Fragment getFragment();

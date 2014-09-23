@@ -7,6 +7,7 @@ import be.webelite.ion.Icon;
 import macbury.enklawa.R;
 import macbury.enklawa.fragments.main.episodes.DownloadedEpisodesFragment;
 import macbury.enklawa.fragments.main.episodes.NewestEpisodesFragment;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 11.09.14.
@@ -25,7 +26,7 @@ public class DownloadedEpisodesNavItem extends NavItemFragment {
 
   @Override
   public Icon getIcon() {
-    return Icon.ion_archive;
+    return Icon.ion_android_download;
   }
 
   @Override
@@ -34,5 +35,10 @@ public class DownloadedEpisodesNavItem extends NavItemFragment {
       fragment = new DownloadedEpisodesFragment();
     }
     return fragment;
+  }
+
+  @Override
+  public int getCount() {
+    return Enklawa.current().db.episodeFiles.countDownloadedOrPendingOrFailed();
   }
 }

@@ -140,7 +140,7 @@ public class NavAdapter extends BaseAdapter{
       holder                  = new SimpleNavItemHolder();
       holder.iconView         = (IconView) convertView.findViewById(R.id.nav_item_icon_view);
       holder.titleView        = (TextView) convertView.findViewById(R.id.nav_item_title_view);
-
+      holder.countView        = (TextView) convertView.findViewById(R.id.nav_item_count_view);
       convertView.setTag(holder);
     } else {
       holder = (SimpleNavItemHolder) convertView.getTag();
@@ -150,6 +150,13 @@ public class NavAdapter extends BaseAdapter{
       holder.titleView.setTypeface(null, Typeface.BOLD);
     } else {
       holder.titleView.setTypeface(null, Typeface.NORMAL);
+    }
+    int count = item.getCount();
+    if (count <= 0) {
+      holder.countView.setVisibility(View.GONE);
+    } else {
+      holder.countView.setText(String.valueOf(count));
+      holder.countView.setVisibility(View.VISIBLE);
     }
 
     holder.titleView.setText(item.getTitle());
@@ -183,6 +190,7 @@ public class NavAdapter extends BaseAdapter{
   public class SimpleNavItemHolder {
     public IconView         iconView;
     public TextView         titleView;
+    public TextView         countView;
   }
 
   public class FavoriteProgramItemItemHolder {

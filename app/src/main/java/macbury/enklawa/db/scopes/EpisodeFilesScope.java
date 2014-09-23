@@ -90,4 +90,14 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
     }
     return null;
   }
+
+  public int countDownloadedOrPendingOrFailed() {
+    QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
+    try {
+      return (int)builder.where().in("status", EpisodeFile.Status.Pending, EpisodeFile.Status.Ready, EpisodeFile.Status.Failed).countOf();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
 }

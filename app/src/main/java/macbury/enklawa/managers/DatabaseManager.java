@@ -10,10 +10,13 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
+
+import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.db.models.ForumThread;
 import macbury.enklawa.db.models.Program;
+import macbury.enklawa.db.scopes.EnqueueEpisodeScope;
 import macbury.enklawa.db.scopes.EpisodeFilesScope;
 import macbury.enklawa.db.scopes.EpisodesScope;
 import macbury.enklawa.db.scopes.ProgramsScope;
@@ -23,9 +26,10 @@ import macbury.enklawa.db.scopes.ThreadScope;
  * Created by macbury on 09.09.14.
  */
 public class DatabaseManager extends OrmLiteSqliteOpenHelper {
-  private static final int DATABASE_VERSION = 45;
+  private static final int DATABASE_VERSION = 46;
   private static final String DATABASE_NAME = "pods.db";
   private static final String TAG           = "DatabaseManager";
+  public EnqueueEpisodeScope queue;
   public ThreadScope threads;
   public EpisodeFilesScope episodeFiles;
   public EpisodesScope episodes;
@@ -40,6 +44,7 @@ public class DatabaseManager extends OrmLiteSqliteOpenHelper {
       this.episodes     = new EpisodesScope(this.<Dao<Episode, Integer>, Episode>getDao(Episode.class));
       this.episodeFiles = new EpisodeFilesScope(this.<Dao<EpisodeFile, Integer>, EpisodeFile>getDao(EpisodeFile.class));
       this.threads      = new ThreadScope(this.<Dao<ForumThread, Integer>, ForumThread>getDao(ForumThread.class));
+      this.queue        = new EnqueueEpisodeScope(this.<Dao<EnqueueEpisode, Integer>, EnqueueEpisode>getDao(EnqueueEpisode.class));
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -57,6 +62,7 @@ public class DatabaseManager extends OrmLiteSqliteOpenHelper {
       TableUtils.createTable(connectionSource, Episode.class);
       TableUtils.createTable(connectionSource, EpisodeFile.class);
       TableUtils.createTable(connectionSource, ForumThread.class);
+      TableUtils.createTable(connectionSource, EnqueueEpisode.class);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -71,6 +77,7 @@ public class DatabaseManager extends OrmLiteSqliteOpenHelper {
       TableUtils.dropTable(connectionSource, Episode.class, true);
       TableUtils.dropTable(connectionSource, EpisodeFile.class, true);
       TableUtils.dropTable(connectionSource, ForumThread.class, true);
+      TableUtils.dropTable(connectionSource, EnqueueEpisode.class, true);
     } catch (SQLException e) {
       e.printStackTrace();
     }

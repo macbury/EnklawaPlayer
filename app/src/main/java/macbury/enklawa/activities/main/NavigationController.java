@@ -17,6 +17,7 @@ import macbury.enklawa.navigation_drawer.items.FavoriteProgramNavItem;
 import macbury.enklawa.navigation_drawer.items.ForumNavItem;
 import macbury.enklawa.navigation_drawer.items.NavItemFragment;
 import macbury.enklawa.navigation_drawer.items.NewestEpisodesNavItem;
+import macbury.enklawa.navigation_drawer.items.PlayQueueNavItem;
 
 /**
  * Created by macbury on 12.09.14.
@@ -25,6 +26,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
   private final MainActivity          activity;
   private final ListView              navDrawerListView;
   private final DrawerLayout          mDrawerLayout;
+  private final PlayQueueNavItem      playQueueItemNav;
   private NavAdapter                  drawerNavAdapter;
   private NewestEpisodesNavItem       newestEpisodesItemNav;
   private AllProgramsNavItem          allProgamsItemNav;
@@ -47,7 +49,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
     this.allProgamsItemNav        = new AllProgramsNavItem(activity);
     this.newestEpisodesItemNav    = new NewestEpisodesNavItem(activity);
     this.drawerNavAdapter         = new NavAdapter(activity);
-
+    this.playQueueItemNav         = new PlayQueueNavItem(activity);
     refresh();
     navDrawerListView.setAdapter(drawerNavAdapter);
     navDrawerListView.setOnItemClickListener(this);
@@ -59,7 +61,7 @@ public class NavigationController implements AdapterView.OnItemClickListener {
     drawerNavAdapter.add(newestEpisodesItemNav);
     drawerNavAdapter.add(allProgamsItemNav);
     drawerNavAdapter.add(downloadedItemNav);
-    drawerNavAdapter.add(forumNavItem);
+    drawerNavAdapter.add(playQueueItemNav);
 
     drawerNavAdapter.add(favoriteDividerNav);
     for(Program program : listener.getNavigationControllerFavoritedPrograms()) {

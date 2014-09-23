@@ -30,5 +30,7 @@
   <string name="donate_github">Kod źródłowy jest na Github.com</string>
   <string name="donate_help_bitcoin">Wspomóż autora poprzez wpłatę dowolnej ilości bitcoinów:
   </string>
+  <string name="action_stream">Słuchaj radia</string>
+  <string name="nav_play_queue">Kolejka odtwarzania</string>
 
 </resources>

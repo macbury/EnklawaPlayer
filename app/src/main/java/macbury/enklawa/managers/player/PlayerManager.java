@@ -14,4 +14,7 @@ public class PlayerManager {
     this.context = context;
   }
 
+  public void destroy() {
+
+  }
 }

@@ -35,7 +35,8 @@ public class Episode extends BaseModel {
   public Program program;
   @ForeignCollectionField
   private ForeignCollection<EpisodeFile> files;
-
+  @ForeignCollectionField
+  private ForeignCollection<EnqueueEpisode> enqueueEpisodes;
   @DatabaseField
   public float playedDuration = 0f;
   @DatabaseField

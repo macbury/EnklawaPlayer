@@ -68,7 +68,7 @@
       android:layout_height="wrap_content"
       style="@style/AppTheme.TextView.UnreadIndicator"
       android:layout_alignParentRight="true"
-      android:layout_alignParentTop="true"/>
+      android:layout_alignParentTop="true" android:visibility="gone"/>
   </RelativeLayout>
 
   <View
