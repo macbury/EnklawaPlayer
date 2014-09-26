@@ -4,41 +4,51 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content"
+    android:background="@color/drawer_background_color"
     tools:context="macbury.enklawa.fragments.PlayerControllerFragment">
 
-    <View
+  <View
       android:layout_width="match_parent"
       android:layout_height="2dp"
       android:background="@color/actionbar_color"/>
     <LinearLayout
       android:id="@+id/rel"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/drawer_background_color"
+      android:layout_height="62dp"
+      android:paddingRight="@dimen/player_padding"
+      android:paddingLeft="@dimen/player_padding"
+
       android:layout_alignParentBottom="true"
       android:layout_alignParentLeft="true" android:layout_gravity="bottom">
 
-      <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/imageView"/>
-      <ImageButton
-        android:id="@+id/button_play_pause"
+      <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/av_play" android:background="@drawable/borderless_button"/>
-
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0:00:00"
+        android:id="@+id/text_running_time" android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/player_time_padding"/>
       <SeekBar
         android:id="@+id/seek_bar_player"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:indeterminate="false" />
+        android:indeterminate="false" android:layout_weight="0.3"/>
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="0:00:00"
+        android:id="@+id/text_running_total_time" android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/player_time_padding"/>
 
     </LinearLayout>
+  <ImageButton
+    android:id="@+id/button_play_pause"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:src="@drawable/av_play" android:background="@drawable/borderless_button"
+    android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

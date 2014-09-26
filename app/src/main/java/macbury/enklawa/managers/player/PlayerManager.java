@@ -51,7 +51,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void removeListener(PlayerManagerListener listener) {
-    if (listeners.indexOf(listener) == -1) {
+    if (listeners.indexOf(listener) != -1) {
       listeners.remove(listener);
     }
   }
@@ -69,9 +69,15 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void add(EnqueueEpisode enqueueEpisode) {
-    stop();
-    if (!contains(enqueueEpisode)) {
+    if (isRunning() && currentMediaSource.equals(enqueueEpisode)) {
+      Log.i(TAG, "Already playing");
+    } else if (!contains(enqueueEpisode)) {
       queue.add(0, new EpisodeMediaSource(enqueueEpisode));
+      if (isRunning()) {
+        pause();
+        queue.add(1, currentMediaSource);
+        next();
+      }
     }
     if (!isRunning()) {
       next();
@@ -96,6 +102,10 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
       currentMediaSource = queue.remove(0);
       try {
         Log.i(TAG, "Episode " + currentMediaSource.getTitle() + " is " + currentMediaSource.getMediaUri().toString());
+        for (PlayerManagerListener listener : listeners) {
+          listener.onInitialize(this, currentMediaSource);
+        }
+        player.reset();
         player.setDataSource(context, currentMediaSource.getMediaUri());
         player.prepareAsync();
       } catch (IOException e) {
@@ -105,7 +115,9 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
       }
     } else {
       Log.i(TAG, "Finished all enqueed episodes");
-      // finished all files!
+      for (PlayerManagerListener listener : listeners) {
+        listener.onFinishAll(this, currentMediaSource);
+      }
     }
   }
 
@@ -169,7 +181,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   @Override
   public void onBufferingUpdate(MediaPlayer mp, int percent) {
-    currentMediaSource.setBufferring(percent);
     for (PlayerManagerListener listener : listeners) {
       listener.onBufferMedia(this, currentMediaSource);
     }
@@ -189,7 +200,14 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   @Override
   public void onSleepTimerTick(SleepTimer timer) {
-    Log.i(TAG, "Tick....");
+    if (currentMediaSource != null) {
+      currentMediaSource.setPosition(player.getCurrentPosition()/1000);
+    }
+    for (PlayerManagerListener listener : listeners) {
+      if (player.isPlaying()) {
+        listener.onMediaUpdate(this, currentMediaSource);
+      }
+    }
   }
 
   @Override
@@ -197,4 +215,9 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     Log.i(TAG, "what info= "+what);
     return false;
   }
+
+  public AbstractMediaSource getCurrentMediaSource() {
+    return currentMediaSource;
+  }
+
 }

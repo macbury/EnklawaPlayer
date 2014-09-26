@@ -20,4 +20,6 @@
   <dimen name="episode_preview_height">160dp</dimen>
   <dimen name="player_about">15dp</dimen>
   <dimen name="drawer_width">240dp</dimen>
+  <dimen name="player_time_padding">10dp</dimen>
+  <dimen name="player_padding">30dp</dimen>
 </resources>

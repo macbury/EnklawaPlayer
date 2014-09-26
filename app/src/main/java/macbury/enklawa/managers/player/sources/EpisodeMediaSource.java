@@ -53,9 +53,14 @@ public class EpisodeMediaSource extends AbstractMediaSource {
   }
 
   @Override
-  public void setDuration(int duration) {
+  public void setPosition(int duration) {
     enqueueEpisode.time = duration;
     Enklawa.current().db.queue.update(enqueueEpisode);
+  }
+
+  @Override
+  public int getDuration() {
+    return enqueueEpisode.episode.getDuration();
   }
 
   @Override
@@ -64,13 +69,21 @@ public class EpisodeMediaSource extends AbstractMediaSource {
     Enklawa.current().db.queue.destroy(enqueueEpisode);
   }
 
+  @Override
+  public int getPosition() {
+    return enqueueEpisode.time;
+  }
+
   public EnqueueEpisode getEnqueueEpisode() {
     return enqueueEpisode;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (EpisodeMediaSource.class.isInstance(o)) {
+    if (EnqueueEpisode.class.isInstance(o)) {
+      EnqueueEpisode ee = (EnqueueEpisode)o;
+      return ee.id == enqueueEpisode.id;
+    } else if (EpisodeMediaSource.class.isInstance(o)) {
       EpisodeMediaSource ems = (EpisodeMediaSource)o;
       return (ems.getEnqueueEpisode().id == enqueueEpisode.id);
     } else {

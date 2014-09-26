@@ -148,4 +148,8 @@ public class IntentManager {
   public PendingIntent pendingOpenPlayerForEpisode(Episode episode) {
     return PendingIntent.getActivity(context, 0, openPlayerForEpisode(episode), PendingIntent.FLAG_UPDATE_CURRENT);
   }
+
+  public Intent player() {
+    return new Intent(context, PlayerService.class);
+  }
 }
