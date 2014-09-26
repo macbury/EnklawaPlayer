@@ -7,6 +7,8 @@ import android.net.Uri;
  */
 public abstract class AbstractMediaSource {
 
+  private int bufferring;
+
   public abstract String getTitle();
   public abstract String getSummary();
   public abstract Uri getMediaUri();
@@ -16,5 +18,14 @@ public abstract class AbstractMediaSource {
   public abstract void onStart();
   public abstract void onPause();
   public abstract void setDuration(int duration);
-  public abstract void onComplete();
+  public abstract void onFinishPlayback();
+
+
+  public void setBufferring(int bufferring) {
+    this.bufferring = bufferring;
+  }
+
+  public int getBufferring() {
+    return bufferring;
+  }
 }

@@ -59,8 +59,22 @@ public class EpisodeMediaSource extends AbstractMediaSource {
   }
 
   @Override
-  public void onComplete() {
+  public void onFinishPlayback() {
     enqueueEpisode.status = EnqueueEpisode.Status.Played;
     Enklawa.current().db.queue.destroy(enqueueEpisode);
+  }
+
+  public EnqueueEpisode getEnqueueEpisode() {
+    return enqueueEpisode;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (EpisodeMediaSource.class.isInstance(o)) {
+      EpisodeMediaSource ems = (EpisodeMediaSource)o;
+      return (ems.getEnqueueEpisode().id == enqueueEpisode.id);
+    } else {
+      return super.equals(o);
+    }
   }
 }

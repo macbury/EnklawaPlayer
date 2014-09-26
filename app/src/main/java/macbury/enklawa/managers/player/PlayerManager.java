@@ -3,7 +3,6 @@ package macbury.enklawa.managers.player;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -12,7 +11,8 @@ import java.util.ArrayList;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.extensions.SleepTimer;
-import macbury.enklawa.managers.Enklawa;
+import macbury.enklawa.managers.player.sources.AbstractMediaSource;
+import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
 
 /**
  * Created by macbury on 19.09.14.
@@ -20,21 +20,19 @@ import macbury.enklawa.managers.Enklawa;
 public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnBufferingUpdateListener, SleepTimer.SleepTimerListener, MediaPlayer.OnInfoListener {
   private static final String TAG = "PlayerManager";
   private final SleepTimer fakeLoop;
-  private EnqueueEpisode currentEnqueuedEpisode;
+  private AbstractMediaSource currentMediaSource;
   private final Context context;
   private final MediaPlayer player;
-  private final ArrayList<EnqueueEpisode> queue;
-  private Mode mode;
-
-  public enum Mode {
-    Initialized, Preparing, Playing, Finished, Paused
-  }
+  private final ArrayList<AbstractMediaSource> queue;
+  private boolean preparing;
+  private ArrayList<PlayerManagerListener> listeners;
 
   public PlayerManager(Context context) {
-    this.context  = context;
-    this.fakeLoop = new SleepTimer(1000, this);
-    this.player   = new MediaPlayer();
-    this.queue    = new ArrayList<EnqueueEpisode>();
+    this.context   = context;
+    this.fakeLoop  = new SleepTimer(1000, this);
+    this.player    = new MediaPlayer();
+    this.queue     = new ArrayList<AbstractMediaSource>();
+    this.listeners = new ArrayList<PlayerManagerListener>();
 
     player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
     player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -46,10 +44,34 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     fakeLoop.start();
   }
 
+  public void addListener(PlayerManagerListener listener) {
+    if (listeners.indexOf(listener) == -1) {
+      listeners.add(listener);
+    }
+  }
+
+  public void removeListener(PlayerManagerListener listener) {
+    if (listeners.indexOf(listener) == -1) {
+      listeners.remove(listener);
+    }
+  }
+
+  public boolean contains(EnqueueEpisode enqueueEpisode) {
+    for (AbstractMediaSource ms : queue) {
+      if (EpisodeMediaSource.class.isInstance(ms)) {
+        EpisodeMediaSource ems = (EpisodeMediaSource)ms;
+        if (ems.getEnqueueEpisode().id == enqueueEpisode.id) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   public void add(EnqueueEpisode enqueueEpisode) {
     stop();
-    if (queue.indexOf(enqueueEpisode) == -1) {
-      queue.add(0, enqueueEpisode);
+    if (!contains(enqueueEpisode)) {
+      queue.add(0, new EpisodeMediaSource(enqueueEpisode));
     }
     if (!isRunning()) {
       next();
@@ -58,8 +80,8 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   public void set(ArrayList<EnqueueEpisode> episodes) {
     for (EnqueueEpisode episode : episodes) {
-      if (queue.indexOf(episode) == -1) {
-        queue.add(episode);
+      if (!contains(episode)) {
+        queue.add(0, new EpisodeMediaSource(episode));
       }
     }
 
@@ -69,14 +91,12 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   private void next() {
-    mode = Mode.Preparing;
-
     if (queue.size() > 0) {
-      currentEnqueuedEpisode = queue.remove(0);
+      preparing = true;
+      currentMediaSource = queue.remove(0);
       try {
-        Uri uri = Enklawa.current().storage.getEpisodeUri(currentEnqueuedEpisode.episode);
-        Log.i(TAG, "Episode " + currentEnqueuedEpisode.episode.name + " is " + uri.toString());
-        player.setDataSource(context, uri);
+        Log.i(TAG, "Episode " + currentMediaSource.getTitle() + " is " + currentMediaSource.getMediaUri().toString());
+        player.setDataSource(context, currentMediaSource.getMediaUri());
         player.prepareAsync();
       } catch (IOException e) {
         e.printStackTrace();
@@ -90,7 +110,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public boolean isRunning() {
-    return currentEnqueuedEpisode != null;
+    return currentMediaSource != null;
   }
 
   public void destroy() {
@@ -100,18 +120,26 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void play() {
-    if (mode != Mode.Preparing) {
-      Log.i(TAG, "PLay");
-      mode = Mode.Playing;
+    if (!preparing || !player.isPlaying()) {
+      Log.i(TAG, "Play");
+      currentMediaSource.onStart();
       player.start();
+
+      for (PlayerManagerListener listener : listeners) {
+        listener.onPlay(this, currentMediaSource);
+      }
     }
   }
 
   public void pause() {
     if (player.isPlaying()) {
       Log.i(TAG, "pause");
-      mode = Mode.Paused;
+      currentMediaSource.onPause();
       player.pause();
+
+      for (PlayerManagerListener listener : listeners) {
+        listener.onPause(this, currentMediaSource);
+      }
     }
   }
 
@@ -119,27 +147,32 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     if (player.isPlaying()) {
       Log.i(TAG, "stop");
       player.stop();
+      for (PlayerManagerListener listener : listeners) {
+        listener.onFinish(this, currentMediaSource);
+      }
       finishPlayback();
     }
   }
 
   private void finishPlayback() {
-    mode = Mode.Finished;
     player.reset();
-    Enklawa.current().db.queue.destroy(currentEnqueuedEpisode);
-    currentEnqueuedEpisode = null;
+    currentMediaSource.onFinishPlayback();
+    currentMediaSource = null;
   }
 
   @Override
   public void onPrepared(MediaPlayer mp) {
     Log.i(TAG, "onPrepared");
-    mode =  Mode.Initialized;
+    preparing = false;
     play();
   }
 
   @Override
   public void onBufferingUpdate(MediaPlayer mp, int percent) {
-
+    currentMediaSource.setBufferring(percent);
+    for (PlayerManagerListener listener : listeners) {
+      listener.onBufferMedia(this, currentMediaSource);
+    }
   }
 
   @Override
