@@ -5,11 +5,15 @@ import android.content.Context;
 
 import be.webelite.ion.Icon;
 import macbury.enklawa.R;
+import macbury.enklawa.fragments.main.episodes.PlaylistFragment;
+import macbury.enklawa.managers.Enklawa;
 
 /**
  * Created by macbury on 22.09.14.
  */
 public class PlayQueueNavItem extends NavItemFragment {
+  private PlaylistFragment fragment;
+
   public PlayQueueNavItem(Context context) {
     super(context);
   }
@@ -25,7 +29,15 @@ public class PlayQueueNavItem extends NavItemFragment {
   }
 
   @Override
+  public int getCount() {
+    return (int)Enklawa.current().db.queue.count();
+  }
+
+  @Override
   public Fragment getFragment() {
-    return null;
+    if (fragment == null) {
+      fragment = new PlaylistFragment();
+    }
+    return fragment;
   }
 }

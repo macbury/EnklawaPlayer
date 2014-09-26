@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "enqueue_episodes")
 public class EnqueueEpisode {
   public enum Status {
-    Pending, Played, Finished
+    Pending, Played, Playing, Paused, Finished
   }
   @DatabaseField(canBeNull = false, generatedId = true)
   public int      id;

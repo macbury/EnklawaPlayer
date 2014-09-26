@@ -1,5 +1,6 @@
 package macbury.enklawa.managers;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -27,5 +28,15 @@ public class StorageManager {
 
   public File getEpisodeFile(EpisodeFile epf) {
     return new File(getPodcastStorageDirectory(), "episode_"+epf.id+".mp3");
+  }
+
+  public Uri getEpisodeUri(Episode episode) {
+    if (episode.getFile() != null) {
+      File episodeFile = getEpisodeFile(episode.getFile());
+      if (episodeFile.exists()) {
+        return Uri.fromFile(episodeFile);
+      }
+    }
+    return Uri.parse(episode.mp3);
   }
 }

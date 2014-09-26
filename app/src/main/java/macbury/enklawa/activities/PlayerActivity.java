@@ -89,8 +89,10 @@ public class PlayerActivity extends Activity {
 
   public void setEpisode(Episode episode) {
     this.episode = episode;
-    updateUIForEpisode();
+    Enklawa.current().db.queue.createFromEpisode(episode);
     Enklawa.current().services.playEpisodeStream(episode);
+    updateUIForEpisode();
+
   }
 
   private void updateUIForEpisode() {

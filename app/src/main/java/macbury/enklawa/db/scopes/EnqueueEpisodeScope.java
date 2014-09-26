@@ -16,14 +16,14 @@ public class EnqueueEpisodeScope extends AbstractScope<EnqueueEpisode> {
     super(dao);
   }
 
-  public boolean createFromEpisode(Episode episode) {
+  public EnqueueEpisode createFromEpisode(Episode episode) {
     EnqueueEpisode file = findByEpisodeId(episode.id);
     if (file == null) {
       file             = new EnqueueEpisode();
       file.episode     = episode;
+      update(file);
     }
-
-    return update(file);
+    return file;
   }
 
   public EnqueueEpisode findByEpisodeId(int id) {
