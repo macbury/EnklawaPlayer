@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
+import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.extensions.SleepTimer;
+import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
 
@@ -23,7 +25,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   private AbstractMediaSource currentMediaSource;
   private final Context context;
   private final MediaPlayer player;
-  private final ArrayList<AbstractMediaSource> queue;
   private boolean preparing;
   private ArrayList<PlayerManagerListener> listeners;
 
@@ -31,7 +32,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     this.context   = context;
     this.fakeLoop  = new SleepTimer(1000, this);
     this.player    = new MediaPlayer();
-    this.queue     = new ArrayList<AbstractMediaSource>();
     this.listeners = new ArrayList<PlayerManagerListener>();
 
     player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
@@ -43,6 +43,15 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     player.setOnInfoListener(this);
     fakeLoop.start();
   }
+
+  public void start() {
+    if (isRunning()) {
+      play();
+    } else {
+      next();
+    }
+  }
+
 
   public void addListener(PlayerManagerListener listener) {
     if (listeners.indexOf(listener) == -1) {
@@ -56,50 +65,13 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     }
   }
 
-  public boolean contains(EnqueueEpisode enqueueEpisode) {
-    for (AbstractMediaSource ms : queue) {
-      if (EpisodeMediaSource.class.isInstance(ms)) {
-        EpisodeMediaSource ems = (EpisodeMediaSource)ms;
-        if (ems.getEnqueueEpisode().id == enqueueEpisode.id) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public void add(EnqueueEpisode enqueueEpisode) {
-    if (isRunning() && currentMediaSource.equals(enqueueEpisode)) {
-      Log.i(TAG, "Already playing");
-    } else if (!contains(enqueueEpisode)) {
-      queue.add(0, new EpisodeMediaSource(enqueueEpisode));
-      if (isRunning()) {
-        pause();
-        queue.add(1, currentMediaSource);
-        next();
-      }
-    }
-    if (!isRunning()) {
-      next();
-    }
-  }
-
-  public void set(ArrayList<EnqueueEpisode> episodes) {
-    for (EnqueueEpisode episode : episodes) {
-      if (!contains(episode)) {
-        queue.add(0, new EpisodeMediaSource(episode));
-      }
-    }
-
-    if (!isRunning()) {
-      next();
-    }
-  }
-
   private void next() {
-    if (queue.size() > 0) {
-      preparing = true;
-      currentMediaSource = queue.remove(0);
+    EnqueueEpisode nextToPlay = Enklawa.current().db.queue.nextToPlay();
+    if (nextToPlay == null) {
+      cancel();
+    } else {
+      currentMediaSource = new EpisodeMediaSource(nextToPlay);
+      preparing          = true;
       try {
         Log.i(TAG, "Episode " + currentMediaSource.getTitle() + " is " + currentMediaSource.getMediaUri().toString());
         for (PlayerManagerListener listener : listeners) {
@@ -112,11 +84,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
         e.printStackTrace();
         finishPlayback();
         next();
-      }
-    } else {
-      Log.i(TAG, "Finished all enqueed episodes");
-      for (PlayerManagerListener listener : listeners) {
-        listener.onFinishAll(this, currentMediaSource);
       }
     }
   }
@@ -226,5 +193,24 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   public boolean isPreparing() {
     return preparing;
+  }
+
+  public void restart() {
+    if (isRunning()) {
+      pause();
+    }
+    next();
+  }
+
+  public void cancel() {
+    stop();
+    Log.i(TAG, "Finished all enqueed episodes");
+    for (PlayerManagerListener listener : listeners) {
+      listener.onFinishAll(this, currentMediaSource);
+    }
+  }
+
+  public boolean is(EnqueueEpisode enqueueEpisode) {
+    return isRunning() && currentMediaSource.equals(enqueueEpisode);
   }
 }

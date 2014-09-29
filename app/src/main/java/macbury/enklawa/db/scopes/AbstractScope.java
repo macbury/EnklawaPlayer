@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import macbury.enklawa.db.DatabaseCRUDListener;
+import macbury.enklawa.db.models.EnqueueEpisode;
 
 /**
  * Created by macbury on 09.09.14.
@@ -26,6 +27,7 @@ public abstract class AbstractScope<K> implements DatabaseCRUDListener<K> {
     this.listeners = new ArrayList<DatabaseCRUDListener<K>>();
     addListener(this);
   }
+
 
   public void addListener(DatabaseCRUDListener<K> listener) {
     if (listeners.indexOf(listener) == -1) {

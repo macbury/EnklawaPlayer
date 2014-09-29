@@ -8,4 +8,6 @@
   <string name="stop_download">Zatrzymaj</string>
   <string name="notification_downloadaded_title">Pobrano odcinek</string>
   <string name="notification_play_action">Odtwórz</string>
+  <string name="notification_pause_action">Pauza</string>
+  <string name="notification_stop_action">Stop</string>
 </resources>

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
 
 import macbury.enklawa.R;
+import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.extensions.Converter;
 
@@ -54,6 +55,34 @@ public class NotificationsManager {
 
     PendingIntent playEpisodePendingIntent = Enklawa.current().intents.pendingOpenPlayerForEpisode(episode);
     builder.addAction(R.drawable.ic_action_av_play, context.getString(R.string.notification_play_action), playEpisodePendingIntent);
+    builder.setContentIntent(playEpisodePendingIntent);
+
+    Notification notification = builder.build();
+    return notification;
+  }
+
+  public Notification playEpisode(Bitmap preview, EnqueueEpisode enqueeEpisode) {
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
+            .setContentTitle(enqueeEpisode.episode.name)
+            .setAutoCancel(false)
+
+            .setTicker(enqueeEpisode.episode.name)
+            .setContentInfo(Converter.getDurationStringLong(enqueeEpisode.episode.duration))
+            .setContentText(enqueeEpisode.episode.program.name);
+
+    if (preview != null) {
+      builder.setLargeIcon(preview);
+    }
+
+    PendingIntent playEpisodePendingIntent = Enklawa.current().intents.pendingOpenPlayerForEpisode(enqueeEpisode.episode);
+
+    if (enqueeEpisode.status != EnqueueEpisode.Status.Playing) {
+      builder.addAction(R.drawable.ic_action_av_play, context.getString(R.string.notification_play_action), Enklawa.current().intents.pendingPlayPlayer());
+    } else {
+      builder.addAction(R.drawable.ic_action_av_pause, context.getString(R.string.notification_pause_action), Enklawa.current().intents.pendingPausePlayer());
+    }
+
     builder.setContentIntent(playEpisodePendingIntent);
 
     Notification notification = builder.build();

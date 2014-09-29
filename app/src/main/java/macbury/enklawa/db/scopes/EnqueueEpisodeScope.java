@@ -21,14 +21,53 @@ public class EnqueueEpisodeScope extends AbstractScope<EnqueueEpisode> {
     if (file == null) {
       file             = new EnqueueEpisode();
       file.episode     = episode;
+      file.position    = maximumPosition() + 1;
       update(file);
     }
     return file;
   }
 
+
+  public int minimumPosition() {
+    try {
+      EnqueueEpisode ob =  dao.queryBuilder().orderBy("position", true).queryForFirst();
+      if (ob == null) {
+        return 0;
+      } else {
+        return ob.position;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
+
+  public int maximumPosition() {
+    try {
+      EnqueueEpisode ob =  dao.queryBuilder().orderBy("position", false).queryForFirst();
+      if (ob == null) {
+        return 0;
+      } else {
+        return ob.position;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
+
   public EnqueueEpisode findByEpisodeId(int id) {
     try {
       return dao.queryBuilder().where().eq("episode_id", id).queryForFirst();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public EnqueueEpisode nextToPlay() {
+    try {
+      return dao.queryBuilder().orderBy("position", true).queryForFirst();
     } catch (SQLException e) {
       e.printStackTrace();
       return null;
@@ -48,5 +87,10 @@ public class EnqueueEpisodeScope extends AbstractScope<EnqueueEpisode> {
   @Override
   public void afterSave(EnqueueEpisode object) {
 
+  }
+
+  public void moveToBegining(EnqueueEpisode enqueueEpisode) {
+    enqueueEpisode.position       = minimumPosition() - 1;
+    update(enqueueEpisode);
   }
 }

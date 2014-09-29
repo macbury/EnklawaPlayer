@@ -23,7 +23,8 @@ public class SleepTimer extends Thread {
     this.listenerTickRunnable = new Runnable() {
       @Override
       public void run() {
-        SleepTimer.this.listener.onSleepTimerTick(SleepTimer.this);
+        if (running)
+          SleepTimer.this.listener.onSleepTimerTick(SleepTimer.this);
       }
     };
   }

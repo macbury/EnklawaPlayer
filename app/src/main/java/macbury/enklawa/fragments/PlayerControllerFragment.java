@@ -60,6 +60,9 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     getActivity().unbindService(playerManagerServiceConnection);
     if (playerBinder != null) {
       Log.i(TAG, "Removing binder");
+      if (!playerBinder.getPlayerManager().isPlaying()) {
+        getActivity().startService(Enklawa.current().intents.stopPlayer());
+      }
       playerBinder.removeListener(this);
       playerBinder = null;
     }
@@ -84,7 +87,8 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
   private void updateUIForCurrentMediaSource() {
     if (playerBinder != null) {
       PlayerManager pm = playerBinder.getPlayerManager();
-      updateUIInfoForMediaSource(pm, pm.getCurrentMediaSource());
+      if (pm.isRunning())
+        updateUIInfoForMediaSource(pm, pm.getCurrentMediaSource());
     }
   }
 

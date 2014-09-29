@@ -74,6 +74,7 @@
         <activity
             android:name=".activities.PlayerActivity"
             android:label="@string/title_activity_player"
+            android:launchMode="singleTask"
             android:parentActivityName=".activities.main.MainActivity"
             android:theme="@style/PlayerActionBarTheme.Dark" >
             <meta-data

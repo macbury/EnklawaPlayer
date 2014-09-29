@@ -59,6 +59,10 @@ public class IntentManager {
     return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
+  public boolean havePauseExtra(Intent intent) {
+    return intent.hasExtra(EXTRA_ACTION_PAUSE);
+  }
+
   public boolean haveEpisode(Intent intent) {
     return intent.hasExtra(EXTRA_EPISODE);
   }
@@ -146,10 +150,30 @@ public class IntentManager {
   }
 
   public PendingIntent pendingOpenPlayerForEpisode(Episode episode) {
-    return PendingIntent.getActivity(context, 0, openPlayerForEpisode(episode), PendingIntent.FLAG_UPDATE_CURRENT);
+    Intent intent = openPlayerForEpisode(episode);
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+    return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
   public Intent player() {
     return new Intent(context, PlayerService.class);
+  }
+
+  public PendingIntent pendingPlayPlayer() {
+    Intent intent = player();
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  public PendingIntent pendingPausePlayer() {
+    Intent intent = pausePlayer();
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  public PendingIntent pendingStopPlayer() {
+    Intent intent = stopPlayer();
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 }

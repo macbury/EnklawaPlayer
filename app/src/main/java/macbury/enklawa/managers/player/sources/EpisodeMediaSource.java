@@ -90,4 +90,8 @@ public class EpisodeMediaSource extends AbstractMediaSource {
       return super.equals(o);
     }
   }
+
+  public EnqueueEpisode getEpisode() {
+    return enqueueEpisode;
+  }
 }
