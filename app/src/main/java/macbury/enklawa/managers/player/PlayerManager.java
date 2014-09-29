@@ -201,7 +201,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   @Override
   public void onSleepTimerTick(SleepTimer timer) {
     if (currentMediaSource != null) {
-      currentMediaSource.setPosition(player.getCurrentPosition()/1000);
+      currentMediaSource.setPosition(player.getCurrentPosition());
     }
     for (PlayerManagerListener listener : listeners) {
       if (player.isPlaying()) {
@@ -220,4 +220,11 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     return currentMediaSource;
   }
 
+  public boolean isPlaying() {
+    return player.isPlaying();
+  }
+
+  public boolean isPreparing() {
+    return preparing;
+  }
 }

@@ -2,7 +2,6 @@ package macbury.enklawa.fragments;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -11,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -22,12 +23,14 @@ import macbury.enklawa.managers.player.PlayerManagerListener;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.services.PlayerService;
 
-public class PlayerControllerFragment extends Fragment implements PlayerManagerListener {
+public class PlayerControllerFragment extends Fragment implements PlayerManagerListener, View.OnClickListener {
   private static final String TAG = "PlayerControllerFragment";
   private PlayerService.PlayerBinder playerBinder;
   private SeekBar timeSeekBar;
   private TextView runningTextView;
   private TextView totalRunnigTextView;
+  private ImageButton playPauseButton;
+  private ProgressBar loadingProgress;
 
   public PlayerControllerFragment() {
   }
@@ -38,6 +41,10 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     timeSeekBar         = (SeekBar)view.findViewById(R.id.seek_bar_player);
     runningTextView     = (TextView)view.findViewById(R.id.text_running_time);
     totalRunnigTextView = (TextView)view.findViewById(R.id.text_running_total_time);
+    playPauseButton     = (ImageButton)view.findViewById(R.id.button_play_pause);
+    loadingProgress     = (ProgressBar)view.findViewById(R.id.progress_loading);
+
+    playPauseButton.setOnClickListener(this);
     return view;
   }
 
@@ -63,6 +70,7 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     public void onServiceConnected(ComponentName name, IBinder service) {
       PlayerControllerFragment.this.playerBinder = (PlayerService.PlayerBinder)service;
       playerBinder.addListener(PlayerControllerFragment.this);
+      updateUIForCurrentMediaSource();
     }
 
     @Override
@@ -73,10 +81,46 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     }
   };
 
+  private void updateUIForCurrentMediaSource() {
+    if (playerBinder != null) {
+      PlayerManager pm = playerBinder.getPlayerManager();
+      updateUIInfoForMediaSource(pm, pm.getCurrentMediaSource());
+    }
+  }
+
+  private void updateUIInfoForMediaSource(PlayerManager playerManager, AbstractMediaSource mediaSource) {
+    timeSeekBar.setMax(mediaSource.getDuration());
+    timeSeekBar.setProgress(mediaSource.getPosition()/mediaSource.getDuration());
+    timeSeekBar.setMax(1);
+    runningTextView.setText(Converter.getDurationStringLong(mediaSource.getPosition()));
+    totalRunnigTextView.setText(Converter.getDurationStringLong(mediaSource.getDuration()));
+
+    if (playerManager.isPreparing()) {
+      loadingProgress.setVisibility(View.VISIBLE);
+      playPauseButton.setVisibility(View.GONE);
+    } else {
+      loadingProgress.setVisibility(View.GONE);
+      playPauseButton.setVisibility(View.VISIBLE);
+    }
+
+
+    if (playerManager.isPlaying()) {
+      playPauseButton.setImageResource(R.drawable.av_pause);
+    } else {
+      playPauseButton.setImageResource(R.drawable.av_play);
+    }
+  }
+
+
+  @Override
+  public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
+    updateUIInfoForMediaSource(manager, mediaSource);
+  }
+
   @Override
   public void onPlay(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onPlay:" + mediaSource.getTitle());
-    timeSeekBar.setMax(mediaSource.getDuration());
+    updateUIInfoForMediaSource(manager, mediaSource);
   }
 
   @Override
@@ -86,31 +130,37 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
 
   @Override
   public void onMediaUpdate(PlayerManager playerManager, AbstractMediaSource mediaSource) {
-    Log.d(TAG, "onMediaUpdate:" + mediaSource.getDuration());
-    timeSeekBar.setProgress(mediaSource.getPosition()/mediaSource.getDuration());
-    timeSeekBar.setMax(1);
-    runningTextView.setText(Converter.getDurationStringLong(mediaSource.getPosition()));
-    totalRunnigTextView.setText(Converter.getDurationStringLong(mediaSource.getDuration()));
+    //Log.d(TAG, "onMediaUpdate:" + mediaSource.getDuration());
+    updateUIInfoForMediaSource(playerManager, mediaSource);
   }
 
   @Override
   public void onPause(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onPause:" + mediaSource.getTitle());
+    updateUIInfoForMediaSource(manager, mediaSource);
   }
 
   @Override
   public void onFinish(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onFinish:" + mediaSource.getTitle());
+    updateUIInfoForMediaSource(manager, mediaSource);
   }
 
-  @Override
-  public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
-
-  }
 
   @Override
   public void onFinishAll(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onFinishAll:" + mediaSource.getTitle());
   }
 
+  @Override
+  public void onClick(View v) {
+    if (v == playPauseButton && playerBinder != null) {
+      PlayerManager pm = playerBinder.getPlayerManager();
+      if (pm.isPlaying()) {
+        pm.pause();
+      } else {
+        pm.play();
+      }
+    }
+  }
 }
