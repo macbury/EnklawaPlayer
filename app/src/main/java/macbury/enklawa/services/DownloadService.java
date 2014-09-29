@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -25,11 +26,13 @@ public class DownloadService extends Service implements DownloadManagerListener 
   private static final String TAG             = "DownloadService";
   private static final String WAKE_LOCK_TAG   = "DownloadService";
   private static final int NOTIFICATION_ID    = 123;
+  private static final String WIFI_LOCK_TAG   = "DownloadService";
   private PowerManager powerManager;
   private PowerManager.WakeLock wakeLock;
   private Enklawa app;
   private static DownloadManager downloadManager;
   private NotificationManager mNotificationManager;
+  private WifiManager.WifiLock wifiLock;
 
   public DownloadService() {
   }
@@ -43,18 +46,21 @@ public class DownloadService extends Service implements DownloadManagerListener 
   @Override
   public void onCreate() {
     super.onCreate();
+    this.wifiLock             = ((WifiManager) getSystemService(Context.WIFI_SERVICE)) .createWifiLock(WifiManager.WIFI_MODE_FULL, WIFI_LOCK_TAG);
     this.mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     this.app                  = Enklawa.current();
     this.powerManager         = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock             = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.downloadManager      = new DownloadManager(this, this);
     this.wakeLock.acquire();
+    this.wifiLock.acquire();
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
     wakeLock.release();
+    wifiLock.release();
     downloadManager.cancelAll();
   }
 

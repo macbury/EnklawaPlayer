@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/player_background_view"
                 android:orientation="vertical"
-                tools:context="macbury.enklawa.activities.PlayerActivity">
+                tools:context="macbury.enklawa.activities.player.PlayerActivity">
 
 
     <org.michaelevans.colorart.library.FadingImageView

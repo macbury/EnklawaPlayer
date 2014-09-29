@@ -22,4 +22,5 @@
   <dimen name="drawer_width">240dp</dimen>
   <dimen name="player_time_padding">10dp</dimen>
   <dimen name="player_padding">30dp</dimen>
+  <dimen name="player_play_pause_button">84dip</dimen>
 </resources>

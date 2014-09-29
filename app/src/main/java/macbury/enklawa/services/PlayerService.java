@@ -1,8 +1,10 @@
 package macbury.enklawa.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -23,10 +25,12 @@ import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
 public class PlayerService extends Service implements PlayerManagerListener {
   private static final String TAG = "PlayerService";
   private static final int NOTIFICATION_PLAYED_ID = 689;
+  private static final String WIFI_LOCK_TAG = "EnklawaPlayerService";
   private Enklawa app;
   private PlayerManager playerManager;
   private final IBinder playerManagerBinder = new PlayerBinder();
   private Bitmap currentBitmapArt;
+  private WifiManager.WifiLock wifiLock;
 
   public PlayerService() {
   }
@@ -34,15 +38,20 @@ public class PlayerService extends Service implements PlayerManagerListener {
   @Override
   public void onCreate() {
     super.onCreate();
+    this.wifiLock = ((WifiManager) getSystemService(Context.WIFI_SERVICE)) .createWifiLock(WifiManager.WIFI_MODE_FULL, WIFI_LOCK_TAG);
+
     this.app           = Enklawa.current();
     this.playerManager = new PlayerManager(getApplicationContext());
     playerManager.addListener(this);
+
+    wifiLock.acquire();
   }
 
   @Override
   public void onDestroy() {
     playerManager.removeListener(this);
     playerManager.destroy();
+    wifiLock.release();
     super.onDestroy();
   }
 

@@ -93,9 +93,9 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void destroy() {
+    fakeLoop.kill();
     player.stop();
     player.release();
-    fakeLoop.kill();
   }
 
   public void play() {
@@ -212,5 +212,15 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   public boolean is(EnqueueEpisode enqueueEpisode) {
     return isRunning() && currentMediaSource.equals(enqueueEpisode);
+  }
+
+  public void seekTo(int duration) {
+    if (isRunning()) {
+      player.seekTo(duration);
+    }
+  }
+
+  public boolean isPaused() {
+    return !isPlaying();
   }
 }

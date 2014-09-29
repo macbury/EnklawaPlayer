@@ -1,10 +1,12 @@
 <LinearLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:background="@color/drawer_background_color"
+    android:paddingBottom="10dp"
     tools:context="macbury.enklawa.fragments.PlayerControllerFragment">
 
   <View
@@ -14,7 +16,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <LinearLayout
       android:id="@+id/rel"
       android:layout_width="match_parent"
-      android:layout_height="62dp"
+      android:layout_height="50dp"
       android:paddingRight="@dimen/player_padding"
       android:paddingLeft="@dimen/player_padding"
 
@@ -26,6 +28,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0:00:00"
+        android:textColor="@color/player_text_color"
         android:id="@+id/text_running_time" android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/player_time_padding"/>
       <SeekBar
@@ -37,22 +40,25 @@ xmlns:android="http://schemas.android.com/apk/res/android"
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/player_text_color"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0:00:00"
         android:id="@+id/text_running_total_time" android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/player_time_padding"/>
 
     </LinearLayout>
-  <ImageButton
+
+
+  <at.markushi.ui.CircleButton
+    android:layout_width="@dimen/player_play_pause_button"
+    android:layout_height="@dimen/player_play_pause_button"
+    android:src="@drawable/ic_action_av_play"
+    app:cb_color="@color/actionbar_color"
     android:id="@+id/button_play_pause"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:src="@drawable/av_play" android:background="@drawable/borderless_button"
-    android:layout_gravity="center_horizontal"/>
+    app:cb_pressedRingWidth="8dip" android:layout_gravity="center_horizontal"/>
   <ProgressBar
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="@dimen/player_play_pause_button"
+    android:layout_height="@dimen/player_play_pause_button"
     android:id="@+id/progress_loading" android:layout_gravity="center_horizontal"
     android:indeterminate="true"/>
 

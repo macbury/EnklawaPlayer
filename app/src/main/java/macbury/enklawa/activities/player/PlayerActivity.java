@@ -1,4 +1,4 @@
-package macbury.enklawa.activities;
+package macbury.enklawa.activities.player;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -56,15 +56,14 @@ public class PlayerActivity extends Activity {
     FragmentManager fm       = getFragmentManager();
     fm.beginTransaction().replace(R.id.player_frame, playerFragmentController).commit();
 
-
-
-    //View mainContentView = findViewById(R.id.player_frame);
-    //SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-    //mainContentView.setPadding(0, config.getPixelInsetTop(false), config.getPixelInsetRight(), config.getPixelInsetBottom());
-
     setEpisode(episode);
   }
 
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    playerFragmentController.stopPlayerIfPaused();
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {

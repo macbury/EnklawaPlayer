@@ -72,7 +72,7 @@
                 android:value="macbury.enklawa.activities.main.MainActivity" />
         </activity>
         <activity
-            android:name=".activities.PlayerActivity"
+            android:name=".activities.player.PlayerActivity"
             android:label="@string/title_activity_player"
             android:launchMode="singleTask"
             android:parentActivityName=".activities.main.MainActivity"

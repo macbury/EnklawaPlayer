@@ -1,5 +1,6 @@
 package macbury.enklawa.fragments;
 
+import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import at.markushi.ui.CircleButton;
 import macbury.enklawa.R;
 import macbury.enklawa.extensions.Converter;
 import macbury.enklawa.managers.Enklawa;
@@ -23,14 +25,15 @@ import macbury.enklawa.managers.player.PlayerManagerListener;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.services.PlayerService;
 
-public class PlayerControllerFragment extends Fragment implements PlayerManagerListener, View.OnClickListener {
+public class PlayerControllerFragment extends Fragment implements PlayerManagerListener, View.OnClickListener, SeekBar.OnSeekBarChangeListener {
   private static final String TAG = "PlayerControllerFragment";
   private PlayerService.PlayerBinder playerBinder;
   private SeekBar timeSeekBar;
   private TextView runningTextView;
   private TextView totalRunnigTextView;
-  private ImageButton playPauseButton;
+  private CircleButton playPauseButton;
   private ProgressBar loadingProgress;
+  private boolean seekingStarted;
 
   public PlayerControllerFragment() {
   }
@@ -41,10 +44,11 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     timeSeekBar         = (SeekBar)view.findViewById(R.id.seek_bar_player);
     runningTextView     = (TextView)view.findViewById(R.id.text_running_time);
     totalRunnigTextView = (TextView)view.findViewById(R.id.text_running_total_time);
-    playPauseButton     = (ImageButton)view.findViewById(R.id.button_play_pause);
+    playPauseButton     = (CircleButton)view.findViewById(R.id.button_play_pause);
     loadingProgress     = (ProgressBar)view.findViewById(R.id.progress_loading);
 
     playPauseButton.setOnClickListener(this);
+    timeSeekBar.setOnSeekBarChangeListener(this);
     return view;
   }
 
@@ -60,9 +64,6 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     getActivity().unbindService(playerManagerServiceConnection);
     if (playerBinder != null) {
       Log.i(TAG, "Removing binder");
-      if (!playerBinder.getPlayerManager().isPlaying()) {
-        getActivity().startService(Enklawa.current().intents.stopPlayer());
-      }
       playerBinder.removeListener(this);
       playerBinder = null;
     }
@@ -94,9 +95,11 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
 
   private void updateUIInfoForMediaSource(PlayerManager playerManager, AbstractMediaSource mediaSource) {
     timeSeekBar.setMax(mediaSource.getDuration());
-    timeSeekBar.setProgress(mediaSource.getPosition()/mediaSource.getDuration());
-    timeSeekBar.setMax(1);
-    runningTextView.setText(Converter.getDurationStringLong(mediaSource.getPosition()));
+    if (!seekingStarted) {
+      timeSeekBar.setProgress(mediaSource.getPosition());
+      runningTextView.setText(Converter.getDurationStringLong(mediaSource.getPosition()));
+    }
+
     totalRunnigTextView.setText(Converter.getDurationStringLong(mediaSource.getDuration()));
 
     if (playerManager.isPreparing()) {
@@ -107,14 +110,12 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
       playPauseButton.setVisibility(View.VISIBLE);
     }
 
-
     if (playerManager.isPlaying()) {
-      playPauseButton.setImageResource(R.drawable.av_pause);
+      playPauseButton.setImageResource(R.drawable.ic_action_av_pause);
     } else {
-      playPauseButton.setImageResource(R.drawable.av_play);
+      playPauseButton.setImageResource(R.drawable.ic_action_av_play);
     }
   }
-
 
   @Override
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
@@ -150,10 +151,10 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
     updateUIInfoForMediaSource(manager, mediaSource);
   }
 
-
   @Override
   public void onFinishAll(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onFinishAll:" + mediaSource.getTitle());
+    getActivity().finish();
   }
 
   @Override
@@ -165,6 +166,33 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
       } else {
         pm.play();
       }
+    }
+  }
+
+  @Override
+  public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    if (seekingStarted) {
+      runningTextView.setText(Converter.getDurationStringLong(progress));
+    }
+  }
+
+  @Override
+  public void onStartTrackingTouch(SeekBar seekBar) {
+    seekingStarted = true;
+    playerBinder.getPlayerManager().pause();
+  }
+
+  @Override
+  public void onStopTrackingTouch(SeekBar seekBar) {
+    PlayerManager pm = playerBinder.getPlayerManager();
+    pm.seekTo(seekBar.getProgress());
+    pm.play();
+    seekingStarted = false;
+  }
+
+  public void stopPlayerIfPaused() {
+    if (playerBinder != null && playerBinder.getPlayerManager().isPaused()) {
+      getActivity().startService(Enklawa.current().intents.stopPlayer());
     }
   }
 }

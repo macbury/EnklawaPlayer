@@ -4,7 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 
-import macbury.enklawa.activities.PlayerActivity;
+import macbury.enklawa.activities.player.PlayerActivity;
 import macbury.enklawa.activities.ProgramEpisodesActivity;
 import macbury.enklawa.activities.SettingsActivity;
 import macbury.enklawa.db.models.Episode;

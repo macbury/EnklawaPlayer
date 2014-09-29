@@ -17,4 +17,5 @@
   <color name="gray">#808080</color>
   <color name="selection_background_color_light">#E3E3E3</color>
   <color name="statusbar_color">#0E8DB8</color>
+  <color name="player_text_color">#000</color>
 </resources>
