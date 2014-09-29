@@ -1,3 +1,3 @@
 EnklawaPlayer
 =============
-![Donate bitcoin](http://macbury.ninja/donate/bitcoin)
+![Donate bitcoin](http://macbury.ninja/donate/qr-code)
