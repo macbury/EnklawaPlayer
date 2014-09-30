@@ -19,4 +19,6 @@ public class DownloadedEpisodesFragment extends AbstractEpisodesFragment {
     }
     return episodes;
   }
+
+
 }

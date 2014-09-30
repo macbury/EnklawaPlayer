@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/drawer_background_color"
+    tools:context="macbury.enklawa.fragments.PlayerInfoFragment" android:orientation="vertical">
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@color/actionbar_color"/>
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ImageView
+      android:layout_width="@dimen/player_artwork_mini"
+      android:layout_height="@dimen/player_artwork_mini"
+      android:id="@+id/imageView"/>
+    <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="fill_parent"
+      android:paddingTop="@dimen/player_mini_padding_veritical"
+      android:paddingLeft="@dimen/player_mini_padding_horizontal"
+      android:paddingRight="@dimen/player_mini_padding_horizontal"
+      android:layout_height="@dimen/player_artwork_mini" android:layout_weight="1"
+      >
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textView"/>
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textView2"/>
+    </LinearLayout>
+    <ImageButton
+      android:layout_width="@dimen/player_artwork_mini"
+      android:layout_height="@dimen/player_artwork_mini"
+      android:background="@drawable/borderless_button"
+      android:id="@+id/imageButton" android:src="@drawable/av_play"/>
+  </LinearLayout>
+</LinearLayout>

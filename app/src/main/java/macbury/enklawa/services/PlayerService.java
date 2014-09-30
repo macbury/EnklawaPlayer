@@ -31,6 +31,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
   private final IBinder playerManagerBinder = new PlayerBinder();
   private Bitmap currentBitmapArt;
   private WifiManager.WifiLock wifiLock;
+  private static boolean running;
 
   public PlayerService() {
   }
@@ -45,6 +46,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
     playerManager.addListener(this);
 
     wifiLock.acquire();
+    running = true;
   }
 
   @Override
@@ -52,6 +54,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
     playerManager.removeListener(this);
     playerManager.destroy();
     wifiLock.release();
+    running = false;
     super.onDestroy();
   }
 
@@ -86,6 +89,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
   @Override
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
+    //sendBroadcast();
     Ion.with(this).load(mediaSource.getPreviewArtUri().toString()).asBitmap().setCallback(new FutureCallback<Bitmap>() {
       @Override
       public void onCompleted(Exception e, Bitmap result) {
@@ -147,5 +151,10 @@ public class PlayerService extends Service implements PlayerManagerListener {
     public void removeListener(PlayerManagerListener listener) {
       playerManager.removeListener(listener);
     }
+  }
+
+
+  public static boolean isRunning() {
+    return running;
   }
 }

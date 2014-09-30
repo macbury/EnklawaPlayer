@@ -90,7 +90,7 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   }
 
   @Override
-  public void onRemoveEpisodeDownloadButtonClick(Episode episode) {
+  public void onRemoveEpisodeButtonClick(Episode episode) {
 
   }
 

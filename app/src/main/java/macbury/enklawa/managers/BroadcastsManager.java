@@ -14,6 +14,8 @@ public class BroadcastsManager {
   public static final String BROADCAST_ACTION_SYNCING     = "macbury.enklawa.BROADCAST_ACTION_SYNCING";
   public static final String BROADCAST_ACTION_DOWNLOADING = "macbury.enklawa.BROADCAST_ACTION_DOWNLOADING";
   public static final String BROADCAST_FAVORITE_PROGRAM   = "macbury.enklawa.BROADCAST_FAVORITE_PROGRAM";
+  public static final String BROADCAST_PLAYER_STATUS      = "macbury.enklawa.BROADCAST_PLAYER_STATUS";
+
   private final Enklawa context;
 
   public BroadcastsManager(Enklawa enklawa) {
@@ -37,6 +39,7 @@ public class BroadcastsManager {
   public void favoriteProgramChange(Program program) {
     context.sendBroadcast(context.intents.favoriteProgram(program));
   }
+
 
   public void favoriteProgramChangeReceiver(Context context, BroadcastReceiver receiver) {
     context.registerReceiver(receiver, new IntentFilter(BROADCAST_FAVORITE_PROGRAM));

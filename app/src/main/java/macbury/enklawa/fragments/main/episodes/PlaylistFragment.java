@@ -6,7 +6,6 @@ import java.util.List;
 import macbury.enklawa.adapters.EpisodesAdapter;
 import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
-import macbury.enklawa.db.models.EpisodeFile;
 import macbury.enklawa.fragments.main.AbstractEpisodesFragment;
 import macbury.enklawa.managers.Enklawa;
 
@@ -31,8 +30,8 @@ public class PlaylistFragment extends AbstractEpisodesFragment {
   }
 
   @Override
-  public void onRemoveEpisodeDownloadButtonClick(Episode episode) {
-    super.onRemoveEpisodeDownloadButtonClick(episode);
+  public void onRemoveEpisodeButtonClick(Episode episode) {
+    super.onRemoveEpisodeButtonClick(episode);
     Enklawa.current().db.queue.deleteByEpisode(episode);
     updateEpisodes();
   }

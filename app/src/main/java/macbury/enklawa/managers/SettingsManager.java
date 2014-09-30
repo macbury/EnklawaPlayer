@@ -54,7 +54,7 @@ public class SettingsManager {
             .registerTypeAdapter(Date.class, new DateDeserializer())
             .create();
     Ion.Config ionConfig = Ion.getDefault(context).configure();
-    ionConfig.setLogging("ION", Log.INFO);
+    ionConfig.setLogging("ION", Log.ERROR);
     ionConfig.userAgent("Enklawa Pod");
     if (useProxy()) {
       ionConfig.proxy(getProxyHost(), getProxyPort());

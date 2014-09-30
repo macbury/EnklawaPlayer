@@ -38,8 +38,8 @@ import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
 import macbury.enklawa.services.PlayerService;
 
 public class PlayerActivity extends Activity implements PlayerManagerListener {
-
-  private static final String TAG = "PlayerActivity";
+  private static final String TAG                 = "PlayerActivity";
+  private static final String CURRENT_EPISODE_ID  = "CURRENT_EPISODE_ID";
   private FadingImageView previewImage;
   private Episode episode;
   private TextView titleLabel;
@@ -59,7 +59,13 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
     titleLabel        = (TextView) findViewById(R.id.episode_title);
     dateLabel         = (TextView) findViewById(R.id.episode_date);
     descriptionLabel  = (TextView) findViewById(R.id.episode_description);
-    int newEpisodeId  = Enklawa.current().intents.getEpisodeId(getIntent());
+    int newEpisodeId  = -1;
+    if (savedInstanceState != null && savedInstanceState.getInt(CURRENT_EPISODE_ID) != 0) {
+      newEpisodeId = savedInstanceState.getInt(CURRENT_EPISODE_ID);
+    } else {
+      newEpisodeId = Enklawa.current().intents.getEpisodeId(getIntent());
+    }
+
     Episode episode   = Enklawa.current().db.episodes.find(newEpisodeId);
 
     playerFragmentController = new PlayerControllerFragment();
@@ -69,6 +75,13 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
     setEpisode(episode);
 
     Enklawa.current().services.playEpisodeStream(episode);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    outState.putInt(CURRENT_EPISODE_ID, episode.id);
   }
 
   @Override
@@ -146,13 +159,13 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
       setTheme(R.style.PlayerActionBarTheme_Light);
     }
 
-   // tintManager.setStatusBarTintColor(colorArt.getBackgroundColor());
     mainView.setBackgroundColor(colorArt.getBackgroundColor());
-    previewImage.invalidate();
-    previewImage.setBackgroundColor(colorArt.getBackgroundColor(), FadingImageView.FadeSide.BOTTOM );
+    previewImage.setBackgroundColor(colorArt.getBackgroundColor(), FadingImageView.FadeSide.BOTTOM);
     titleLabel.setTextColor(colorArt.getPrimaryColor());
     dateLabel.setTextColor(colorArt.getDetailColor());
     descriptionLabel.setTextColor(colorArt.getSecondaryColor());
+
+    previewImage.refreshDrawableState();
   }
 
   public Episode getEpisode() {

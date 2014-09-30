@@ -182,7 +182,7 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
         break;
 
         case Remove:
-          listener.onRemoveEpisodeDownloadButtonClick(holder.episode);
+          listener.onRemoveEpisodeButtonClick(holder.episode);
         break;
       }
 

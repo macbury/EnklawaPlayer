@@ -34,6 +34,7 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
   private CircleButton playPauseButton;
   private ProgressBar loadingProgress;
   private boolean seekingStarted;
+  private boolean beforeSeekingPlaying;
 
   public PlayerControllerFragment() {
   }
@@ -177,7 +178,8 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
 
   @Override
   public void onStartTrackingTouch(SeekBar seekBar) {
-    seekingStarted = true;
+    seekingStarted       = true;
+    beforeSeekingPlaying = playerBinder.getPlayerManager().isPlaying();
     playerBinder.getPlayerManager().pause();
   }
 
@@ -185,8 +187,10 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
   public void onStopTrackingTouch(SeekBar seekBar) {
     PlayerManager pm = playerBinder.getPlayerManager();
     pm.seekTo(seekBar.getProgress());
-    pm.play();
-    seekingStarted = false;
+    if (beforeSeekingPlaying)
+      pm.play();
+    beforeSeekingPlaying = false;
+    seekingStarted       = false;
   }
 
   public void stopPlayerIfPaused() {

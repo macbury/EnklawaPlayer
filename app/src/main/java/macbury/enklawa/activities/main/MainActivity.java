@@ -27,6 +27,7 @@ import macbury.enklawa.R;
 import macbury.enklawa.activities.DonateActivity;
 import macbury.enklawa.db.models.Program;
 import macbury.enklawa.fragments.PlayerControllerFragment;
+import macbury.enklawa.fragments.PlayerInfoFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   private ListView                      navDrawerListView;
   private NavigationController          navigationController;
   private View                          playerFrameView;
-  private PlayerControllerFragment      playerControllerFragment;
+  private PlayerInfoFragment playerControllerFragment;
   private View                          mainContainer;
 
   private void updateUI() {
@@ -89,11 +90,13 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
     mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
     navDrawerListView.setPadding((int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(true), (int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
+
+    showPlayer();
   }
 
   private void showPlayer() {
     if (playerControllerFragment == null){
-      playerControllerFragment = new PlayerControllerFragment();
+      playerControllerFragment = new PlayerInfoFragment();
     }
     FragmentManager fragmentManager = getFragmentManager();
     fragmentManager.beginTransaction()
