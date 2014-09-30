@@ -81,4 +81,13 @@ public class Episode {
     return duration;
   }
 
+  public EnqueueEpisode getQueue() {
+    try {
+      enqueueEpisodes.refreshCollection();
+      return enqueueEpisodes.size() > 0 ? enqueueEpisodes.iteratorThrow().first() : null;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

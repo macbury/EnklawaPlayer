@@ -7,15 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ListView;
 
 import com.negusoft.holoaccent.activity.AccentActivity;
@@ -26,8 +23,7 @@ import java.util.List;
 import macbury.enklawa.R;
 import macbury.enklawa.activities.DonateActivity;
 import macbury.enklawa.db.models.Program;
-import macbury.enklawa.fragments.PlayerControllerFragment;
-import macbury.enklawa.fragments.PlayerInfoFragment;
+import macbury.enklawa.fragments.ExternalPlayerFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 
@@ -40,7 +36,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
   private ListView                      navDrawerListView;
   private NavigationController          navigationController;
   private View                          playerFrameView;
-  private PlayerInfoFragment playerControllerFragment;
+  private ExternalPlayerFragment playerControllerFragment;
   private View                          mainContainer;
 
   private void updateUI() {
@@ -96,7 +92,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
   private void showPlayer() {
     if (playerControllerFragment == null){
-      playerControllerFragment = new PlayerInfoFragment();
+      playerControllerFragment = new ExternalPlayerFragment();
     }
     FragmentManager fragmentManager = getFragmentManager();
     fragmentManager.beginTransaction()

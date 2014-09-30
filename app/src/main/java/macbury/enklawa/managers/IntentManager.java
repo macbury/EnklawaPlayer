@@ -176,4 +176,5 @@ public class IntentManager {
     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
+
 }

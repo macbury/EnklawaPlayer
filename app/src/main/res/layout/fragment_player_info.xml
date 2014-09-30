@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_background_color"
-    tools:context="macbury.enklawa.fragments.PlayerInfoFragment" android:orientation="vertical">
+    tools:context="macbury.enklawa.fragments.ExternalPlayerFragment" android:orientation="vertical">
 
   <View
     android:layout_width="match_parent"
@@ -12,14 +12,18 @@
     android:background="@color/actionbar_color"/>
   <LinearLayout
     android:orientation="horizontal"
+
+    android:background="@drawable/borderless_button"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <ImageView
       android:layout_width="@dimen/player_artwork_mini"
       android:layout_height="@dimen/player_artwork_mini"
-      android:scaleType="centerCrop"
-      android:id="@+id/player_artwork"/>
+      android:adjustViewBounds="true"
+      android:cropToPadding="true"
+      android:id="@+id/player_artwork" android:scaleType="fitXY"/>
     <LinearLayout
+      android:id="@+id/player_frame"
       android:orientation="vertical"
       android:layout_width="fill_parent"
       android:paddingTop="@dimen/player_mini_padding_veritical"
@@ -28,11 +32,12 @@
       android:layout_height="@dimen/player_artwork_mini" android:layout_weight="1"
       >
       <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/player_name"/>
+        android:id="@+id/player_name" android:lines="1"/>
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
