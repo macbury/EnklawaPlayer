@@ -102,7 +102,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
   }
 
   @Override
-  public void onFinishAll(PlayerManager manager, AbstractMediaSource mediaSource) {
+  public void onFinishAll(PlayerManager manager) {
     stopSelf();
   }
 

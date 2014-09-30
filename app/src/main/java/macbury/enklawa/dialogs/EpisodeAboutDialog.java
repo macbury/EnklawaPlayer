@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -32,6 +33,7 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
   private ImageButton playDownloadButton;
   private ImageButton streamButton;
   private ImageButton deleteFileButton;
+  private ImageButton addToPlaylistButton;
 
   public EpisodeAboutDialog(Activity activity, Episode episode) {
     super(activity);
@@ -52,6 +54,7 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
     websiteButton       = (ImageButton)findViewById(R.id.button_website);
     titleTextView       = (TextView)findViewById(R.id.episode_title);
     descriptionTextView = (HtmlTextView)findViewById(R.id.episode_description);
+    addToPlaylistButton = (ImageButton)findViewById(R.id.button_add_to_playlist);
 
     titleTextView.setText(episode.name);
     if (episode.description.length() <= 5) {
@@ -60,11 +63,13 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
       descriptionTextView.setHtmlFromString(episode.description, false);
     }
 
+    addToPlaylistButton.setOnClickListener(this);
     streamButton.setOnClickListener(this);
     websiteButton.setOnClickListener(this);
     goToProgramButton.setOnClickListener(this);
     playDownloadButton.setOnClickListener(this);
     deleteFileButton.setOnClickListener(this);
+
     updateUI();
   }
 
@@ -80,6 +85,12 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
     } else {
       streamButton.setVisibility(View.VISIBLE);
       playDownloadButton.setImageResource(R.drawable.av_download);
+    }
+
+    if (Enklawa.current().db.queue.have(episode)) {
+      addToPlaylistButton.setVisibility(View.GONE);
+    } else {
+      addToPlaylistButton.setVisibility(View.VISIBLE);
     }
   }
 
@@ -97,9 +108,17 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
       playEpisode();
     } else if (v == deleteFileButton) {
       app.db.episodeFiles.destroy(episode.getFile());
+    } else if (v == addToPlaylistButton) {
+      addToPlaylist();
     }
 
     dismiss();
+  }
+
+  private void addToPlaylist() {
+    Enklawa app     = Enklawa.current();
+    app.db.queue.createFromEpisode(episode);
+    Toast.makeText(app, R.string.added_to_playlist, Toast.LENGTH_LONG).show();
   }
 
   private void playEpisode() {
@@ -118,8 +137,6 @@ public class EpisodeAboutDialog extends Dialog implements View.OnClickListener {
       app.db.episodeFiles.createFromEpisode(episode);
       app.services.downloadPendingEpisodes();
     }
-    
-    
   }
 
   @Override

@@ -7,7 +7,7 @@ import macbury.enklawa.managers.player.sources.AbstractMediaSource;
  */
 public interface PlayerManagerListener {
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource);
-  public void onFinishAll(PlayerManager manager, AbstractMediaSource mediaSource);
+  public void onFinishAll(PlayerManager manager);
   public void onPlay(PlayerManager manager, AbstractMediaSource mediaSource);
   public void onPause(PlayerManager manager, AbstractMediaSource mediaSource);
   public void onFinish(PlayerManager manager, AbstractMediaSource mediaSource);

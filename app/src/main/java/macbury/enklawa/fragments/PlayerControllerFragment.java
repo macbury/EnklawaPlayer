@@ -152,9 +152,8 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
   }
 
   @Override
-  public void onFinishAll(PlayerManager manager, AbstractMediaSource mediaSource) {
-    Log.d(TAG, "onFinishAll:" + mediaSource.getTitle());
-    getActivity().finish();
+  public void onFinishAll(PlayerManager manager) {
+    Log.d(TAG, "onFinishAll:");
   }
 
   @Override

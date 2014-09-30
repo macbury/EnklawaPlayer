@@ -3,6 +3,7 @@ package macbury.enklawa.db.scopes;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
@@ -92,5 +93,25 @@ public class EnqueueEpisodeScope extends AbstractScope<EnqueueEpisode> {
   public void moveToBegining(EnqueueEpisode enqueueEpisode) {
     enqueueEpisode.position       = minimumPosition() - 1;
     update(enqueueEpisode);
+  }
+
+  public boolean have(Episode episode) {
+    return findByEpisodeId(episode.id) != null;
+  }
+
+  public void deleteByEpisode(Episode episode) {
+    EnqueueEpisode ee = findByEpisodeId(episode.id);
+    if (ee != null) {
+      destroy(ee);
+    }
+  }
+
+  public ArrayList<EnqueueEpisode> pendingToPlay() {
+    try {
+      return new ArrayList<EnqueueEpisode>(dao.queryBuilder().orderBy("position", true).query());
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

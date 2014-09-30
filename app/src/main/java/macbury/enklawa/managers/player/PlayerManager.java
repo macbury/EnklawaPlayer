@@ -143,6 +143,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   public void onPrepared(MediaPlayer mp) {
     Log.i(TAG, "onPrepared");
     preparing = false;
+    seekTo(currentMediaSource.getPosition());
     play();
   }
 
@@ -206,7 +207,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     stop();
     Log.i(TAG, "Finished all enqueed episodes");
     for (PlayerManagerListener listener : listeners) {
-      listener.onFinishAll(this, currentMediaSource);
+      listener.onFinishAll(this);
     }
   }
 

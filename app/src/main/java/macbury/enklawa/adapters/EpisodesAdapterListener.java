@@ -10,4 +10,5 @@ public interface EpisodesAdapterListener {
   public void onCancelEpisodeDownloadButtonClick(Episode episode);
   public void onPlayEpisodeDownloadButtonClick(Episode episode);
   public void onPauseEpisodeDownloadButtonClick(Episode episode);
+  public void onRemoveEpisodeDownloadButtonClick(Episode episode);
 }

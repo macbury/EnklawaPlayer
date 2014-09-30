@@ -27,11 +27,17 @@ import macbury.enklawa.managers.download.DownloadManager;
  */
 public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener {
   public enum SecondaryAction {
-    Download, CancelDownload, Pause, Play, None
+    Download, CancelDownload, Pause, Play, Remove, None
   }
+
+  public enum ActionMode {
+    PlayDownload, Trash
+  }
+
   private final Context context;
   private ArrayList<Episode> episodesArray;
   private EpisodesAdapterListener listener;
+  private ActionMode mode;
 
   public void setListener(EpisodesAdapterListener listener) {
     this.listener = listener;
@@ -41,6 +47,12 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
     super();
     this.context       = context;
     this.episodesArray = new ArrayList<Episode>();
+    this.mode          = ActionMode.PlayDownload;
+  }
+
+  public void setMode(ActionMode mode) {
+    this.mode = mode;
+    notifyDataSetChanged();
   }
 
   @Override
@@ -99,6 +111,28 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
     EpisodeFile episodeFile = episode.getFile();
     holder.progressBar.setVisibility(View.INVISIBLE);
 
+    if (mode == ActionMode.PlayDownload) {
+      setupPLayDownloadActionButton(holder, episodeFile);
+    } else {
+      setupTrashActionButton(holder, episodeFile);
+    }
+
+    if (episode.isUnread()) {
+      holder.statusTextView.setText(context.getString(R.string.new_label));
+    } else {
+      holder.statusTextView.setText("");
+    }
+
+    Ion.with(context).load(episode.image).withBitmap().placeholder(R.drawable.placeholder).intoImageView(holder.previewImageView);
+    return convertView;
+  }
+
+  private void setupTrashActionButton(EpisodeHolder holder, EpisodeFile episodeFile) {
+    holder.actionType = SecondaryAction.Remove;
+    holder.secondaryAction.setImageResource(R.drawable.ic_action_content_discard);
+  }
+
+  private void setupPLayDownloadActionButton(EpisodeHolder holder, EpisodeFile episodeFile) {
     if (episodeFile == null || episodeFile.haveFailed()) {
       holder.actionType = SecondaryAction.Download;
       holder.secondaryAction.setImageResource(R.drawable.av_download);
@@ -113,21 +147,11 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
           holder.progressBar.setIndeterminate(false);
           holder.progressBar.setProgress(DownloadManager.current.getProgress());
         }
-
       }
     } else {
       holder.actionType = SecondaryAction.Play;
       holder.secondaryAction.setImageResource(R.drawable.av_play);
     }
-
-    if (episode.isUnread()) {
-      holder.statusTextView.setText(context.getString(R.string.new_label));
-    } else {
-      holder.statusTextView.setText("");
-    }
-
-    Ion.with(context).load(episode.image).withBitmap().placeholder(R.drawable.placeholder).intoImageView(holder.previewImageView);
-    return convertView;
   }
 
   public void set(List<Episode> newEpisodeArray) {
@@ -155,6 +179,10 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
 
         case Pause:
           listener.onPauseEpisodeDownloadButtonClick(holder.episode);
+        break;
+
+        case Remove:
+          listener.onRemoveEpisodeDownloadButtonClick(holder.episode);
         break;
       }
 

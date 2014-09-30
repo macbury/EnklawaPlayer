@@ -90,10 +90,17 @@ public abstract class AbstractEpisodesFragment extends EnklawaBaseAbstractListFr
   }
 
   @Override
+  public void onRemoveEpisodeDownloadButtonClick(Episode episode) {
+
+  }
+
+  @Override
   public void onPlayEpisodeDownloadButtonClick(Episode episode) {
     Log.v(TAG, "Clicked play download episode: " + episode.name);
     getActivity().startActivity(app.intents.openPlayerForEpisode(episode));
   }
+
+
 
   @Override
   public void onDismiss(DialogInterface dialog) {

@@ -2,9 +2,14 @@ package macbury.enklawa.activities.player;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.NotificationManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -26,8 +31,13 @@ import macbury.enklawa.R;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.fragments.PlayerControllerFragment;
 import macbury.enklawa.managers.Enklawa;
+import macbury.enklawa.managers.player.PlayerManager;
+import macbury.enklawa.managers.player.PlayerManagerListener;
+import macbury.enklawa.managers.player.sources.AbstractMediaSource;
+import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
+import macbury.enklawa.services.PlayerService;
 
-public class PlayerActivity extends Activity {
+public class PlayerActivity extends Activity implements PlayerManagerListener {
 
   private static final String TAG = "PlayerActivity";
   private FadingImageView previewImage;
@@ -57,12 +67,26 @@ public class PlayerActivity extends Activity {
     fm.beginTransaction().replace(R.id.player_frame, playerFragmentController).commit();
 
     setEpisode(episode);
+
+    Enklawa.current().services.playEpisodeStream(episode);
   }
 
   @Override
   public void onBackPressed() {
     super.onBackPressed();
     playerFragmentController.stopPlayerIfPaused();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    bindService(Enklawa.current().intents.player(), playerManagerServiceConnection, Context.BIND_AUTO_CREATE);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    unbindService(playerManagerServiceConnection);
   }
 
   @Override
@@ -88,10 +112,7 @@ public class PlayerActivity extends Activity {
 
   public void setEpisode(Episode episode) {
     this.episode = episode;
-    Enklawa.current().db.queue.createFromEpisode(episode);
-    Enklawa.current().services.playEpisodeStream(episode);
     updateUIForEpisode();
-
   }
 
   private void updateUIForEpisode() {
@@ -127,6 +148,7 @@ public class PlayerActivity extends Activity {
 
    // tintManager.setStatusBarTintColor(colorArt.getBackgroundColor());
     mainView.setBackgroundColor(colorArt.getBackgroundColor());
+    previewImage.invalidate();
     previewImage.setBackgroundColor(colorArt.getBackgroundColor(), FadingImageView.FadeSide.BOTTOM );
     titleLabel.setTextColor(colorArt.getPrimaryColor());
     dateLabel.setTextColor(colorArt.getDetailColor());
@@ -135,5 +157,61 @@ public class PlayerActivity extends Activity {
 
   public Episode getEpisode() {
     return episode;
+  }
+
+  private PlayerService.PlayerBinder playerBinder;
+  private ServiceConnection playerManagerServiceConnection = new ServiceConnection() {
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      PlayerActivity.this.playerBinder = (PlayerService.PlayerBinder)service;
+      playerBinder.addListener(PlayerActivity.this);
+      updateUIForEpisode();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+      Log.i(TAG, "Player service disconnected!");
+      playerBinder.removeListener(PlayerActivity.this);
+      playerBinder = null;
+    }
+  };
+
+  @Override
+  public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
+    EpisodeMediaSource ems = (EpisodeMediaSource)mediaSource;
+    Episode episode        = ems.getEpisode().episode;
+    setEpisode(episode);
+    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    mNotificationManager.cancel(episode.id);
+  }
+
+  @Override
+  public void onFinishAll(PlayerManager manager) {
+    finish();
+  }
+
+  @Override
+  public void onPlay(PlayerManager manager, AbstractMediaSource mediaSource) {
+
+  }
+
+  @Override
+  public void onPause(PlayerManager manager, AbstractMediaSource mediaSource) {
+
+  }
+
+  @Override
+  public void onFinish(PlayerManager manager, AbstractMediaSource mediaSource) {
+
+  }
+
+  @Override
+  public void onBufferMedia(PlayerManager manager, AbstractMediaSource mediaSource) {
+
+  }
+
+  @Override
+  public void onMediaUpdate(PlayerManager playerManager, AbstractMediaSource currentMediaSource) {
+
   }
 }

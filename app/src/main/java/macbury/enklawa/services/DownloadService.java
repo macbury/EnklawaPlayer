@@ -113,15 +113,14 @@ public class DownloadService extends Service implements DownloadManagerListener 
   public void onDownloadSuccess(final DownloadEpisode download) {
     updateNotification(download);
     sendStatusFor(download);
-
-    Ion.with(this).load(download.getEpisode().image).asBitmap().setCallback(new FutureCallback<Bitmap>() {
+    Enklawa.current().db.queue.createFromEpisode(download.getEpisode());
+    Ion.with(Enklawa.current()).load(download.getEpisode().image).asBitmap().setCallback(new FutureCallback<Bitmap>() {
       @Override
       public void onCompleted(Exception e, Bitmap result) {
         mNotificationManager.notify(download.getEpisodeFileId(), app.notifications.downloadedEpisode(result, download.getEpisode()));
       }
     });
   }
-
 
   @Override
   public void onDownloadManagerFinishedAll() {
