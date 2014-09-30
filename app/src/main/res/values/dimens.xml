@@ -25,5 +25,5 @@
   <dimen name="player_play_pause_button">84dip</dimen>
   <dimen name="player_artwork_mini">64dp</dimen>
   <dimen name="player_mini_padding_veritical">8dp</dimen>
-  <dimen name="player_mini_padding_horizontal">5dp</dimen>
+  <dimen name="player_mini_padding_horizontal">10dp</dimen>
 </resources>

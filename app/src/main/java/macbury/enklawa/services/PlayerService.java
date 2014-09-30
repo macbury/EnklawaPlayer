@@ -47,6 +47,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
     wifiLock.acquire();
     running = true;
+    app.broadcasts.playerStatusChanged();
   }
 
   @Override
@@ -150,6 +151,10 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
     public void removeListener(PlayerManagerListener listener) {
       playerManager.removeListener(listener);
+    }
+
+    public boolean isPlaying() {
+      return playerManager.isPlaying();
     }
   }
 

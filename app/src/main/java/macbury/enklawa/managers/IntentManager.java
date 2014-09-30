@@ -60,15 +60,15 @@ public class IntentManager {
   }
 
   public boolean havePauseExtra(Intent intent) {
-    return intent.hasExtra(EXTRA_ACTION_PAUSE);
+    return intent != null && intent.hasExtra(EXTRA_ACTION_PAUSE);
   }
 
   public boolean haveEpisode(Intent intent) {
-    return intent.hasExtra(EXTRA_EPISODE);
+    return intent != null && intent.hasExtra(EXTRA_EPISODE);
   }
 
   public boolean haveProgram(Intent intent) {
-    return intent.hasExtra(EXTRA_PROGRAM_ID);
+    return intent != null && intent.hasExtra(EXTRA_PROGRAM_ID);
   }
 
   public int getProgramId(Intent intent) {

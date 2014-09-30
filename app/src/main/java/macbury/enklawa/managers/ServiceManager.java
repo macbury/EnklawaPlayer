@@ -38,4 +38,8 @@ public class ServiceManager {
   public void pausePlayer() {
     context.startService(context.intents.pausePlayer());
   }
+
+  public void playNextInQueue() {
+    context.startService(context.intents.player());
+  }
 }

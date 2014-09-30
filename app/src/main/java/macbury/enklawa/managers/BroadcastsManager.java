@@ -27,7 +27,6 @@ public class BroadcastsManager {
     this.context.sendBroadcast(intent);
   }
 
-
   public void podSyncReceiver(Context context, BroadcastReceiver receiver) {
     context.registerReceiver(receiver, new IntentFilter(BROADCAST_ACTION_SYNCING));
   }
@@ -40,6 +39,14 @@ public class BroadcastsManager {
     context.sendBroadcast(context.intents.favoriteProgram(program));
   }
 
+  public void playerStatusChanged() {
+    Intent intent = new Intent(BROADCAST_PLAYER_STATUS);
+    context.sendBroadcast(intent);
+  }
+
+  public void playerStatusChangedReceiver(Context context, BroadcastReceiver receiver) {
+    context.registerReceiver(receiver, new IntentFilter(BROADCAST_PLAYER_STATUS));
+  }
 
   public void favoriteProgramChangeReceiver(Context context, BroadcastReceiver receiver) {
     context.registerReceiver(receiver, new IntentFilter(BROADCAST_FAVORITE_PROGRAM));
