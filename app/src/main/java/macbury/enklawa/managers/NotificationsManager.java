@@ -11,6 +11,7 @@ import macbury.enklawa.R;
 import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.extensions.Converter;
+import macbury.enklawa.managers.player.PlaybackStatus;
 
 /**
  * Created by macbury on 10.09.14.
@@ -77,7 +78,7 @@ public class NotificationsManager {
 
     PendingIntent playEpisodePendingIntent = Enklawa.current().intents.pendingOpenPlayerForEpisode(enqueeEpisode.episode);
 
-    if (enqueeEpisode.status != EnqueueEpisode.Status.Playing) {
+    if (enqueeEpisode.status != PlaybackStatus.Playing) {
       builder.addAction(R.drawable.ic_action_av_play, context.getString(R.string.notification_play_action), Enklawa.current().intents.pendingPlayPlayer());
     } else {
       builder.addAction(R.drawable.ic_action_av_pause, context.getString(R.string.notification_pause_action), Enklawa.current().intents.pendingPausePlayer());

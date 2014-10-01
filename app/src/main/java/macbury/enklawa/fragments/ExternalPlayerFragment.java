@@ -79,6 +79,10 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
 
   public void updateUI() {
     Episode currentEpisode = getEpisode();
+    if (getView() == null) {
+      return;
+    }
+
     if (currentEpisode == null) {
       getView().setVisibility(View.GONE);
     } else {
@@ -109,7 +113,7 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
     AbstractMediaSource ams = getAbstractMediaSource();
     if (ams != null) {
       EpisodeMediaSource ems = (EpisodeMediaSource)ams;
-      return ems.getEpisode().episode;
+      return ems.getEpisode();
     } else {
       EnqueueEpisode nextEnqueueEpisode = Enklawa.current().db.queue.nextToPlay();
       if (nextEnqueueEpisode == null) {
@@ -126,6 +130,10 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
     Enklawa.current().db.queue.removeListener(this);
     getActivity().unregisterReceiver(playerStatusReceiver);
     if (playerBinder != null) {
+      if (!playerBinder.isPlaying()) {
+        getActivity().startService(Enklawa.current().intents.stopPlayer());
+      }
+
       getActivity().unbindService(playerManagerServiceConnection);
       playerBinder = null;
       playerManagerServiceConnection = null;
@@ -140,7 +148,7 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
   };
 
   private void bindIfRunning() {
-    if (PlayerService.isRunning() && playerBinder == null) {
+    if (PlayerService.isRunning() && playerBinder == null && playerManagerServiceConnection == null) {
       playerManagerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

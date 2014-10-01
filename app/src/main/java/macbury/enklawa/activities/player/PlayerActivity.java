@@ -192,7 +192,7 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
   @Override
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
     EpisodeMediaSource ems = (EpisodeMediaSource)mediaSource;
-    Episode episode        = ems.getEpisode().episode;
+    Episode episode        = ems.getEpisode();
     setEpisode(episode);
     NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     mNotificationManager.cancel(episode.id);

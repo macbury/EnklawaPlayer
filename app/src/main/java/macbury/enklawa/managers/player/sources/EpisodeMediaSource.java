@@ -3,7 +3,9 @@ package macbury.enklawa.managers.player.sources;
 import android.net.Uri;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
+import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.managers.Enklawa;
+import macbury.enklawa.managers.player.PlaybackStatus;
 
 /**
  * Created by macbury on 25.09.14.
@@ -13,6 +15,7 @@ public class EpisodeMediaSource extends AbstractMediaSource {
 
   public EpisodeMediaSource(EnqueueEpisode enqueueEpisode) {
     this.enqueueEpisode = enqueueEpisode;
+    this.status         = enqueueEpisode.status;
   }
 
   @Override
@@ -22,7 +25,7 @@ public class EpisodeMediaSource extends AbstractMediaSource {
 
   @Override
   public String getSummary() {
-    return enqueueEpisode.episode.description;
+    return enqueueEpisode.episode.program.name;
   }
 
   @Override
@@ -41,15 +44,13 @@ public class EpisodeMediaSource extends AbstractMediaSource {
   }
 
   @Override
-  public void onStart() {
-    enqueueEpisode.status = EnqueueEpisode.Status.Playing;
-    Enklawa.current().db.queue.update(enqueueEpisode);
+  public void onPlay() {
+    setStatus(PlaybackStatus.Playing);
   }
 
   @Override
   public void onPause() {
-    enqueueEpisode.status = EnqueueEpisode.Status.Paused;
-    Enklawa.current().db.queue.update(enqueueEpisode);
+    setStatus(PlaybackStatus.Paused);
   }
 
   @Override
@@ -65,8 +66,7 @@ public class EpisodeMediaSource extends AbstractMediaSource {
 
   @Override
   public void onFinishPlayback() {
-    enqueueEpisode.status = EnqueueEpisode.Status.Played;
-    Enklawa.current().db.queue.destroy(enqueueEpisode);
+    setStatus(PlaybackStatus.Finished);
   }
 
   @Override
@@ -91,7 +91,14 @@ public class EpisodeMediaSource extends AbstractMediaSource {
     }
   }
 
-  public EnqueueEpisode getEpisode() {
-    return enqueueEpisode;
+  public Episode getEpisode() {
+    return enqueueEpisode.episode;
+  }
+
+  @Override
+  public void setStatus(PlaybackStatus status) {
+    super.setStatus(status);
+    enqueueEpisode.status = status;
+    Enklawa.current().db.queue.update(enqueueEpisode);
   }
 }

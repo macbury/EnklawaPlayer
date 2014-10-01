@@ -35,5 +35,6 @@
   <string name="go_to_program_activity">Pokaż wszystkie odcinki dla tego programu</string>
   <string name="pref_key_sync_last_update_title">Ostatnia aktualizacja</string>
   <string name="added_to_playlist">Dodano do kolejki</string>
+  <string name="unknown_media_key">Zaprawde powiadam ci, klawisz ten nie znany mi</string>
 
 </resources>

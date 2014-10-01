@@ -19,6 +19,7 @@ import macbury.enklawa.services.SyncPodService;
  * Created by macbury on 09.09.14.
  */
 public class IntentManager {
+  public static final String EXTRA_ACTION_KEYCODE          = "EXTRA_ACTION_KEYCODE";
   public static final String EXTRA_ACTION_PAUSE            = "EXTRA_ACTION_PAUSE";
   public static final String EXTRA_ACTION_CANCEL           = "EXTRA_ACTION_CANCEL";
   public static final String EXTRA_PROGRESS                = "EXTRA_PROGRESS";
@@ -59,6 +60,10 @@ public class IntentManager {
     return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
+  public boolean haveKeyCode(Intent intent) {
+    return intent != null && intent.hasExtra(EXTRA_ACTION_KEYCODE);
+  }
+
   public boolean havePauseExtra(Intent intent) {
     return intent != null && intent.hasExtra(EXTRA_ACTION_PAUSE);
   }
@@ -69,6 +74,10 @@ public class IntentManager {
 
   public boolean haveProgram(Intent intent) {
     return intent != null && intent.hasExtra(EXTRA_PROGRAM_ID);
+  }
+
+  public int getKeyCode(Intent intent) {
+    return intent.getIntExtra(EXTRA_ACTION_KEYCODE, -1);
   }
 
   public int getProgramId(Intent intent) {
@@ -177,4 +186,9 @@ public class IntentManager {
     return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
+  public Intent playerHandleRemoteControlClient(int keycode) {
+    Intent intent = player();
+    intent.putExtra(EXTRA_ACTION_KEYCODE, keycode);
+    return intent;
+  }
 }

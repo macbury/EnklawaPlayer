@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
-import macbury.enklawa.db.models.Episode;
 import macbury.enklawa.extensions.SleepTimer;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
@@ -52,6 +51,13 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     }
   }
 
+  public PlaybackStatus getState() {
+    if (isRunning()) {
+      return currentMediaSource.getStatus();
+    } else {
+      return PlaybackStatus.Pending;
+    }
+  }
 
   public void addListener(PlayerManagerListener listener) {
     if (listeners.indexOf(listener) == -1) {
@@ -101,7 +107,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   public void play() {
     if (!preparing || !player.isPlaying()) {
       Log.i(TAG, "Play");
-      currentMediaSource.onStart();
+      currentMediaSource.onPlay();
       player.start();
 
       for (PlayerManagerListener listener : listeners) {
@@ -111,7 +117,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void pause() {
-    if (player.isPlaying()) {
+    if (isPlaying()) {
       Log.i(TAG, "pause");
       currentMediaSource.onPause();
       player.pause();
@@ -141,7 +147,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   @Override
   public void onPrepared(MediaPlayer mp) {
-    Log.i(TAG, "onPrepared");
+    Log.i(TAG, "onPrepared seeking to: " + currentMediaSource.getPosition());
     preparing = false;
     seekTo(currentMediaSource.getPosition());
     play();
@@ -218,6 +224,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   public void seekTo(int duration) {
     if (isRunning()) {
       player.seekTo(duration);
+      currentMediaSource.setPosition(duration);
     }
   }
 
