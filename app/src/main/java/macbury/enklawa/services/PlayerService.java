@@ -33,10 +33,12 @@ import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
 import macbury.enklawa.receivers.MediaButtonReceiver;
 
-public class PlayerService extends Service implements PlayerManagerListener {
-  private static final String TAG = "PlayerService";
-  private static final int NOTIFICATION_PLAYED_ID = 689;
-  private static final String WIFI_LOCK_TAG = "EnklawaPlayerService";
+public class PlayerService extends Service implements PlayerManagerListener, AudioManager.OnAudioFocusChangeListener {
+  private static final String AVRCP_ACTION_PLAYER_STATUS_CHANGED  = "com.android.music.playstatechanged";
+  private static final String AVRCP_ACTION_META_CHANGED           = "com.android.music.metachanged";
+  private static final String TAG                                 = "PlayerService";
+  private static final int NOTIFICATION_PLAYED_ID                 = 689;
+  private static final String WIFI_LOCK_TAG                       = "EnklawaPlayerService";
   private RemoteControlClient remoteControlClient;
   private Enklawa app;
   private PlayerManager playerManager;
@@ -60,9 +62,10 @@ public class PlayerService extends Service implements PlayerManagerListener {
     this.playerManager = new PlayerManager(getApplicationContext());
     playerManager.addListener(this);
 
-    wifiLock.acquire();
     running = true;
     app.broadcasts.playerStatusChanged();
+
+    audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
     setupRemoteControlClient();
 
@@ -87,27 +90,45 @@ public class PlayerService extends Service implements PlayerManagerListener {
     if (playerManager.isRunning()) {
       remoteControlClient.setPlaybackState(playstate);
       RemoteControlClient.MetadataEditor editor = remoteControlClient.editMetadata(false);
-
-      AbstractMediaSource ams = playerManager.getCurrentMediaSource();
+      AbstractMediaSource ams                   = playerManager.getCurrentMediaSource();
 
       editor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, ams.getTitle());
       editor.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, ams.getSummary());
-      editor.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, ams.getDuration());
+      //editor.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, ams.getDuration());
       //editor.putLong(MediaMetadataRetriever.METADATA_KEY_LOCATION, ams.getPosition());
       editor.apply();
-    }
 
+      bluetoothNotifyChange(ams, AVRCP_ACTION_PLAYER_STATUS_CHANGED);
+      bluetoothNotifyChange(ams, AVRCP_ACTION_META_CHANGED);
+    }
+  }
+
+  private void bluetoothNotifyChange(AbstractMediaSource ams, String whatChanged) {
+    if (ams != null) {
+      Intent i = new Intent(whatChanged);
+      i.putExtra("id", 1);
+      i.putExtra("artist", "");
+      i.putExtra("album", ams.getSummary());
+      i.putExtra("track", ams.getTitle());
+      i.putExtra("playing", playerManager.isPlaying());
+      i.putExtra("ListSize", Enklawa.current().db.queue.count());
+      i.putExtra("duration", ams.getDuration());
+      i.putExtra("position", ams.getPosition());
+      sendBroadcast(i);
+    }
   }
 
   @Override
   public void onDestroy() {
     playerManager.removeListener(this);
     playerManager.destroy();
-    wifiLock.release();
     running = false;
+    if (wifiLock.isHeld())
+      wifiLock.release();
     unregisterReceiver(headsetDisconnected);
     unregisterReceiver(audioBecomingNoisy);
     audioManager.unregisterMediaButtonEventReceiver(mediaButtonEventReceiver);
+    audioManager.abandonAudioFocus(this);
     super.onDestroy();
   }
 
@@ -144,6 +165,15 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
   private void handleKeycode(int keycode) {
     switch (keycode) {
+      case KeyEvent.KEYCODE_HEADSETHOOK:
+      case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+        if (playerManager.isPlaying()) {
+          playerManager.pause();
+        } else if (playerManager.isPaused()) {
+          playerManager.play();
+        }
+      break;
+
       case KeyEvent.KEYCODE_MEDIA_PLAY:
         playerManager.start();
       break;
@@ -183,6 +213,8 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
   @Override
   public void onPlay(PlayerManager manager, AbstractMediaSource mediaSource) {
+    if (!wifiLock.isHeld())
+      wifiLock.acquire();
     refreshRemoteControlClient(RemoteControlClient.PLAYSTATE_PLAYING);
     updateNotification();
   }
@@ -196,6 +228,7 @@ public class PlayerService extends Service implements PlayerManagerListener {
   @Override
   public void onFinish(PlayerManager manager, AbstractMediaSource mediaSource) {
     updateNotification();
+    wifiLock.release();
   }
 
   @Override
@@ -205,6 +238,11 @@ public class PlayerService extends Service implements PlayerManagerListener {
 
   @Override
   public void onMediaUpdate(PlayerManager playerManager, AbstractMediaSource currentMediaSource) {
+
+  }
+
+  @Override
+  public void onAudioFocusChange(int focusChange) {
 
   }
 

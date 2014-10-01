@@ -167,7 +167,6 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
     }
   }
 
-
   @Override
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
     updateUI();
