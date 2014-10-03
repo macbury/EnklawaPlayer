@@ -42,5 +42,7 @@
   <string name="media_player_error_unknown">Nieznany błąd</string>
   <string name="media_player_error_audio_focus_not_granted">Nie można odtworzyć teraz tego pliku
   </string>
+  <string name="radio_title">Na żywo</string>
+  <string name="radio_summary">Radio internetowe</string>
 
 </resources>

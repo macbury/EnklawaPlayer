@@ -1,6 +1,7 @@
 package macbury.enklawa.activities;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,8 +30,9 @@ public class DonateActivity extends AccentActivity implements View.OnClickListen
 
     View mainContainer = findViewById(R.id.main_container);
     SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-    mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
-
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    }
     donationButton     = (Button) findViewById(R.id.button_donate);
     githubButton       = (Button) findViewById(R.id.button_github);
 

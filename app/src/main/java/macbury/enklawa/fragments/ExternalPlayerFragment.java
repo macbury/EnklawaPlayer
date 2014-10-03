@@ -136,7 +136,7 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
     getActivity().unregisterReceiver(playerStatusReceiver);
     if (playerBinder != null) {
       if (!playerBinder.isPlaying()) {
-        getActivity().startService(Enklawa.current().intents.stopPlayer());
+        Enklawa.current().services.stopPlayer();
       }
 
       getActivity().unbindService(playerManagerServiceConnection);

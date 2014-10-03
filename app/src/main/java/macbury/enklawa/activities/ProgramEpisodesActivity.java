@@ -1,5 +1,6 @@
 package macbury.enklawa.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -40,7 +41,9 @@ public class ProgramEpisodesActivity extends AccentActivity {
 
     View mainContentView = findViewById(R.id.content_frame);
     SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-    mainContentView.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      mainContentView.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    }
   }
 
   @Override

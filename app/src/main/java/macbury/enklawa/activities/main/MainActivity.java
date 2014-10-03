@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -84,9 +85,11 @@ public class MainActivity extends AccentActivity implements NavigationListener {
     actionBar.setDisplayShowHomeEnabled(true);
 
     SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-    mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
-    navDrawerListView.setPadding((int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(true), (int)getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
 
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+      navDrawerListView.setPadding((int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(false), (int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
+    }
     showPlayer();
   }
 

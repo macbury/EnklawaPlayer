@@ -59,8 +59,11 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
     titleLabel        = (TextView) findViewById(R.id.episode_title);
     dateLabel         = (TextView) findViewById(R.id.episode_date);
     descriptionLabel  = (TextView) findViewById(R.id.episode_description);
+
+    boolean restoringState = savedInstanceState != null;
+
     int newEpisodeId  = -1;
-    if (savedInstanceState != null && savedInstanceState.getInt(CURRENT_EPISODE_ID) != 0) {
+    if (restoringState) {
       newEpisodeId = savedInstanceState.getInt(CURRENT_EPISODE_ID);
     } else {
       newEpisodeId = Enklawa.current().intents.getEpisodeId(getIntent());
@@ -73,8 +76,11 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
     fm.beginTransaction().replace(R.id.player_frame, playerFragmentController).commit();
 
     setEpisode(episode);
-
-    Enklawa.current().services.playEpisodeStream(episode);
+    if (restoringState) {
+      Enklawa.current().services.player();
+    } else {
+      Enklawa.current().services.playEpisode(episode);
+    }
   }
 
   @Override

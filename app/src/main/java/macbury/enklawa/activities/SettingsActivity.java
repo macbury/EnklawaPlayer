@@ -1,5 +1,6 @@
 package macbury.enklawa.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -31,7 +32,9 @@ public class SettingsActivity extends AccentFragmentActivity {
 
     View mainContentView = findViewById(android.R.id.content);
     SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-    mainContentView.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      mainContentView.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
+    }
   }
 
   @Override

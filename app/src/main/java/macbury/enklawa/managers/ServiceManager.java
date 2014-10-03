@@ -46,4 +46,12 @@ public class ServiceManager {
   public void playEpisode(Episode episode) {
     context.startService(context.intents.playEpisode(episode));
   }
+
+  public void player() {
+    context.startService(context.intents.player());
+  }
+
+  public void stopPlayer() {
+    context.startService(context.intents.stopPlayer());
+  }
 }

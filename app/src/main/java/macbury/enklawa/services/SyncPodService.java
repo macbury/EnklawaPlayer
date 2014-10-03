@@ -83,6 +83,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   public void onCompleted(Exception e, APIResponse result) {
     if (e == null) {
       Log.d(TAG, "Downloaded pod data!");
+      Enklawa.current().settings.setRadioURI(result.radio);
       SyncApiResponseWithDB syncDB = new SyncApiResponseWithDB();
       syncDB.execute(result);
     } else {

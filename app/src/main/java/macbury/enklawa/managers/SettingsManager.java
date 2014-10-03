@@ -23,6 +23,7 @@ import macbury.enklawa.extensions.DateDeserializer;
  * Created by macbury on 09.09.14.
  */
 public class SettingsManager {
+  public static final String KEY_API_RADIO_URI      = "KEY_API_RADIO_URI";
   public static final String KEY_API_ENDPOINT       = "pref_key_api_endpoint";
   public static final String KEY_SYNC_FREQ          = "pref_key_sync_frequency";
   public static final String KEY_PROXY_ENABLED      = "pref_key_proxy_enabled";
@@ -85,4 +86,11 @@ public class SettingsManager {
     return Integer.parseInt(settings.getString(KEY_PROXY_PORT, ""));
   }
 
+  public void setRadioURI(String radioURL) {
+    settings.edit().putString(KEY_API_RADIO_URI, radioURL).commit();
+  }
+
+  public Uri getRadioURI() {
+    return Uri.parse(settings.getString(KEY_API_RADIO_URI, null));
+  }
 }

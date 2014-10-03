@@ -32,6 +32,7 @@ import macbury.enklawa.managers.player.PlayerManager;
 import macbury.enklawa.managers.player.PlayerManagerListener;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
+import macbury.enklawa.managers.player.sources.RadioMediaSource;
 import macbury.enklawa.receivers.MediaButtonReceiver;
 
 public class PlayerService extends Service implements PlayerManagerListener, AudioManager.OnAudioFocusChangeListener {
@@ -151,11 +152,17 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
       playerManager.pause();
     } else if (app.intents.haveCancelExtra(intent)) {
       playerManager.cancel();
+    } else if (app.intents.haveRadioExtra(intent)) {
+      RadioMediaSource rms = new RadioMediaSource();
+      if (!playerManager.isRunning(rms)) {
+        playerManager.pause();
+        playerManager.set(rms);
+      }
     } else if (app.intents.haveEpisode(intent)) {
       Episode episode               = app.db.episodes.find(app.intents.getEpisodeId(intent));
       EnqueueEpisode enqueueEpisode = app.db.queue.createFromEpisode(episode);
       Log.i(TAG, "Recived episode to play:" + episode.name);
-      if (playerManager.is(enqueueEpisode)) {
+      if (playerManager.isRunning(enqueueEpisode)) {
         playerManager.start();
       } else {
         app.db.queue.moveToBegining(enqueueEpisode);
@@ -210,6 +217,8 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
 
   @Override
   public void onFinishAll(PlayerManager manager) {
+    Log.i(TAG, "On finish all");
+    stopForeground(true);
     stopSelf();
   }
 

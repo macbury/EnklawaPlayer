@@ -15,6 +15,7 @@ import macbury.enklawa.extensions.SleepTimer;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.player.sources.AbstractMediaSource;
 import macbury.enklawa.managers.player.sources.EpisodeMediaSource;
+import macbury.enklawa.managers.player.sources.RadioMediaSource;
 
 /**
  * Created by macbury on 19.09.14.
@@ -78,24 +79,27 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     if (nextToPlay == null) {
       exit();
     } else {
-      currentMediaSource = new EpisodeMediaSource(nextToPlay);
-      preparing          = true;
-      try {
-        Log.i(TAG, "Episode " + currentMediaSource.getTitle() + " is " + currentMediaSource.getMediaUri().toString());
-        for (PlayerManagerListener listener : listeners) {
-          listener.onInitialize(this, currentMediaSource);
-        }
-        player.reset();
-        player.setDataSource(context, currentMediaSource.getMediaUri());
-        player.prepareAsync();
-      } catch (IOException e) {
-        e.printStackTrace();
-        for (PlayerManagerListener listener : listeners) {
-          listener.onMediaError(this, MediaPlayer.MEDIA_ERROR_IO);
-        }
-        stop();
-        next();
+      set(new EpisodeMediaSource(nextToPlay));
+    }
+  }
+
+  public void set(AbstractMediaSource mediaSource) {
+    currentMediaSource = mediaSource;
+    preparing          = true;
+    try {
+      Log.i(TAG, "Episode " + currentMediaSource.getTitle() + " is " + currentMediaSource.getMediaUri().toString());
+      for (PlayerManagerListener listener : listeners) {
+        listener.onInitialize(this, currentMediaSource);
       }
+      player.reset();
+      player.setDataSource(context, currentMediaSource.getMediaUri());
+      player.prepareAsync();
+    } catch (IOException e) {
+      e.printStackTrace();
+      for (PlayerManagerListener listener : listeners) {
+        listener.onMediaError(this, MediaPlayer.MEDIA_ERROR_IO);
+      }
+      exit();
     }
   }
 
@@ -232,15 +236,19 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public boolean isPlaying() {
-    return player.isPlaying();
+    return isRunning() && player.isPlaying();
   }
 
   public boolean isPreparing() {
     return preparing;
   }
 
-  public boolean is(EnqueueEpisode enqueueEpisode) {
+  public boolean isRunning(EnqueueEpisode enqueueEpisode) {
     return isRunning() && currentMediaSource.equals(enqueueEpisode);
+  }
+
+  public boolean isRunning(RadioMediaSource rms) {
+    return isRunning() && currentMediaSource.equals(rms);
   }
 
   public void seekTo(int duration) {
@@ -262,4 +270,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   public boolean isPlayAfterPrepare() {
     return playAfterPrepare;
   }
+
+
 }

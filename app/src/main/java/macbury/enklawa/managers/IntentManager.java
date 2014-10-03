@@ -20,6 +20,7 @@ import macbury.enklawa.services.SyncPodService;
  */
 public class IntentManager {
   public static final String EXTRA_ACTION_KEYCODE          = "EXTRA_ACTION_KEYCODE";
+  public static final String EXTRA_ACTION_RADIO            = "EXTRA_ACTION_RADIO";
   public static final String EXTRA_ACTION_PENDING          = "EXTRA_ACTION_PENDING";
   public static final String EXTRA_ACTION_PLAY             = "EXTRA_ACTION_PLAY";
   public static final String EXTRA_ACTION_PAUSE            = "EXTRA_ACTION_PAUSE";
@@ -198,5 +199,13 @@ public class IntentManager {
     Intent intent = player();
     intent.putExtra(EXTRA_EPISODE, episode.id);
     return intent;
+  }
+
+  public PendingIntent pendingPlayEpisode(Episode episode) {
+    return PendingIntent.getService(context, 0, playEpisode(episode), PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  public boolean haveRadioExtra(Intent intent) {
+    return intent.hasExtra(EXTRA_ACTION_RADIO);
   }
 }
