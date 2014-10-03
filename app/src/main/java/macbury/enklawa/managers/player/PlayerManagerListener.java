@@ -13,4 +13,6 @@ public interface PlayerManagerListener {
   public void onFinish(PlayerManager manager, AbstractMediaSource mediaSource);
   public void onBufferMedia(PlayerManager manager, AbstractMediaSource mediaSource);
   public void onMediaUpdate(PlayerManager playerManager, AbstractMediaSource currentMediaSource);
+
+  public void onMediaError(PlayerManager playerManager, int extra);
 }

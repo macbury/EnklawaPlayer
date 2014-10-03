@@ -141,6 +141,11 @@ public class PlayerControllerFragment extends Fragment implements PlayerManagerL
   }
 
   @Override
+  public void onMediaError(PlayerManager playerManager, int extra) {
+
+  }
+
+  @Override
   public void onPause(PlayerManager manager, AbstractMediaSource mediaSource) {
     Log.d(TAG, "onPause:" + mediaSource.getTitle());
     updateUIInfoForMediaSource(manager, mediaSource);

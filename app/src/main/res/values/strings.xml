@@ -36,5 +36,11 @@
   <string name="pref_key_sync_last_update_title">Ostatnia aktualizacja</string>
   <string name="added_to_playlist">Dodano do kolejki</string>
   <string name="unknown_media_key">Zaprawde powiadam ci, klawisz ten nie znany mi</string>
+  <string name="media_player_error_io">Nie można odczytać źródła</string>
+  <string name="media_player_error_unsupported">Nie obsługiwany format</string>
+  <string name="media_player_error_timeout">Serwer nie odpowiada</string>
+  <string name="media_player_error_unknown">Nieznany błąd</string>
+  <string name="media_player_error_audio_focus_not_granted">Nie można odtworzyć teraz tego pliku
+  </string>
 
 </resources>

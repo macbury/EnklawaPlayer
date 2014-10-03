@@ -60,6 +60,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/player_play_pause_button"
     android:layout_height="@dimen/player_play_pause_button"
     android:id="@+id/progress_loading" android:layout_gravity="center_horizontal"
-    android:indeterminate="true"/>
+    android:indeterminate="true" android:visibility="gone"/>
 
 </LinearLayout>

@@ -52,5 +52,10 @@
       app:cb_color="@color/actionbar_color"
       android:id="@+id/button_play_pause"
       app:cb_pressedRingWidth="8dip" android:layout_gravity="center_horizontal"/>
+    <ProgressBar
+      style="?android:attr/progressBarStyleLarge"
+      android:layout_width="@dimen/player_artwork_mini"
+      android:layout_height="@dimen/player_artwork_mini"
+      android:id="@+id/progress_loading" android:visibility="gone"/>
   </LinearLayout>
 </LinearLayout>

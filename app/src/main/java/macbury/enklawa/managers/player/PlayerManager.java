@@ -27,6 +27,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   private final MediaPlayer player;
   private boolean preparing;
   private ArrayList<PlayerManagerListener> listeners;
+  private boolean playAfterPrepare = true;
 
   public PlayerManager(Context context) {
     this.context   = context;
@@ -43,7 +44,6 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     player.setOnInfoListener(this);
     fakeLoop.start();
   }
-
 
   public void start() {
     if (isRunning()) {
@@ -76,7 +76,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   private void next() {
     EnqueueEpisode nextToPlay = Enklawa.current().db.queue.nextToPlay();
     if (nextToPlay == null) {
-      cancel();
+      exit();
     } else {
       currentMediaSource = new EpisodeMediaSource(nextToPlay);
       preparing          = true;
@@ -90,7 +90,10 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
         player.prepareAsync();
       } catch (IOException e) {
         e.printStackTrace();
-        finishPlayback();
+        for (PlayerManagerListener listener : listeners) {
+          listener.onMediaError(this, MediaPlayer.MEDIA_ERROR_IO);
+        }
+        stop();
         next();
       }
     }
@@ -104,6 +107,31 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     fakeLoop.kill();
     player.stop();
     player.release();
+  }
+
+
+  public void restart() {
+    if (isRunning()) {
+      pause();
+    }
+    next();
+  }
+
+  public void cancel() {
+    stop();
+    exit();
+  }
+
+  public void pauseAndExit() {
+    pause();
+    exit();
+  }
+
+  public void exit() {
+    Log.i(TAG, "Exiting playlist");
+    for (PlayerManagerListener listener : listeners) {
+      listener.onFinishAll(this);
+    }
   }
 
   public void play() {
@@ -131,7 +159,7 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
   }
 
   public void stop() {
-    if (player.isPlaying()) {
+    if (isPlaying()) {
       Log.i(TAG, "stop");
       player.stop();
       for (PlayerManagerListener listener : listeners) {
@@ -152,7 +180,8 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     Log.i(TAG, "onPrepared seeking to: " + currentMediaSource.getPosition());
     preparing = false;
     seekTo(currentMediaSource.getPosition());
-    play();
+    if (playAfterPrepare)
+      play();
   }
 
   @Override
@@ -170,19 +199,25 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
 
   @Override
   public boolean onError(MediaPlayer mp, int what, int extra) {
-    next();
+    Log.i(TAG, "Recived error: " +extra);
+    pause();
+    for (PlayerManagerListener listener : listeners) {
+      listener.onMediaError(this, extra);
+    }
     return true;
   }
 
   @Override
   public void onSleepTimerTick(SleepTimer timer) {
-    if (currentMediaSource != null) {
-      currentMediaSource.setPosition(player.getCurrentPosition());
+    if (isPlaying()) {
+      updatePosition();
     }
+  }
+
+  private void updatePosition() {
+    currentMediaSource.setPosition(player.getCurrentPosition());
     for (PlayerManagerListener listener : listeners) {
-      if (player.isPlaying()) {
-        listener.onMediaUpdate(this, currentMediaSource);
-      }
+      listener.onMediaUpdate(this, currentMediaSource);
     }
   }
 
@@ -204,33 +239,27 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     return preparing;
   }
 
-  public void restart() {
-    if (isRunning()) {
-      pause();
-    }
-    next();
-  }
-
-  public void cancel() {
-    stop();
-    Log.i(TAG, "Finished all enqueed episodes");
-    for (PlayerManagerListener listener : listeners) {
-      listener.onFinishAll(this);
-    }
-  }
-
   public boolean is(EnqueueEpisode enqueueEpisode) {
     return isRunning() && currentMediaSource.equals(enqueueEpisode);
   }
 
   public void seekTo(int duration) {
     if (isRunning()) {
+      Log.i(TAG, "Seek to "+ duration);
       player.seekTo(duration);
-      currentMediaSource.setPosition(duration);
+      updatePosition();
     }
   }
 
   public boolean isPaused() {
     return !isPlaying();
+  }
+
+  public void setPlayAfterPrepare(boolean playAfterPrepare) {
+    this.playAfterPrepare = playAfterPrepare;
+  }
+
+  public boolean isPlayAfterPrepare() {
+    return playAfterPrepare;
   }
 }

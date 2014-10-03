@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.koushikdutta.ion.Ion;
@@ -38,6 +40,8 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
   private CircleButton playPauseButton;
   private View actionFrame;
   private ServiceConnection playerManagerServiceConnection;
+  private ProgressBar loadingProgress;
+
   public ExternalPlayerFragment() {
     // Required empty public constructor
   }
@@ -51,6 +55,7 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
     this.titleTextView          = (TextView) view.findViewById(R.id.player_name);
     this.timeTextView           = (TextView) view.findViewById(R.id.player_time);
     this.actionFrame            = view.findViewById(R.id.player_frame);
+    this.loadingProgress        = (ProgressBar) view.findViewById(R.id.progress_loading);
     playPauseButton.setOnClickListener(this);
     actionFrame.setOnClickListener(this);
     return view;
@@ -170,6 +175,8 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
   @Override
   public void onInitialize(PlayerManager manager, AbstractMediaSource mediaSource) {
     updateUI();
+    loadingProgress.setVisibility(View.VISIBLE);
+    playPauseButton.setVisibility(View.GONE);
   }
 
   @Override
@@ -180,6 +187,8 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
   @Override
   public void onPlay(PlayerManager manager, AbstractMediaSource mediaSource) {
     updateUI();
+    loadingProgress.setVisibility(View.GONE);
+    playPauseButton.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -203,6 +212,11 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
   }
 
   @Override
+  public void onMediaError(PlayerManager playerManager, int extra) {
+
+  }
+
+  @Override
   public void afterCreate(EnqueueEpisode model) {
     updateUI();
   }
@@ -223,6 +237,8 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
       if (isPlaying()) {
         Enklawa.current().services.pausePlayer();
       } else {
+        loadingProgress.setVisibility(View.VISIBLE);
+        playPauseButton.setVisibility(View.GONE);
         Enklawa.current().services.playNextInQueue();
       }
     } else if (v == actionFrame) {

@@ -67,6 +67,7 @@ public class EpisodeMediaSource extends AbstractMediaSource {
   @Override
   public void onFinishPlayback() {
     setStatus(PlaybackStatus.Finished);
+    Enklawa.current().db.queue.destroy(enqueueEpisode);
   }
 
   @Override

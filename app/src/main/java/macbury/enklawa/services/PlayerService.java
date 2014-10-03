@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
@@ -65,7 +66,11 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
     running = true;
     app.broadcasts.playerStatusChanged();
 
-    audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    if (audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+      Toast.makeText(this, R.string.media_player_error_audio_focus_not_granted, Toast.LENGTH_LONG).show();
+      stopSelf();
+      return;
+    }
 
     setupRemoteControlClient();
 
@@ -242,8 +247,36 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
   }
 
   @Override
-  public void onAudioFocusChange(int focusChange) {
+  public void onMediaError(PlayerManager playerManager, int extra) {
+    switch (extra) {
+      case MediaPlayer.MEDIA_ERROR_MALFORMED:
+      case MediaPlayer.MEDIA_ERROR_IO:
+        Toast.makeText(this, R.string.media_player_error_io, Toast.LENGTH_LONG).show();
+      break;
 
+      case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+        Toast.makeText(this, R.string.media_player_error_unsupported, Toast.LENGTH_LONG).show();
+      break;
+
+      case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+        Toast.makeText(this, R.string.media_player_error_timeout, Toast.LENGTH_LONG).show();
+      break;
+
+      default:
+        Toast.makeText(this, R.string.media_player_error_unknown, Toast.LENGTH_LONG).show();
+      break;
+    }
+  }
+
+  @Override
+  public void onAudioFocusChange(int focusChange) {
+    if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+      playerManager.pause();
+    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+      playerManager.play();
+    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+      playerManager.pauseAndExit();
+    }
   }
 
   public class PlayerBinder extends Binder {

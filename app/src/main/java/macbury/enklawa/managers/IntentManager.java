@@ -20,6 +20,8 @@ import macbury.enklawa.services.SyncPodService;
  */
 public class IntentManager {
   public static final String EXTRA_ACTION_KEYCODE          = "EXTRA_ACTION_KEYCODE";
+  public static final String EXTRA_ACTION_PENDING          = "EXTRA_ACTION_PENDING";
+  public static final String EXTRA_ACTION_PLAY             = "EXTRA_ACTION_PLAY";
   public static final String EXTRA_ACTION_PAUSE            = "EXTRA_ACTION_PAUSE";
   public static final String EXTRA_ACTION_CANCEL           = "EXTRA_ACTION_CANCEL";
   public static final String EXTRA_PROGRESS                = "EXTRA_PROGRESS";

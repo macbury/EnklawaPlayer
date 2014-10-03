@@ -227,4 +227,9 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
   public void onMediaUpdate(PlayerManager playerManager, AbstractMediaSource currentMediaSource) {
 
   }
+
+  @Override
+  public void onMediaError(PlayerManager playerManager, int extra) {
+
+  }
 }
