@@ -135,6 +135,9 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
       MenuItem syncMenuItem = menu.findItem(R.id.action_refresh);
       syncMenuItem.setVisible(!SyncPodService.isRunning());
+
+      MenuItem streamMenuItem = menu.findItem(R.id.action_stream);
+      streamMenuItem.setVisible(false);
     }
     return true;
   }

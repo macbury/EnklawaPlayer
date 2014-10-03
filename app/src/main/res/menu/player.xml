@@ -6,8 +6,4 @@
     android:showAsAction="always"
     android:title="Share"
     android:actionProviderClass="android.widget.ShareActionProvider" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
 </menu>

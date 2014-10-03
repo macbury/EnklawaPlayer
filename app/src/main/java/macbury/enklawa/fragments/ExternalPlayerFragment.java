@@ -237,9 +237,7 @@ public class ExternalPlayerFragment extends Fragment implements PlayerManagerLis
       if (isPlaying()) {
         Enklawa.current().services.pausePlayer();
       } else {
-        loadingProgress.setVisibility(View.VISIBLE);
-        playPauseButton.setVisibility(View.GONE);
-        Enklawa.current().services.playNextInQueue();
+        Enklawa.current().services.playEpisode(getEpisode());
       }
     } else if (v == actionFrame) {
       getView().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);

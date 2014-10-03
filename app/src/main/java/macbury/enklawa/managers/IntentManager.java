@@ -193,4 +193,10 @@ public class IntentManager {
     intent.putExtra(EXTRA_ACTION_KEYCODE, keycode);
     return intent;
   }
+
+  public Intent playEpisode(Episode episode) {
+    Intent intent = player();
+    intent.putExtra(EXTRA_EPISODE, episode.id);
+    return intent;
+  }
 }

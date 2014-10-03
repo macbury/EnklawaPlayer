@@ -156,14 +156,11 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
       EnqueueEpisode enqueueEpisode = app.db.queue.createFromEpisode(episode);
       Log.i(TAG, "Recived episode to play:" + episode.name);
       if (playerManager.is(enqueueEpisode)) {
-        playerManager.play();
+        playerManager.start();
       } else {
         app.db.queue.moveToBegining(enqueueEpisode);
         playerManager.restart();
       }
-    } else {
-      Log.i(TAG, "Play all enqeued episodes");
-      playerManager.start();
     }
     return super.onStartCommand(intent, flags, startId);
   }
@@ -175,7 +172,7 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
         if (playerManager.isPlaying()) {
           playerManager.pause();
         } else if (playerManager.isPaused()) {
-          playerManager.play();
+          playerManager.start();
         }
       break;
 

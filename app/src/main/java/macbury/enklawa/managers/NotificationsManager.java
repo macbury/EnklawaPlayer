@@ -67,7 +67,7 @@ public class NotificationsManager {
             .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
             .setContentTitle(enqueeEpisode.episode.name)
             .setAutoCancel(false)
-
+            .setOngoing(true)
             .setTicker(enqueeEpisode.episode.name)
             .setContentInfo(Converter.getDurationStringLong(enqueeEpisode.episode.duration))
             .setContentText(enqueeEpisode.episode.program.name);

@@ -42,4 +42,8 @@ public class ServiceManager {
   public void playNextInQueue() {
     context.startService(context.intents.player());
   }
+
+  public void playEpisode(Episode episode) {
+    context.startService(context.intents.playEpisode(episode));
+  }
 }
