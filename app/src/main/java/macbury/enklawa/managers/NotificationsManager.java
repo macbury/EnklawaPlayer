@@ -81,10 +81,12 @@ public class NotificationsManager {
     if (enqueeEpisode.status != PlaybackStatus.Playing) {
       builder.addAction(R.drawable.ic_action_av_play, context.getString(R.string.notification_play_action), Enklawa.current().intents.pendingPlayEpisode(enqueeEpisode.episode));
     } else {
-      builder.addAction(R.drawable.ic_action_av_pause, context.getString(R.string.notification_pause_action), Enklawa.current().intents.pendingPausePlayer());
+      NotificationCompat.Action pauseAction = new NotificationCompat.Action(R.drawable.ic_action_av_pause, context.getString(R.string.notification_pause_action), Enklawa.current().intents.pendingPausePlayer());
+      builder.addAction(pauseAction);
     }
 
-    builder.addAction(R.drawable.ic_action_av_stop, context.getString(R.string.notification_stop_action), Enklawa.current().intents.pendingStopPlayer());
+    //NotificationCompat.Action stopAction = new NotificationCompat.Action(R.drawable.ic_action_av_stop, context.getString(R.string.notification_stop_action), Enklawa.current().intents.pendingStopPlayer());
+    //builder.addAction(stopAction);
 
     builder.setContentIntent(openPlayerIntent);
 

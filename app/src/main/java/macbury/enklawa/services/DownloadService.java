@@ -117,7 +117,7 @@ public class DownloadService extends Service implements DownloadManagerListener 
     Ion.with(Enklawa.current()).load(download.getEpisode().image).asBitmap().setCallback(new FutureCallback<Bitmap>() {
       @Override
       public void onCompleted(Exception e, Bitmap result) {
-        mNotificationManager.notify(download.getEpisodeFileId(), app.notifications.downloadedEpisode(result, download.getEpisode()));
+        mNotificationManager.notify(download.getEpisode().id, app.notifications.downloadedEpisode(result, download.getEpisode()));
       }
     });
   }
