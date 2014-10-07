@@ -34,6 +34,11 @@ public class PlayQueueNavItem extends NavItemFragment {
   }
 
   @Override
+  public int getColorResource() {
+    return context.getResources().getColor(R.color.queue_episodes);
+  }
+
+  @Override
   public Fragment getFragment() {
     if (fragment == null) {
       fragment = new PlaylistFragment();

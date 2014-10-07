@@ -15,6 +15,11 @@ public class ForumNavItem extends NavItemFragment {
   }
 
   @Override
+  public int getColorResource() {
+    return 0;
+  }
+
+  @Override
   public String getTitle() {
     return context.getString(R.string.nav_forum);
   }

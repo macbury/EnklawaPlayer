@@ -13,9 +13,13 @@
   <color name="progress_color_4">#ED1E79</color>
   <color name="progress_color_5">#FFA500</color>
   <color name="actionbar_color">#11A7D9</color>
-  <color name="drawer_background_color">#f3f3f3</color>
+  <color name="drawer_background_color">#ffffff</color>
   <color name="gray">#808080</color>
   <color name="selection_background_color_light">#E3E3E3</color>
   <color name="statusbar_color">#0E8DB8</color>
   <color name="player_text_color">#000</color>
+  <color name="all_programs_color">#FFA500</color>
+  <color name="downloaded_episodes">#004B8E</color>
+  <color name="queue_episodes">#ED1E79</color>
+  <color name="newest_episodes">#00B15E</color>
 </resources>

@@ -146,6 +146,8 @@ public class NavAdapter extends BaseAdapter{
       holder = (SimpleNavItemHolder) convertView.getTag();
     }
 
+    holder.iconView.setTextColor(item.getColorResource());
+
     if (position == selected) {
       holder.titleView.setTypeface(null, Typeface.BOLD);
     } else {

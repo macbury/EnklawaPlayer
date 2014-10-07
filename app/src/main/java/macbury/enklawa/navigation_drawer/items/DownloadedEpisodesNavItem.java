@@ -41,4 +41,9 @@ public class DownloadedEpisodesNavItem extends NavItemFragment {
   public int getCount() {
     return Enklawa.current().db.episodeFiles.countDownloadedOrPendingOrFailed();
   }
+
+  @Override
+  public int getColorResource() {
+    return context.getResources().getColor(R.color.downloaded_episodes);
+  }
 }

@@ -19,6 +19,7 @@ public abstract class NavItemFragment extends NavBaseItem {
     return -1;
   }
 
+  public abstract int getColorResource();
   public abstract String getTitle();
   public abstract Icon getIcon();
   public abstract Fragment getFragment();

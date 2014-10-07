@@ -18,6 +18,11 @@ public class AllProgramsNavItem extends NavItemFragment {
   }
 
   @Override
+  public int getColorResource() {
+    return context.getResources().getColor(R.color.all_programs_color);
+  }
+
+  @Override
   public String getTitle() {
     return context.getString(R.string.nav_all_programs);
   }

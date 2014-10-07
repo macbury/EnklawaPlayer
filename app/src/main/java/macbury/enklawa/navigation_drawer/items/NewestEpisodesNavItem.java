@@ -18,6 +18,11 @@ public class NewestEpisodesNavItem extends NavItemFragment {
   }
 
   @Override
+  public int getColorResource() {
+    return context.getResources().getColor(R.color.newest_episodes);
+  }
+
+  @Override
   public String getTitle() {
     return context.getString(R.string.nav_newest_episodes);
   }
