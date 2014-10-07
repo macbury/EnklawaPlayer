@@ -118,8 +118,10 @@ public class EpisodesAdapter extends BaseAdapter implements View.OnClickListener
     }
 
     if (episode.isUnread()) {
+      holder.statusTextView.setVisibility(View.VISIBLE);
       holder.statusTextView.setText(context.getString(R.string.new_label));
     } else {
+      holder.statusTextView.setVisibility(View.INVISIBLE);
       holder.statusTextView.setText("");
     }
 

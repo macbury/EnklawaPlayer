@@ -9,6 +9,7 @@
   <dimen name="nav_item_simple_icon_margin">6dp</dimen>
   <dimen name="nav_item_simple_icon_text_size">24dp</dimen>
   <dimen name="nav_item_simple_title_size">14sp</dimen>
+  <dimen name="nav_item_favorite_title_size">15sp</dimen>
   <dimen name="nav_item_simple_title_margin_top">8dp</dimen>
   <dimen name="nav_item_simple_title_margin_left">12dp</dimen>
   <dimen name="text_size_small">14sp</dimen>
@@ -29,4 +30,5 @@
   <dimen name="program_grid_height">140dp</dimen>
   <dimen name="program_grid_description_height">55dp</dimen>
   <dimen name="player_controller_height">150dp</dimen>
+  <dimen name="favorite_preview">66dp</dimen>
 </resources>

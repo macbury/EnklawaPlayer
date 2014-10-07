@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import macbury.enklawa.db.models.EnqueueEpisode;
 import macbury.enklawa.db.models.Episode;
+import macbury.enklawa.managers.DatabaseManager;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.managers.player.PlaybackStatus;
 
@@ -46,6 +47,9 @@ public class EpisodeMediaSource extends AbstractMediaSource {
   @Override
   public void onPlay() {
     setStatus(PlaybackStatus.Playing);
+    DatabaseManager db            = Enklawa.current().db;
+    enqueueEpisode.episode.played = true;
+    db.episodes.update(enqueueEpisode.episode);
   }
 
   @Override
@@ -66,8 +70,11 @@ public class EpisodeMediaSource extends AbstractMediaSource {
 
   @Override
   public void onFinishPlayback() {
+    DatabaseManager db            = Enklawa.current().db;
     setStatus(PlaybackStatus.Finished);
-    Enklawa.current().db.queue.destroy(enqueueEpisode);
+    enqueueEpisode.episode.played = true;
+    db.episodes.update(enqueueEpisode.episode);
+    db.queue.destroy(enqueueEpisode);
   }
 
   @Override
