@@ -259,6 +259,14 @@ public class PlayerManager implements MediaPlayer.OnPreparedListener, MediaPlaye
     }
   }
 
+  public void lowerVolume() {
+    player.setVolume(0.5f, 0.5f);
+  }
+
+  public void normalVolume() {
+    player.setVolume(1,1);
+  }
+
   public boolean isPaused() {
     return !isPlaying();
   }

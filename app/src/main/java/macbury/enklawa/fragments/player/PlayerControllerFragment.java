@@ -1,6 +1,5 @@
-package macbury.enklawa.fragments;
+package macbury.enklawa.fragments.player;
 
-import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;

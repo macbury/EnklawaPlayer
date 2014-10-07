@@ -55,7 +55,7 @@ public class IntentManager {
   }
 
   public boolean haveCancelExtra(Intent intent){
-    return intent.hasExtra(EXTRA_ACTION_CANCEL) && intent.getBooleanExtra(EXTRA_ACTION_CANCEL, false) == true;
+    return intent != null && intent.hasExtra(EXTRA_ACTION_CANCEL) && intent.getBooleanExtra(EXTRA_ACTION_CANCEL, false) == true;
   }
 
   public PendingIntent syncPod() {

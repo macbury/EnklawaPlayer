@@ -5,11 +5,11 @@
   android:id="@+id/program_grid_item"
   android:layout_width="match_parent"
   android:background="?android:attr/activatedBackgroundIndicator"
-  android:layout_height="wrap_content"
+  android:layout_height="@dimen/program_grid_height"
   android:descendantFocusability="blocksDescendants">
   <ImageView
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="@dimen/program_grid_height"
     android:id="@+id/program_preview"
     android:layout_gravity="left|top"
     android:scaleType="centerCrop"
@@ -17,7 +17,7 @@
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="55dp" android:layout_gravity="left|bottom"
+    android:layout_height="@dimen/program_grid_description_height" android:layout_gravity="left|bottom"
     android:background="#a1000000">
     <TextView
       android:layout_width="match_parent"

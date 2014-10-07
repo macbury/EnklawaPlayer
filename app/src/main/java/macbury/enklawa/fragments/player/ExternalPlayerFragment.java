@@ -1,11 +1,10 @@
-package macbury.enklawa.fragments;
+package macbury.enklawa.fragments.player;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.IBinder;

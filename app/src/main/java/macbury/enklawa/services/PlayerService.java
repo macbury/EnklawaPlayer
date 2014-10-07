@@ -50,6 +50,7 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
   private static boolean running;
   private AudioManager audioManager;
   private ComponentName mediaButtonEventReceiver;
+  private boolean havePlayedBeforeLostFocus;
 
   public PlayerService() {
   }
@@ -276,10 +277,17 @@ public class PlayerService extends Service implements PlayerManagerListener, Aud
 
   @Override
   public void onAudioFocusChange(int focusChange) {
-    if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-      playerManager.pause();
+    if  (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+      playerManager.lowerVolume();
     } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-      playerManager.play();
+      playerManager.normalVolume();
+      if (havePlayedBeforeLostFocus) {
+        playerManager.play();
+        havePlayedBeforeLostFocus = false;
+      }
+    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+      havePlayedBeforeLostFocus = playerManager.isPlaying();
+      playerManager.pause();
     } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
       playerManager.pauseAndExit();
     }

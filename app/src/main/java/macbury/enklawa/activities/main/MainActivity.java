@@ -24,7 +24,7 @@ import java.util.List;
 import macbury.enklawa.R;
 import macbury.enklawa.activities.DonateActivity;
 import macbury.enklawa.db.models.Program;
-import macbury.enklawa.fragments.ExternalPlayerFragment;
+import macbury.enklawa.fragments.player.ExternalPlayerFragment;
 import macbury.enklawa.managers.Enklawa;
 import macbury.enklawa.services.SyncPodService;
 
@@ -88,7 +88,7 @@ public class MainActivity extends AccentActivity implements NavigationListener {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       mainContainer.setPadding(0, config.getPixelInsetTop(true), config.getPixelInsetRight(), config.getPixelInsetBottom());
-      navDrawerListView.setPadding((int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(false), (int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
+      navDrawerListView.setPadding((int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetTop(true), (int) getResources().getDimension(R.dimen.nav_bar_padding), config.getPixelInsetBottom());
     }
     showPlayer();
   }
