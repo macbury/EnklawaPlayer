@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">KontestPod</string>
+
+  <string name="donate_title">Podoba ci się KontestPod?</string>
+  <string name="donate_summary">Jeżeli podoba ci się KontestPod i chciałbyś się w jakiś sposób pomóc
+    przy jego rozwoju, możesz to zrobić na dwojaki sposób:
+  </string>
+  <string name="donate_help_develop">Pomóż przy rozwoju kodu. KontestPod ma w pełni otwarty kod
+    źródłowy:
+  </string>
+</resources>

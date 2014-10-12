@@ -27,7 +27,7 @@ public class NotificationsManager {
 
   public Notification syncPod() {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
+            .setSmallIcon(R.drawable.ic_stat_pod_notification)
             .setContentTitle(context.getString(R.string.notification_sync_pod_title))
             .setContentText(context.getString(R.string.notification_sync_pod_content));
     builder.setProgress(100, 0, true);
@@ -37,7 +37,7 @@ public class NotificationsManager {
 
   public Notification syncPodError(Exception e) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
+            .setSmallIcon(R.drawable.ic_stat_pod_notification)
             .setContentTitle(context.getString(R.string.notification_sync_pod_error_title))
             .setContentText(e.getLocalizedMessage());
 
@@ -46,7 +46,7 @@ public class NotificationsManager {
 
   public Notification downloadedEpisode(Bitmap preview, Episode episode) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
+            .setSmallIcon(R.drawable.ic_stat_pod_notification)
             .setLargeIcon(preview)
             .setContentTitle(episode.name)
             .setAutoCancel(true)
@@ -64,7 +64,7 @@ public class NotificationsManager {
 
   public Notification playEpisode(Bitmap preview, EnqueueEpisode enqueeEpisode) {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-            .setSmallIcon(R.drawable.ic_stat_enklawa_notification)
+            .setSmallIcon(R.drawable.ic_stat_pod_notification)
             .setContentTitle(enqueeEpisode.episode.name)
             .setAutoCancel(false)
             .setOngoing(true)

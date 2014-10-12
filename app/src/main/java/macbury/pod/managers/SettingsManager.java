@@ -27,7 +27,6 @@ public class SettingsManager {
   public static final String KEY_PROXY_HOST         = "pref_key_proxy_host";
   public static final String KEY_PROXY_PORT         = "pref_key_proxy_port";
   public static final String KEY_LAST_UPDATE        = "pref_key_last_update";
-  public static final String DEFAULT_POD_URL        = "http://enklawa.macbury.ninja";
   public static final int DEFAULT_SYNC_FREQ         = 360;
   public static final int DEFAULT_PROXY_PORT        = 9050;
   public static final String DEFAULT_PROXY_HOST     = "127.0.0.1";
@@ -64,7 +63,7 @@ public class SettingsManager {
   }
 
   public String getApiEndpoint() {
-    return settings.getString(KEY_API_ENDPOINT, DEFAULT_POD_URL);
+    return settings.getString(KEY_API_ENDPOINT, App.current().getString(R.string.default_pod_url));
   }
 
   public long getSyncFreq() {

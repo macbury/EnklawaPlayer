@@ -6,7 +6,7 @@
     android:key="pref_key_api_settings">
     <EditTextPreference
       android:key="pref_key_api_endpoint"
-      android:defaultValue="http://enklawa.macbury.ninja"
+      android:defaultValue="@string/default_pod_url"
       android:title="@string/pref_key_api_endpoint_title" />
 
   </PreferenceCategory>
