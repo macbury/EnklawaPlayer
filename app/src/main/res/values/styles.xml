@@ -13,6 +13,19 @@
   <style name="AppTheme" parent="BaseAppTheme">
   </style>
 
+  <style name="AppShowcaseThemeTitle" parent="TextAppearance.ShowcaseView.Title">
+    <item name="android:textColor">#fff</item>
+  </style>
+
+  <style name="AppShowcaseTheme" parent="ShowcaseView">
+    <item name="sv_backgroundColor">#CC000000</item>
+    <item name="sv_showcaseColor">@color/actionbar_color</item>
+    <item name="sv_buttonText">Schowaj</item>
+    <item name="sv_tintButtonColor">true</item>
+    <item name="sv_titleTextAppearance">@style/AppShowcaseThemeTitle</item>
+  </style>
+
+
   <style name="BasePlayerActionBarTheme.Dark" parent="android:Theme.Holo">
     <item name="android:windowActionBarOverlay">true</item>
     <item name="android:windowActionBar">true</item>

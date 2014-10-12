@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@color/drawer_background_color"
-    tools:context="macbury.enklawa.fragments.player.ExternalPlayerFragment" android:orientation="vertical">
+    tools:context="macbury.pod.fragments.player.ExternalPlayerFragment" android:orientation="vertical">
 
   <View
     android:layout_width="match_parent"

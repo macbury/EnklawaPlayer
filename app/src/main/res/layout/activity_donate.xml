@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:id="@+id/main_container"
     android:layout_height="match_parent"
-    tools:context="macbury.enklawa.activities.DonateActivity">
+    tools:context="macbury.pod.activities.DonateActivity">
 
   <ScrollView
     android:layout_width="match_parent"

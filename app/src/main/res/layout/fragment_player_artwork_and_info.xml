@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="macbury.enklawa.fragments.player.PlayerArtworkAndInfoFragment"
+    tools:context="macbury.pod.fragments.player.PlayerArtworkAndInfoFragment"
     android:orientation="vertical">
   <org.michaelevans.colorart.library.FadingImageView
     android:layout_width="match_parent"

@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="macbury.enklawa.activities.player.PlayerActivity" >
+    tools:context="macbury.pod.activities.player.PlayerActivity" >
   <item
     android:id="@+id/menu_item_share"
     android:showAsAction="always"
