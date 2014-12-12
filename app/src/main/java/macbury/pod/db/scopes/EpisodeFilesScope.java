@@ -99,6 +99,16 @@ public class EpisodeFilesScope extends AbstractScope<EpisodeFile> {
     return null;
   }
 
+  public List<EpisodeFile> downloaded() {
+    QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
+    try {
+      return builder.orderBy("id", true).where().in("status", EpisodeFile.Status.Ready).query();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
   public int countDownloadedOrPendingOrFailed() {
     QueryBuilder<EpisodeFile, Integer> builder = dao.queryBuilder();
     try {

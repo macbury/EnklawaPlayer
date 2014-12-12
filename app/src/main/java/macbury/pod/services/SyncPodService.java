@@ -12,12 +12,14 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import macbury.pod.api.APIProgram;
 import macbury.pod.api.APIResponse;
 import macbury.pod.api.APIThread;
 import macbury.pod.db.DatabaseCRUDListener;
 import macbury.pod.db.models.Episode;
+import macbury.pod.db.models.EpisodeFile;
 import macbury.pod.db.models.ForumThread;
 import macbury.pod.db.models.Program;
 import macbury.pod.db.scopes.EpisodesScope;
@@ -66,13 +68,23 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
     this.powerManager = (PowerManager) getSystemService(POWER_SERVICE);
     this.wakeLock     = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG);
     this.wakeLock.acquire();
+    this.findOldEpisodesAndCleanThem();
     app.broadcasts.podSync();
     syncPod();
   }
 
+  private void findOldEpisodesAndCleanThem() {
+    List<EpisodeFile> episodes = app.db.episodeFiles.downloaded();
+    for (EpisodeFile episodeFile : episodes) {
+      if (episodeFile.isOld()) {
+        Log.d(TAG, "Removing old episode: "+ episodeFile.episode.name);
+        app.db.episodeFiles.destroy(episodeFile);
+      }
+    }
+  }
 
   private void syncPod() {
-    startForeground(SYNC_POD_NOTIFICATION_ID, this.app.notifications.syncPod());
+    //startForeground(SYNC_POD_NOTIFICATION_ID, this.app.notifications.syncPod());
     Log.i(TAG, "Syncing pod: "+app.settings.getApiEndpoint());
     Ion.with(this).load(app.settings.getApiEndpoint()).noCache().as(new TypeToken<APIResponse>() {}).setCallback(this);
   }
@@ -93,7 +105,7 @@ public class SyncPodService extends Service implements FutureCallback<APIRespons
   }
 
   private void showErrorSyncNotification(Exception e) {
-    app.notifications.manager.notify(1, app.notifications.syncPodError(e));
+    //app.notifications.manager.notify(1, app.notifications.syncPodError(e));
   }
 
   private void showNotificationsForNewEpisodesOrDownloadThem(ArrayList<Episode> newEpisodes) {

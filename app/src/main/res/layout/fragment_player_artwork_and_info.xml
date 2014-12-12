@@ -4,13 +4,7 @@
     android:layout_height="match_parent"
     tools:context="macbury.pod.fragments.player.PlayerArtworkAndInfoFragment"
     android:orientation="vertical">
-  <org.michaelevans.colorart.library.FadingImageView
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/episode_preview_height"
-    android:scaleType="centerCrop"
-    android:background="@color/actionbar_color"
-    android:id="@+id/episode_preview"
-    />
+
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,16 +15,28 @@
     <LinearLayout
       android:orientation="vertical"
       android:layout_width="fill_parent"
-      android:padding="@dimen/player_about"
+
       android:layout_height="match_parent">
+      <org.michaelevans.colorart.library.FadingImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/episode_preview_height"
+        android:scaleType="centerCrop"
+        android:background="@color/actionbar_color"
+        android:id="@+id/episode_preview"
+        />
       <TextView
         android:id="@+id/episode_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/player_about"
+        android:paddingLeft="@dimen/player_about"
+        android:paddingRight="@dimen/player_about"
         android:text="Episode title"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/episode_preview" android:layout_centerHorizontal="true"/>
       <TextView
+        android:paddingLeft="@dimen/player_about"
+        android:paddingRight="@dimen/player_about"
         android:id="@+id/episode_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +53,13 @@
         android:layout_below="@+id/episode_date"
         android:layout_marginRight="16dp"
         android:text="Some description"
+        android:paddingLeft="@dimen/player_about"
+        android:paddingRight="@dimen/player_about"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </LinearLayout>
   </ScrollView>
+  <com.appbrain.AppBrainBanner
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 </LinearLayout>

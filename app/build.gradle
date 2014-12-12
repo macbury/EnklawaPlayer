@@ -8,12 +8,12 @@ android {
         applicationId "macbury.pod"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 2
-        versionName "0.2"
+        versionCode 3
+        versionName "0.2.1"
     }
     buildTypes {
         release {
-            runProguard false
+            //runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -39,10 +39,10 @@ repositories {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
-    compile('org.michaelevans.colorart:library:0.0.2')
+    compile 'org.michaelevans.colorart:library:0.0.2'
     compile 'com.etsy.android.grid:library:1.0.5'
     compile 'com.koushikdutta.ion:ion:1.+'
     compile 'com.google.code.gson:gson:1.7.2'
@@ -53,4 +53,5 @@ dependencies {
     compile 'be.webelite:ion-iconview:1.0.+@aar'
     compile 'com.github.markushi:circlebutton:1.1'
     compile project(':html-textview')
+    compile files('libs/appbrain-applift-sdk-v10.32.jar')
 }

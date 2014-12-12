@@ -1,5 +1,6 @@
 package macbury.pod.db.models;
 
+
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -49,6 +50,12 @@ public class EpisodeFile  {
 
   public boolean inDownloadQueue() {
     return isDownloading() || isPending();
+  }
+
+
+  public boolean isOld() {
+    Date sevenDaysAgo = new Date(new Date().getTime() - 604800000L);
+    return createdAt.before(sevenDaysAgo);
   }
 
   @Override

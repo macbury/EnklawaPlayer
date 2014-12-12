@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ShareActionProvider;
 
+import com.appbrain.AppBrain;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import macbury.pod.R;
@@ -39,6 +40,7 @@ public class PlayerActivity extends Activity implements PlayerManagerListener {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    AppBrain.init(this);
     setContentView(R.layout.activity_player);
 
     mainView          = (View) findViewById(R.id.player_background_view);
