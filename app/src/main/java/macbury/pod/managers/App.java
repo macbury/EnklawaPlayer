@@ -26,7 +26,7 @@ public class App extends Application {
     this.services      = new ServiceManager(this);
     this.intents       = new IntentManager(this);
     this.notifications = new NotificationsManager(this.getApplicationContext());
-    this.storage       = new StorageManager();
+    this.storage       = new StorageManager(this);
     this.settings      = new SettingsManager(this);
     this.alarms        = new AlarmsManager(this);
     this.settings.update();

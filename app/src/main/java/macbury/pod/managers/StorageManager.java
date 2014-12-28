@@ -1,11 +1,13 @@
 package macbury.pod.managers;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 
+import macbury.pod.R;
 import macbury.pod.db.models.Episode;
 import macbury.pod.db.models.EpisodeFile;
 
@@ -13,15 +15,19 @@ import macbury.pod.db.models.EpisodeFile;
  * Created by macbury on 23.09.14.
  */
 public class StorageManager {
-  private static final String ENKLAWA_PREFIX = "enklawa.net";
   private static final String TAG            = "StorageManager";
+  private final Context context;
+  private final String downloadPrefix;
 
-  public StorageManager() {
+  public StorageManager(Context context) {
+    this.context = context;
+    this.downloadPrefix = context.getString(R.string.download_prefix);
     Log.i(TAG, "Storage dir is: " + getPodcastStorageDirectory().getAbsolutePath());
+
   }
 
   public File getPodcastStorageDirectory() {
-    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS), ENKLAWA_PREFIX);
+    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS), downloadPrefix);
     file.mkdirs();
     return file;
   }

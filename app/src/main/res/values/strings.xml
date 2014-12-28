@@ -17,32 +17,29 @@
     <string name="episode_no_description">Brak opisu dla audycji</string>
     <string name="title_activity_player">PlayerActivity</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-  <string name="action_donate">Wspomóż aplikację</string>
-  <string name="title_activity_donate">Wspomóż aplikację</string>
-  <string name="button_donate_title">Wyślij Bitcoiny!</string>
-  <string name="donate_title">Podoba ci się EnklawaPod?</string>
-  <string name="donate_summary">Jeżeli podoba ci się EnklawaPod i chciałbyś się w jakiś sposób pomóc
-    przy jego rozwoju, możesz to zrobić na dwojaki sposób:
-  </string>
-  <string name="donate_help_develop">Pomóż przy rozwoju kodu. EnklawaPod ma w pełni otwarty kod
-    źródłowy:
-  </string>
-  <string name="donate_github">Kod źródłowy jest na Github.com</string>
-  <string name="donate_help_bitcoin">Wspomóż autora poprzez wpłatę dowolnej ilości bitcoinów:
-  </string>
-  <string name="action_stream">Słuchaj radia</string>
-  <string name="nav_play_queue">Kolejka odtwarzania</string>
-  <string name="go_to_program_activity">Pokaż wszystkie odcinki dla tego programu</string>
-  <string name="pref_key_sync_last_update_title">Ostatnia aktualizacja</string>
-  <string name="added_to_playlist">Dodano do kolejki</string>
-  <string name="unknown_media_key">Zaprawde powiadam ci, klawisz ten nie znany mi</string>
-  <string name="media_player_error_io">Nie można odczytać źródła</string>
-  <string name="media_player_error_unsupported">Nie obsługiwany format</string>
-  <string name="media_player_error_timeout">Serwer nie odpowiada</string>
-  <string name="media_player_error_unknown">Nieznany błąd</string>
-  <string name="media_player_error_audio_focus_not_granted">Nie można odtworzyć teraz tego pliku
-  </string>
-  <string name="radio_title">Na żywo</string>
-  <string name="radio_summary">Radio internetowe</string>
+    <string name="action_donate">Wspomóż aplikację</string>
+    <string name="title_activity_donate">Wspomóż aplikację</string>
+    <string name="button_donate_title">Wyślij Bitcoiny!</string>
+    <string name="donate_title">Podoba ci się EnklawaPod?</string>
+    <string name="donate_summary">Jeżeli podoba ci się EnklawaPod i chciałbyś się w jakiś sposób pomóc
+    przy jego rozwoju, możesz to zrobić na dwojaki sposób:</string>
+    <string name="donate_help_develop">Pomóż przy rozwoju kodu. EnklawaPod ma w pełni otwarty kod
+    źródłowy:</string>
+    <string name="donate_github">Kod źródłowy jest na Github.com</string>
+    <string name="donate_help_bitcoin">Wspomóż autora poprzez wpłatę dowolnej ilości bitcoinów:</string>
+    <string name="action_stream">Słuchaj radia</string>
+    <string name="nav_play_queue">Kolejka odtwarzania</string>
+    <string name="go_to_program_activity">Pokaż wszystkie odcinki dla tego programu</string>
+    <string name="pref_key_sync_last_update_title">Ostatnia aktualizacja</string>
+    <string name="added_to_playlist">Dodano do kolejki</string>
+    <string name="unknown_media_key">Zaprawde powiadam ci, klawisz ten nie znany mi</string>
+    <string name="media_player_error_io">Nie można odczytać źródła</string>
+    <string name="media_player_error_unsupported">Nie obsługiwany format</string>
+    <string name="media_player_error_timeout">Serwer nie odpowiada</string>
+    <string name="media_player_error_unknown">Nieznany błąd</string>
+    <string name="media_player_error_audio_focus_not_granted">Nie można odtworzyć teraz tego pliku</string>
+    <string name="radio_title">Na żywo</string>
+    <string name="radio_summary">Radio internetowe</string>
+    <string name="title_activity_radio">Radio</string>
 
 </resources>

@@ -7,6 +7,7 @@ import android.net.Uri;
 import macbury.pod.activities.player.PlayerActivity;
 import macbury.pod.activities.ProgramEpisodesActivity;
 import macbury.pod.activities.SettingsActivity;
+import macbury.pod.activities.player.RadioActivity;
 import macbury.pod.db.models.Episode;
 import macbury.pod.db.models.EpisodeFile;
 import macbury.pod.db.models.Program;
@@ -216,8 +217,8 @@ public class IntentManager {
   }
 
   public Intent playRadioActivity() {
-    Intent intent = new Intent(context, PlayerActivity.class);
-    intent.putExtra(EXTRA_ACTION_RADIO, true);
+    Intent intent = new Intent(context, RadioActivity.class);
+    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
     return intent;
   }
 }
