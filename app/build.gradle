@@ -51,6 +51,6 @@ dependencies {
     compile 'com.negusoft.holoaccent:library:1.1'
     compile 'be.webelite:ion-iconview:1.0.+@aar'
     compile 'com.github.markushi:circlebutton:1.1'
-    compile project(':html-textview')
+    compile 'org.sufficientlysecure:html-textview:1.1'
     compile files('libs/appbrain-applift-sdk-v10.32.jar')
 }

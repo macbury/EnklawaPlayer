@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/EnklawaPlayer.iml" filepath="$PROJECT_DIR$/EnklawaPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/libs/html-textview/html-textview.iml" filepath="$PROJECT_DIR$/app/libs/html-textview/html-textview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/libs/html-textview/html-textview.iml" filepath="$PROJECT_DIR$/app/libs/html-textview/html-textview.iml" />
     </modules>
   </component>
 </project>
